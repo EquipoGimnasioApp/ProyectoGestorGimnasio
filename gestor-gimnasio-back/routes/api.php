@@ -45,6 +45,9 @@ Route::middleware(AUTH_SANCTION)->group(function () {
         Route::get('/profesores', [UsuarioController::class, 'getProfesores'])
             ->name('usuarios.getProfesores');
 
+            Route::get('/alumnos', [UsuarioController::class, 'getAlumnos'])
+                ->name('usuarios.getAlumnos');
+
         Route::get(ID_ROUTE_PARAMETER, [UsuarioController::class, 'show'])
             ->name('usuarios.show');
     });
