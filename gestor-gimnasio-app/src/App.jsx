@@ -14,6 +14,7 @@ import Contacto from "./components/contacto/Contacto"
 import Actividades from "./components/actividades/Actividades"
 import MensajesAdministrador from "./components/mensajes-internos-administrador/MensajesAdministrador"
 import Mensajes from "./components/mensajes-internos/Mensajes"
+import AbmUsuarios from "./components/abm-usuarios/AbmUsuarios"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -45,6 +46,7 @@ function App() {
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />
             <Route path="/dashboard/abm/salas" element={<AbmSalas />} />
             <Route path="/dashboard/abm/equipamiento" element={<AbmEquipamiento />} />
+            <Route path="/dashboard/abm/usuarios" element={<AbmUsuarios />} />
           </Route>
         </Route>
 

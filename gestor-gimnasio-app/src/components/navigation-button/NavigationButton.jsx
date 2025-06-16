@@ -62,6 +62,11 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
     handleAbmClose()
   }
 
+  const handleAbmUsuariosClick = () => {
+    navigate("/dashboard/abm/usuarios")
+    handleAbmClose()
+  }
+
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem" }}>
       {puedeVerAgendarClases && (
@@ -136,6 +141,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
             <MenuItem onClick={handleAbmTiposActividadClick}>ABM Actividades</MenuItem>
             <MenuItem onClick={handleAbmSalasClick}>ABM Salas</MenuItem>
             <MenuItem onClick={handleAbmEquipamientoClick}>ABM Equipamiento</MenuItem>
+            <MenuItem onClick={handleAbmUsuariosClick}>ABM Usuarios</MenuItem>
           </Menu>
         </>
       )}
