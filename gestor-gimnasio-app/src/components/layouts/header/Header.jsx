@@ -99,9 +99,46 @@ function Header() {
                     }}
                   >
                     <Button
+                      variant= "contained"
+                      className="boton-secundario"
+                      /* onClick={handleLogout} */
+                      sx={{ width: '70%' }}
+                    >
+                      Mi Perfil
+                    </Button>
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      justifyContent: 'center',
+                      paddingY: '6px',
+                      '&:hover, &.Mui-focusVisible': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <Button
+                      variant= "contained"
+                      className="boton-secundario"
+                      /* onClick={handleLogout} */
+                      sx={{ width: '70%' }}
+                    >
+                      Editar Perfil
+                    </Button>
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      justifyContent: 'center',
+                      paddingY: '6px',
+                      '&:hover, &.Mui-focusVisible': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <Button
                       variant="contained"
-                      className="logout-button-custom-red"
+                      className="boton-principal"
                       onClick={handleLogout}
+                       sx={{ width: '70%' }}
                     >
                       Cerrar Sesión
                     </Button>
