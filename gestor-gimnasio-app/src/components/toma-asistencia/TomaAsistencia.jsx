@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Box, Typography, Paper, FormControl, Select, MenuItem, Checkbox, FormControlLabel, Button } from '@mui/material';
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { Box, Typography, Paper, FormControl, Select, MenuItem, Checkbox, FormControlLabel, Button } from '@mui/material'
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import environment from "../../environments/environment"
 import CargaTabla from "../clases-carga/CargaTabla"
@@ -15,11 +15,11 @@ export default function TomaAsistencia() {
 
   const [cargando, setCargando] = useState(true)
 
-  const [turnoClases, setTurnoClases] = useState([]);
-  const [alumnos, setAlumnos] = useState([]);
+  const [turnoClases, setTurnoClases] = useState([])
+  const [alumnos, setAlumnos] = useState([])
   const [cargandoAlumnos, setCargandoAlumnos] = useState(false)
-  const [claseSeleccionada, setClaseSeleccionada] = useState([]);
-  const [asistencia, setAsistencia] = useState({});
+  const [claseSeleccionada, setClaseSeleccionada] = useState(null)
+  const [asistencia, setAsistencia] = useState({})
 
   const handleCloseSnackbar = (_, reason) => {
     if (reason === "clickaway") {
@@ -66,70 +66,102 @@ export default function TomaAsistencia() {
     [showSnackbar]
   )
 
-  const getAlumnos = useCallback(
-      async (token) => {
-        setAlumnos([])
-        setCargandoAlumnos(true)
+  const getAlumnosClase = useCallback(
+    async (token, claseId) => {
+      setAlumnos([])
+      setCargandoAlumnos(true)
 
-        try {
-          const response = await fetch(`${environment.apiUrl}/usuarios/alumnos`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-  
-          if (!response.ok) {
-            throw new Error("Error al obtener los alumnos")
-          }
-  
-          const data = await response.json()
-          setAlumnos(data)
-        } catch (error) {
-          showSnackbar(error.message ?? "Error al obtener los alumnos", "error")
-          setAlumnos([])
-        } finally {
-          setCargandoAlumnos(false)
+      try {
+        const response = await fetch(`${environment.apiUrl}/inscripciones/turnos-clase/${claseId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        console.log('Response:', response)
+
+        if (!response.ok) {
+          throw new Error("Error al obtener los alumnos")
         }
-      },
-      [showSnackbar]
-    )
+
+        const data = await response.json()
+        const usuarios = data.map(inscripcion =>
+          inscripcion.usuario
+        )
+        setAlumnos(usuarios)
+        console.log(usuarios)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener los alumnos", "error")
+        setAlumnos([])
+      } finally {
+        setCargandoAlumnos(false)
+      }
+    },
+    [showSnackbar]
+  )
 
   useEffect(() => {
     getTurnoClases(userToken)
-    getAlumnos(userToken)
-  }, [userToken, getTurnoClases, getAlumnos])
+    /*     getAlumnos(userToken) */
+  }, [userToken, getTurnoClases])
 
-  const manejarCambio = (idAlumno) => {
+  const toggleAsistenciaAlumno = (idAlumno) => {
     setAsistencia({
       ...asistencia,
       [idAlumno]: !asistencia[idAlumno],
-    });
-  };
+    })
+  }
 
-  const guardarAsistencia = () => {
+  const guardarAsistencia = async () => {
     const datos = alumnos.map(alumno => ({
       idAlumno: alumno.id,
       presente: asistencia[alumno.id] ? 1 : 0,
-    }));
+    }))
 
-    console.log('Enviando al backend:', datos);
-    // Acá harías el POST a tu API para guardar asistencia
-  };
+    setCargando(true)
+    try {
+      const response = await fetch(`${environment.apiUrl}/inscripciones/cargar-asistencia/${claseSeleccionada}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify(datos),
+      })
 
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message ?? "Error al cargar asistencia")
+      }
 
+      showSnackbar("Asistencia cargada exitosamente", "success")
+      //await getSalas(token)
+    } catch (error) {
+      showSnackbar(error.message ?? "Error al cargar asistencia", "error")
+    } finally {
+      setCargando(false)
+    }
 
- 
-const hoy = new Date();
-const dia = String(hoy.getDate()).padStart(2, '0');
-const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-const anio = hoy.getFullYear();
-const hoyStr = `${dia}/${mes}/${anio}`;
+  }
 
-// Filtrar las clases del día de hoy
-const turnoClasesHoy = turnoClases.filter(clase => clase.fecha === hoyStr);
+  const hoy = new Date()
+  const dia = String(hoy.getDate()).padStart(2, '0')
+  const mes = String(hoy.getMonth() + 1).padStart(2, '0')
+  const anio = hoy.getFullYear()
+  const hoyStr = `${dia}/${mes}/${anio}`
+
+  // Filtrar las clases del día de hoy
+  const turnoClasesHoy = turnoClases.filter(clase => clase.fecha === hoyStr)
+
+  const handleSeleccionClase = (event) => {
+    const claseId = event.target.value
+    setClaseSeleccionada(claseId)
+    getAlumnosClase(userToken, claseId)
+  }
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 8, background: '#fff' }}>
@@ -138,30 +170,30 @@ const turnoClasesHoy = turnoClases.filter(clase => clase.fecha === hoyStr);
       </Typography>
       <Paper elevation={1} sx={{ p: 4, borderRadius: 3, minWidth: 500, maxWidth: 540, mx: 'auto' }}>
         {cargando ? (
-                 <CargaTabla texto="Cargando clases..." />
-               ) : (
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-          <Typography fontSize={20} fontWeight={500} sx={{ mr: 2 }}>
-            Seleccionar clase:
-          </Typography>
-          <FormControl fullWidth sx={{ maxWidth: 250 }}>
-            <Select
-              value={claseSeleccionada}
-              displayEmpty
-              onChange={e => setClaseSeleccionada(e.target.value)}
-              sx={{ background: '#fff' }}
-            >
-              <MenuItem value="" disabled>Seleccione una clase</MenuItem>
-              {turnoClasesHoy.map(clase => (
-                <MenuItem key={clase.id} value={clase.id}>
-                  {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} - {clase.horarioDesde} a {clase.horarioHasta}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+          <CargaTabla texto="Cargando clases..." />
+        ) : (
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Typography fontSize={20} fontWeight={500} sx={{ mr: 2 }}>
+              Seleccionar clase:
+            </Typography>
+            <FormControl fullWidth sx={{ maxWidth: 250 }}>
+              <Select
+                value={claseSeleccionada}
+                displayEmpty
+                onChange={handleSeleccionClase}
+                sx={{ background: '#fff' }}
+              >
+                <MenuItem value="" disabled>Seleccione una clase</MenuItem>
+                {turnoClasesHoy.map(clase => (
+                  <MenuItem key={clase.id} value={clase.id}>
+                    {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} - {clase.horarioDesde} a {clase.horarioHasta}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         )}
-        
+
         {claseSeleccionada && (
           <>
             <Box sx={{ mb: 3, pl: 5 }}>
@@ -171,12 +203,12 @@ const turnoClasesHoy = turnoClases.filter(clase => clase.fecha === hoyStr);
                   control={
                     <Checkbox
                       checked={asistencia[alumno.id] || false}
-                      onChange={() => manejarCambio(alumno.id)}
+                      onChange={() => toggleAsistenciaAlumno(alumno.id)}
                       sx={{ color: '#000' }}
                     />
                   }
                   label={<Typography fontSize={18}>{alumno.nombres} {alumno.apellidos}</Typography>}
-                  sx={{ display: 'block', mb: 1 }}
+                  sx={{ display: 'flex', mb: 1 }}
                 />
               ))}
             </Box>
@@ -193,7 +225,7 @@ const turnoClasesHoy = turnoClases.filter(clase => clase.fecha === hoyStr);
                 boxShadow: 'none',
                 '&:hover': { background: '#222' }
               }}
-             /*  onClick={guardarAsistencia} */
+              onClick={guardarAsistencia}
             >
               Guardar asistencia
             </Button>
@@ -208,5 +240,5 @@ const turnoClasesHoy = turnoClases.filter(clase => clase.fecha === hoyStr);
         snackbarSeverity={snackbarSeverity}
       />
     </Box>
-  );
+  )
 }

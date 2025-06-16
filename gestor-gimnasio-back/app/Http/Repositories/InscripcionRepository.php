@@ -22,4 +22,20 @@ class InscripcionRepository implements InscripcionRepositoryInterface
             ->where('id_turno_clase', $id_turno_clase)
             ->delete();
     }
+
+    public function getInscripcionesPorTurnoClase($id_turno_clase)
+    {
+        return Inscripcion::where('id_turno_clase', $id_turno_clase)
+            ->with('usuario')
+            ->get();
+    }
+
+    public function cargarAsistencias($idTurnoClase, array $asistencias)
+    {
+        foreach ($asistencias as $asistencia) {
+            Inscripcion::where('id_turno_clase', $idTurnoClase)
+                ->where('id_usuario', $asistencia['idAlumno'])
+                ->update(['presente' => $asistencia['presente']]);
+        }
+    }
 }
