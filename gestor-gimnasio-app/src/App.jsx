@@ -14,6 +14,7 @@ import Contacto from "./components/contacto/Contacto"
 import Actividades from "./components/actividades/Actividades"
 import MensajesAdministrador from "./components/mensajes-internos-administrador/MensajesAdministrador"
 import Mensajes from "./components/mensajes-internos/Mensajes"
+import EditarPerfil from "./components/editar-perfil/EditarPerfil"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -40,6 +41,7 @@ function App() {
             <Route path="/dashboard/agendar-clases" element={<AgendarClases />} />
             <Route path="/dashboard/actividades" element={<Actividades />} />
             <Route path="/dashboard/mensajes" element={<Mensajes />} />
+            <Route path="/dashboard/editar-perfil" element={<EditarPerfil />} />
             <Route path="/dashboard/admin-mensajes" element={<MensajesAdministrador />} />
             <Route path="/dashboard/abm/clases" element={<AbmTurnoClase />} />
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />
