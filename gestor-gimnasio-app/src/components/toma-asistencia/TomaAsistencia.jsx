@@ -18,7 +18,7 @@ export default function TomaAsistencia() {
   const [turnoClases, setTurnoClases] = useState([])
   const [alumnos, setAlumnos] = useState([])
   const [cargandoAlumnos, setCargandoAlumnos] = useState(false)
-  const [claseSeleccionada, setClaseSeleccionada] = useState(null)
+  const [claseSeleccionada, setClaseSeleccionada] = useState("")
   const [asistencia, setAsistencia] = useState({})
 
   const handleCloseSnackbar = (_, reason) => {
@@ -88,11 +88,16 @@ export default function TomaAsistencia() {
         }
 
         const data = await response.json()
+        console.log(data)
         const usuarios = data.map(inscripcion =>
           inscripcion.usuario
         )
         setAlumnos(usuarios)
-        console.log(usuarios)
+        const asistencia = data.reduce((acc, inscripcion) => {
+          acc[inscripcion.id_usuario] = inscripcion.presente
+          return acc
+        }, {})
+        setAsistencia(asistencia)
       } catch (error) {
         showSnackbar(error.message ?? "Error al obtener los alumnos", "error")
         setAlumnos([])
