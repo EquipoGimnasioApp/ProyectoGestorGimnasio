@@ -598,6 +598,7 @@ TurnoClasesTabla.propTypes = {
     })
   ).isRequired,
   onEditar: PropTypes.func.isRequired,
+  onEliminar: PropTypes.func.isRequired,
 }
 
 function TurnoClaseModal({
