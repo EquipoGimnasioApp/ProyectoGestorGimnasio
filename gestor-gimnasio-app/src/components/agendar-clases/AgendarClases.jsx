@@ -362,30 +362,25 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
-  const clasesOrdenadas = [...clases].sort((a, b) => {
-    const fechaA = new Date(a.fecha)
-    const fechaB = new Date(b.fecha)
-    return fechaA - fechaB
-  })
-
   return (
     <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
       {encabezadoTabla()}
       <TableBody>
-        {clasesOrdenadas.map((clase) => {
+        {clases.map((clase) => {
           const soloFechas = clase.fecha.split(" ")[0].split("-")
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
+          const nombreProfe = `${clase.nombresProfesor} ${clase.apellidosProfesor}`
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
           const disponibilidad = clase.cupoMaximo - clase.totalInscriptos
 
           return (
             <TableRow key={clase.idTurnoClase} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell>{clase.tipoActividad}</TableCell>
-              <TableCell>{`${clase.nombresProfesor} ${clase.apellidosProfesor}`}</TableCell>
+              <TableCell>{nombreProfe}</TableCell>
               <TableCell>{fechaFormateada}</TableCell>
               <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>
               <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>
-              <TableCell>{disponibilidad}</TableCell>
+              <TableCell>{disponibilidad}/{clase.cupoMaximo}</TableCell>
               <TableCell>
                 {clase.inscripto ? (
                   <CheckCircleOutlineIcon sx={{ color: green[500] }} />
