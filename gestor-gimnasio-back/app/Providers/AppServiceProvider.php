@@ -33,7 +33,10 @@ use App\Http\Services\SalaService;
 use App\Http\Services\TipoActividadService;
 use App\Http\Services\TurnoClaseService;
 use App\Http\Services\MaterialService;
-
+use App\Http\Interfaces\PerfilServiceInterface;
+use App\Http\Services\PerfilService;
+use App\Http\Interfaces\PerfilRepositoryInterface;
+use App\Http\Repositories\PerfilRepository;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -110,6 +113,16 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(MaterialServiceInterface::class, MaterialService::class);
         $this->app->bind(MaterialRepositoryInterface::class, MaterialRepository::class);
+
+        $this->app->bind(
+            PerfilServiceInterface::class,
+            PerfilService::class
+        );
+
+        $this->app->bind(
+            PerfilRepositoryInterface::class,
+            PerfilRepository::class
+        );
     }
 
     /**

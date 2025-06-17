@@ -11,6 +11,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MensajeController;
+use App\Http\Controllers\PerfilController;
 
 if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
@@ -107,6 +108,11 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('equipamiento.update');
         Route::delete(ID_ROUTE_PARAMETER, [MaterialController::class, 'destroy'])
             ->name('equipamiento.destroy');
+    });
+
+    Route::prefix('perfiles')->group(function () {
+        Route::get('/{userId}', [PerfilController::class, 'show'])
+            ->name('perfiles.show');
     });
 
     Route::post('/mensajes/enviar', [MensajeController::class, 'enviar']);

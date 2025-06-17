@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react"
 import {
     Box,
     Typography,
@@ -9,24 +9,53 @@ import {
     Select,
     InputLabel,
     FormControl,
-    Grid,
-} from "@mui/material";
+} from "@mui/material"
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { es } from 'date-fns/locale'
+import UsuarioAcceesToken from "../../models/auth/UsuarioAccessToken"
+import environment from "../../environments/environment"
+import SnackbarMensaje from "../utils/SnackbarMensaje"
 
+// data hardcodeada para los select
 const tiposDocumento = [
     { value: "DNI", label: "DNI" },
     { value: "Libreta Cívica", label: "Libreta Cívica" },
     { value: "Libreta de Enrolamiento", label: "Libreta de Enrolamiento" },
-];
+]
 
+// data hardcodeada para los select de países, debería traer el pais por default de la tabla perfil
 const paises = [
     { value: "Argentina", label: "Argentina" },
-];
+]
 
 export default function EditarPerfil() {
+    const usuario = useMemo(() => new UsuarioAcceesToken(JSON.parse(localStorage.getItem("usuario"))).usuario, [])
+    const token = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
+    const [isLoading, setIsLoading] = useState(true)
+
+    const [abrirSnackbar, setAbrirSnackbar] = useState(false)
+    const [mensajeSnackbar, setMensajeSnackbar] = useState("")
+    const [snackbarSeverity, setSnackbarSeverity] = useState("info")
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === "clickaway") {
+            return
+        }
+
+        setAbrirSnackbar(false)
+    }
+
+    const showSnackbar = useCallback((mensaje, severidad) => {
+        setMensajeSnackbar(mensaje)
+        setSnackbarSeverity(severidad)
+        setAbrirSnackbar(true)
+    }, [])
+
+
     const [form, setForm] = useState({
-        dia: "",
-        mes: "",
-        anio: "",
+        fecha_nacimiento: null,
         telefono: "",
         telefonoEmergencia: "",
         tipoDocumento: "",
@@ -37,35 +66,71 @@ export default function EditarPerfil() {
         ciudad: "",
         codigoPostal: "",
         pais: "Argentina",
-    });
+    })
+
+    const getPerfiles = useCallback(
+        async (usuario, token) => {
+            /*             setClasesParaTabla([]) */
+            setIsLoading(true)
+            const idUsuario = usuario.id
+
+            try {
+                const response = await fetch(`${environment.apiUrl}/perfiles/${idUsuario}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+
+                if (!response.ok) {
+                    throw new Error("Error al obtener los perfiles")
+                }
+
+                const data = await response.json()
+                console.log("Perfiles obtenidos:", data)
+                /*                 setClasesParaTabla(dataDto) */
+            } catch (error) {
+                showSnackbar(error.message || "Error al tratar de obtener los perfiles", "error")
+                /*                 setClasesParaTabla([]) */
+            } finally {
+                setIsLoading(false)
+            }
+        },
+        [showSnackbar]
+    )
+
+    useEffect(() => {
+        getPerfiles(usuario, token)
+    }, [getPerfiles, usuario, token])
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+        setForm({ ...form, [e.target.name]: e.target.value })
+    }
 
     const handleFoto = (accion) => {
         // Lógica para tomar, subir o eliminar foto
-        alert(`Acción de foto: ${accion}`);
-    };
+        alert(`Acción de foto: ${accion}`)
+    }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         // Lógica para guardar los datos
-        alert("Datos guardados (simulado)");
-    };
+        alert("Datos guardados (simulado)")
+    }
 
     return (
         <>
-            <h2 className="titulo-clases" > Editar Datos Personales</h2>
-            <Box sx={{ maxWidth: 800, mx: "auto", mt: 4 }}>
+            <h2 className="titulo-clases" > Editar mi Perfil</h2>
+            <Box sx={{ maxWidth: 800, mx: "auto", mt: 6 }}>
                 <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", mb: 3 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "center" }}>
                         <Avatar sx={{ width: 150, height: 150, mr: 3 }} />
                         <Box sx={{ display: "flex", flexDirection: "column", width: "180px" }}>
-                            <Button variant="outlined" fullWidth sx={{ mb: 1 }} onClick={() => handleFoto("tomar")}>
+                            <Button variant="outlined" color="black" fullWidth sx={{ mb: 1 }} onClick={() => handleFoto("tomar")}>
                                 Tomar una foto
                             </Button>
-                            <Button variant="outlined" fullWidth sx={{ mb: 1 }} onClick={() => handleFoto("subir")}>
+                            <Button variant="outlined" color="black" fullWidth sx={{ mb: 1 }} onClick={() => handleFoto("subir")}>
                                 Subir una foto
                             </Button>
                             <Button variant="outlined" fullWidth color="error" onClick={() => handleFoto("eliminar")}>
@@ -74,50 +139,23 @@ export default function EditarPerfil() {
                         </Box>
                     </Box>
                 </Box>
-                <Typography variant="h4" align="left" mb={2} sx ={{  marginBottom: 8, marginTop: 8 }}>
+                <Typography variant="h4" align="center" mb={2} sx={{ marginBottom: 4, marginTop: 9 }}>
                     Mariano Costa
                 </Typography>
                 <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Fecha de Nacimiento  "
-                        name="fechaNacimiento"
-                        value={form.fechaNacimiento}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <Grid container spacing={1}>
-                        <Grid item xs={4}>
-                            <TextField
-                                label="Día"
-                                name="dia"
-                                value={form.dia}
-                                onChange={handleChange}
-                                fullWidth
-                                size="small"
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                label="Mes"
-                                name="mes"
-                                value={form.mes}
-                                onChange={handleChange}
-                                fullWidth
-                                size="small"
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                label="Año"
-                                name="anio"
-                                value={form.anio}
-                                onChange={handleChange}
-                                fullWidth
-                                size="small"
-                            />
-                        </Grid>
-                    </Grid>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                        <DatePicker
+                            label="Fecha de nacimiento"
+                            value={form.fecha_nacimiento}
+                            onChange={(newValue) => {
+                                setForm({ ...form, fecha_nacimiento: newValue })
+                            }}
+                            format="yyyy-MM-dd"
+                            slotProps={{
+                                textField: { fullWidth: true, size: 'medium' }
+                            }}
+                        />
+                    </LocalizationProvider>
                     <TextField
                         label="Teléfono"
                         name="telefono"
@@ -191,14 +229,6 @@ export default function EditarPerfil() {
                         </Select>
                     </FormControl>
                     <TextField
-                        label="Dirección"
-                        name="direccion"
-                        value={form.direccion}
-                        onChange={handleChange}
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextField
                         label="Ciudad"
                         name="ciudad"
                         value={form.ciudad}
@@ -206,6 +236,15 @@ export default function EditarPerfil() {
                         fullWidth
                         margin="normal"
                     />
+                    <TextField
+                        label="Dirección"
+                        name="direccion"
+                        value={form.direccion}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                    />
+
                     <TextField
                         label="Código postal"
                         name="codigoPostal"
@@ -218,6 +257,7 @@ export default function EditarPerfil() {
                         type="submit"
                         variant="contained"
                         className="boton-principal"
+                        sx={{ mt: 3, mb: 2 }}
                         fullWidth
 
                     >
@@ -225,6 +265,13 @@ export default function EditarPerfil() {
                     </Button>
                 </form>
             </Box>
+            <SnackbarMensaje
+                abrirSnackbar={abrirSnackbar}
+                duracionSnackbar={5000}
+                handleCloseSnackbar={handleCloseSnackbar}
+                mensajeSnackbar={mensajeSnackbar}
+                snackbarSeverity={snackbarSeverity}
+            />
         </>
-    );
+    )
 }
