@@ -65,7 +65,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         return TurnoClase::query()
             ->select(DB::raw('cupo_maximo - COUNT(inscripcion.id) AS cupoActual'))
-            ->join('inscripcion', 'turno_clase.id', '=', 'inscripcion.id_turno_clase')
+            ->leftJoin('inscripcion', 'turno_clase.id', '=', 'inscripcion.id_turno_clase')
             ->where('turno_clase.id', $idTurnoClase)
             ->groupBy('turno_clase.cupo_maximo')
             ->value('cupoActual');
