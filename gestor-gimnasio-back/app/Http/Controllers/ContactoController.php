@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Interfaces\ContactoServiceInterface;
 use Illuminate\Http\Request;
-use App\Mail\ContactoMail;
-use Illuminate\Support\Facades\Mail;
+
 
 class ContactoController extends Controller
 {
@@ -27,8 +26,6 @@ class ContactoController extends Controller
         // Guardar en la base de datos
         $contacto = $this->contacto_service->create($datos);
 
-        // Enviar el mail
-        Mail::to('fitmanagersrl@gmail.com')->send(new ContactoMail($datos));
 
         return response()->json(['message' => 'Consulta enviada correctamente.', 'contacto' => $contacto], 201);
     }
