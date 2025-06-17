@@ -26,10 +26,14 @@ Route::prefix('usuarios')->group(function () {
     Route::post('/', [UsuarioController::class, 'store'])
         ->name('usuarios.store');
 });
+
 Route::prefix('contactos')->group(function () {
     Route::post('/', [ContactoController::class, 'create'])
         ->name('contactos.create');
 });
+
+
+Route::post('/contactos', [ContactoController::class, 'enviar']);
 
 Route::post('/contactoslanding', [ContactoLandingController::class, 'enviar']);
 

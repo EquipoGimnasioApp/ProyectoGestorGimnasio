@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Interfaces\ContactoServiceInterface;
 use Illuminate\Http\Request;
+use App\Mail\ContactoMail;
+use Illuminate\Support\Facades\Mail;
 
 class ContactoController extends Controller
 {
@@ -11,22 +13,23 @@ class ContactoController extends Controller
         private readonly ContactoServiceInterface $contacto_service,
     ) {}
 
-    /**
-     * Crea un nuevo contacto en la base de datos.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function create(Request $request)
+    public function enviar(Request $request)
     {
-        $data = $request->validate([
+        $datos = $request->validate([
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
             'email' => 'required|email|max:255',
+            'rol' => 'string',
             'asunto' => 'required|string|max:255',
             'mensaje' => 'required|string',
         ]);
 
-        $contacto = $this->contacto_service->create($data);
+        // Guardar en la base de datos
+        $contacto = $this->contacto_service->create($datos);
 
-        return response()->json($contacto, 201);
+        // Enviar el mail
+        Mail::to('fitmanagersrl@gmail.com')->send(new ContactoMail($datos));
+
+        return response()->json(['message' => 'Consulta enviada correctamente.', 'contacto' => $contacto], 201);
     }
 }
