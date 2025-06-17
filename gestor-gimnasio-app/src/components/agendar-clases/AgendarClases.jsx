@@ -22,6 +22,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import HighlightOffIcon from "@mui/icons-material/HighlightOff"
 import SnackbarMensaje from "../utils/SnackbarMensaje"
 import CargaTabla from "../clases-carga/CargaTabla"
+import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum"
 
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([])
@@ -275,6 +276,7 @@ function Clases() {
           <CargaTabla texto="Cargando clases..." />
         ) : (
           <ClasesTabla
+            tipoUsuario={parseInt(usuario.idTipoUsuario, 10)}
             clases={clasesFiltradas}
             onInscribirClick={handleInscribirClick}
             onCancelarInscripcionClick={handleCancelarInscripcionClick}
@@ -283,6 +285,24 @@ function Clases() {
           />
         )}
       </TableContainer>
+
+      <Box sx={{
+        maxWidth: 1200,
+        minWidth: 900,
+        width: '90vw',
+        margin: '0 auto',
+        display: 'flex',
+        justifyContent: 'flex-end',
+      }}>
+        <Button
+          variant="outlined"
+          className="boton-principal"
+          onClick={() => getClasesInscripcionUsuario(usuario, token)}
+          disabled={isLoading}
+        >
+          Actualizar
+        </Button>
+      </Box>
 
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
@@ -295,7 +315,7 @@ function Clases() {
   )
 }
 
-function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, accionEnProgreso, accionId }) {
+function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripcionClick, accionEnProgreso, accionId }) {
   const encabezadoTabla = () => {
     return (
       <TableHead className="cabecera-tabla">
@@ -306,14 +326,24 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
           <TableCell>DISPONIBILIDAD</TableCell>
-          <TableCell>INSCRIPTO</TableCell>
-          <TableCell>ACCIÓN</TableCell>
+          {tipoUsuario !== TiposUsuarioEnum.ADMINISTRADOR && (
+            <>
+              <TableCell>INSCRIPTO</TableCell>
+              <TableCell>ACCIÓN</TableCell>
+            </>
+          )}
         </TableRow>
       </TableHead>
     )
   }
 
   const renderizarBotonAcciones = (clase, disponibilidad, isCurrentActionTarget) => {
+    if (tipoUsuario === TiposUsuarioEnum.ADMINISTRADOR) {
+      return (
+        <></>
+      )
+    }
+
     if (clase.inscripto) {
       return (
         <Button
@@ -362,37 +392,34 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
     )
   }
 
-  const clasesOrdenadas = [...clases].sort((a, b) => {
-    const fechaA = new Date(a.fecha)
-    const fechaB = new Date(b.fecha)
-    return fechaA - fechaB
-  })
-
   return (
     <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
       {encabezadoTabla()}
       <TableBody>
-        {clasesOrdenadas.map((clase) => {
+        {clases.map((clase) => {
           const soloFechas = clase.fecha.split(" ")[0].split("-")
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
+          const nombreProfe = `${clase.nombresProfesor} ${clase.apellidosProfesor}`
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
           const disponibilidad = clase.cupoMaximo - clase.totalInscriptos
 
           return (
             <TableRow key={clase.idTurnoClase} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell>{clase.tipoActividad}</TableCell>
-              <TableCell>{`${clase.nombresProfesor} ${clase.apellidosProfesor}`}</TableCell>
+              <TableCell>{nombreProfe}</TableCell>
               <TableCell>{fechaFormateada}</TableCell>
               <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>
               <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>
-              <TableCell>{disponibilidad}</TableCell>
-              <TableCell>
-                {clase.inscripto ? (
-                  <CheckCircleOutlineIcon sx={{ color: green[500] }} />
-                ) : (
-                  <HighlightOffIcon sx={{ color: red[500] }} />
-                )}
-              </TableCell>
+              <TableCell>{disponibilidad}/{clase.cupoMaximo}</TableCell>
+              {tipoUsuario !== TiposUsuarioEnum.ADMINISTRADOR && (
+                <TableCell>
+                  {clase.inscripto && tipoUsuario ? (
+                    <CheckCircleOutlineIcon sx={{ color: green[500] }} />
+                  ) : (
+                    <HighlightOffIcon sx={{ color: red[500] }} />
+                  )}
+                </TableCell>
+              )}
               <TableCell>{renderizarBotonAcciones(clase, disponibilidad, isCurrentActionTarget)}</TableCell>
             </TableRow>
           )
@@ -403,6 +430,7 @@ function ClasesTabla({ clases, onInscribirClick, onCancelarInscripcionClick, acc
 }
 
 ClasesTabla.propTypes = {
+  tipoUsuario: PropTypes.number,
   clases: PropTypes.arrayOf(PropTypes.instanceOf(TurnoClaseIncripcionEstadoDto)).isRequired,
   onInscribirClick: PropTypes.func.isRequired,
   onCancelarInscripcionClick: PropTypes.func.isRequired,

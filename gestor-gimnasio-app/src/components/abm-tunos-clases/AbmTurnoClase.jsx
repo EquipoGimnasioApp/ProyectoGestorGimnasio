@@ -502,18 +502,12 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
     )
   }
 
-  const clasesOrdenadas = [...clases].sort((a, b) => {
-    const fechaA = parseFecha(a.fecha)
-    const fechaB = parseFecha(b.fecha)
-    return fechaA - fechaB
-  })
-
   return (
     <>
       <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
         {encabezadosTabla()}
         <TableBody>
-          {clasesOrdenadas.map((clase) => {
+          {clases.map((clase) => {
             const fechaFormateada = formatearFecha(clase.fecha)
             return (
               <TableRow key={clase.id}>

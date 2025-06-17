@@ -46,6 +46,13 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                     ->where('inscripcion.id_usuario', '=', $userId);
             })
             ->join('usuario', 'turno_clase.id_profesor', '=', 'usuario.id')
+            ->where(function ($query) {
+                $query->whereDate('turno_clase.fecha', '>', now()->toDateString())
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->whereDate('turno_clase.fecha', '=', now()->toDateString())
+                            ->whereTime('turno_clase.horario_desde', '>', now()->toTimeString());
+                    });
+            })
             ->orderBy('turno_clase.fecha', 'DESC')
             ->orderBy('turno_clase.id_actividad')
             ->orderBy('turno_clase.horario_desde')
