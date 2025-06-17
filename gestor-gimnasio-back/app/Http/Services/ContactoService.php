@@ -6,6 +6,7 @@ use App\Http\Interfaces\ContactoServiceInterface;
 use App\Http\Interfaces\ContactoRepositoryInterface;
 use App\Models\Contacto;
 use Illuminate\Support\Facades\Log;
+use App\Mail\ContactoMail;
 use Illuminate\Support\Facades\Mail;
 
 class ContactoService implements ContactoServiceInterface
@@ -23,7 +24,7 @@ class ContactoService implements ContactoServiceInterface
     public function create(array $data)
     {
         $contacto = $this->contacto_repository->create($data);
-        $this->enviarEmailNotificacionAdmin($contacto);
+        $this->enviarEmailNotificacionAdmin($data);
         return $contacto;
     }
 
@@ -33,23 +34,11 @@ class ContactoService implements ContactoServiceInterface
      * @param Contacto $contacto
      * @return void
      */
-    private function enviarEmailNotificacionAdmin(Contacto $contacto)
+    private function enviarEmailNotificacionAdmin(array $data)
     {
         try {
-            Mail::raw(
-                "Nuevo mensaje de contacto:\n" .
-                    "De: {$contacto->email}\n" .
-                    "Asunto: {$contacto->asunto}\n" .
-                    "Mensaje: {$contacto->mensaje}\n" .
-                    "Fecha: " . now()->format('d/m/Y H:i:s'),
-                function ($message) use ($contacto) {
-                    $message->to('admin@fitmanager.com')
-                        ->subject($contacto->asunto)
-                        ->replyTo($contacto->email);
-                }
-            );
-
-            Log::info("Email de contacto enviado para contacto ID: {$contacto->id}");
+            Mail::to('fitmanagersrl@gmail.com')->send(new ContactoMail($data));
+            Log::info("Email de contacto enviado para contacto: {$data['email']}");
         } catch (\Exception $e) {
             Log::error("Error enviando email de contacto: " . $e->getMessage());
         }
