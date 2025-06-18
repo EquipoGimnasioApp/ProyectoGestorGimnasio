@@ -318,7 +318,7 @@ function Clases() {
 function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripcionClick, accionEnProgreso, accionId }) {
   const encabezadoTabla = () => {
     return (
-      <TableHead className="cabecera-tabla">
+      <TableHead className='cabecera-tabla'>
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
           <TableCell>PROFESOR</TableCell>
@@ -339,27 +339,25 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
 
   const renderizarBotonAcciones = (clase, disponibilidad, isCurrentActionTarget) => {
     if (tipoUsuario === TiposUsuarioEnum.ADMINISTRADOR) {
-      return (
-        <></>
-      )
+      return null
     }
 
     if (clase.inscripto) {
       return (
         <Button
-          variant="outlined"
-          className="boton-secundario"
+          variant='outlined'
+          className='boton-secundario'
           onClick={() => onCancelarInscripcionClick(clase.idTurnoClase)}
           disabled={accionEnProgreso}
         >
-          {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : "Cancelar Inscripción"}
+          {isCurrentActionTarget ? <CircularProgress size={24} color='inherit' /> : 'Cancelar Inscripción'}
         </Button>
       )
     }
 
     if (disponibilidad <= 0) {
       return (
-        <Button variant="outlined" disabled>
+        <Button variant='outlined' disabled>
           Sin disponibilidad
         </Button>
       )
@@ -367,23 +365,23 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
 
     return (
       <Button
-        variant="outlined"
-        className="boton-principal"
+        variant='outlined'
+        className='boton-principal'
         onClick={() => onInscribirClick(clase.idTurnoClase)}
         disabled={accionEnProgreso}
       >
-        {isCurrentActionTarget ? <CircularProgress size={24} color="inherit" /> : "Inscribirse"}
+        {isCurrentActionTarget ? <CircularProgress size={24} color='inherit' /> : 'Inscribirse'}
       </Button>
     )
   }
 
   if (!clases || clases.length === 0) {
     return (
-      <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
+      <Table sx={{ minWidth: 900 }} aria-label='tabla de clases'>
         {encabezadoTabla()}
         <TableBody>
           <TableRow>
-            <TableCell colSpan={8} align="center">
+            <TableCell colSpan={tipoUsuario !== TiposUsuarioEnum.ADMINISTRADOR ? 8 : 6} align='center'>
               No hay clases para mostrar
             </TableCell>
           </TableRow>
@@ -393,18 +391,18 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
   }
 
   return (
-    <Table sx={{ minWidth: 900 }} aria-label="tabla de clases">
+    <Table sx={{ minWidth: 900 }} aria-label='tabla de clases'>
       {encabezadoTabla()}
       <TableBody>
         {clases.map((clase) => {
-          const soloFechas = clase.fecha.split(" ")[0].split("-")
+          const soloFechas = clase.fecha.split(' ')[0].split('-')
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
           const nombreProfe = `${clase.nombresProfesor} ${clase.apellidosProfesor}`
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
           const disponibilidad = clase.cupoMaximo - clase.totalInscriptos
 
           return (
-            <TableRow key={clase.idTurnoClase} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+            <TableRow key={clase.idTurnoClase} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell>{clase.tipoActividad}</TableCell>
               <TableCell>{nombreProfe}</TableCell>
               <TableCell>{fechaFormateada}</TableCell>
@@ -412,15 +410,17 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
               <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>
               <TableCell>{disponibilidad}/{clase.cupoMaximo}</TableCell>
               {tipoUsuario !== TiposUsuarioEnum.ADMINISTRADOR && (
-                <TableCell>
-                  {clase.inscripto && tipoUsuario ? (
-                    <CheckCircleOutlineIcon sx={{ color: green[500] }} />
-                  ) : (
-                    <HighlightOffIcon sx={{ color: red[500] }} />
-                  )}
-                </TableCell>
+                <>
+                  <TableCell>
+                    {clase.inscripto && tipoUsuario ? (
+                      <CheckCircleOutlineIcon sx={{ color: green[500] }} />
+                    ) : (
+                      <HighlightOffIcon sx={{ color: red[500] }} />
+                    )}
+                  </TableCell>
+                  <TableCell>{renderizarBotonAcciones(clase, disponibilidad, isCurrentActionTarget)}</TableCell>
+                </>
               )}
-              <TableCell>{renderizarBotonAcciones(clase, disponibilidad, isCurrentActionTarget)}</TableCell>
             </TableRow>
           )
         })}
