@@ -58,6 +58,22 @@ class InscripcionService implements InscripcionServiceInterface
 
         return $filasAfectadas;
     }
+
+    public function getInscripcionesPorTurnoClase($id_turno_clase)
+    {
+        $turnoClase = $this->turnoClaseRepository->find($id_turno_clase);
+
+        if (!$turnoClase) {
+            throw new ModelNotFoundException("Turno de clase no encontrado", Response::HTTP_NOT_FOUND);
+        }
+
+        return $this->inscripcionRepository->getInscripcionesPorTurnoClase($id_turno_clase);
+    }
+
+    public function cargarAsistencias($idTurnoClase, array $asistencias)
+    {
+        $this->inscripcionRepository->cargarAsistencias($idTurnoClase, $asistencias);
+    }
 }
 
 class CupoActualClaseException extends \Exception

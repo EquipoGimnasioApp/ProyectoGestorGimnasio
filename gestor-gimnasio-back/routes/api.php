@@ -49,6 +49,9 @@ Route::middleware(AUTH_SANCTION)->group(function () {
         Route::get('/profesores', [UsuarioController::class, 'getProfesores'])
             ->name('usuarios.getProfesores');
 
+        Route::get('/alumnos', [UsuarioController::class, 'getAlumnos'])
+            ->name('usuarios.getAlumnos');
+
         Route::get(ID_ROUTE_PARAMETER, [UsuarioController::class, 'show'])
             ->name('usuarios.show');
     });
@@ -75,9 +78,12 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('inscripciones')->group(function () {
         Route::post('/', [InscripcionController::class, 'inscribirUsuario'])
             ->name('inscripciones.inscribir-usuario');
-
         Route::delete('/{id_usuario}/{id_turno_clase}', [InscripcionController::class, 'cancelarInscripcion'])
             ->name('inscripciones.cancelar-inscripcion');
+        Route::get('/turnos-clase/{claseId}', [InscripcionController::class, 'getInscripcionesPorTurnoClase'])
+            ->name('inscripciones.inscripciones-por-turno-clase');
+        Route::post('/cargar-asistencia/{id_turno_clase}', [InscripcionController::class, 'cargarAsistencia'])
+            ->name('inscripciones.cargar-asistencia');
     });
 
     Route::prefix('tipos-actividad')->group(function () {

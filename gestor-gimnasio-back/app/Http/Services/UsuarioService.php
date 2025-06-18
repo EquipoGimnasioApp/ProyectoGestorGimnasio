@@ -47,6 +47,19 @@ class UsuarioService implements UsuarioServiceInterface
         });
     }
 
+    /**
+     * Obtener todos los usuarios que son alumnos.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Una colección de usuarios que son alumnos.
+     */
+    public function getAlumnos()
+    {
+        $alumnos = $this->usuarioRepoInterface->getAlumnos();
+        return $alumnos->map(function (Usuario $usuario) {
+            return UsuarioDto::fromUser($usuario);
+        });
+    }
+
     public function checkEmailExists(string $email): bool
     {
         return $this->usuarioRepoInterface->checkEmailExists($email);

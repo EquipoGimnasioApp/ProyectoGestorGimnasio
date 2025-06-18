@@ -111,4 +111,9 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
         $turnoClase = TurnoClase::findOrFail($id);
         return $turnoClase->delete();
     }
+
+    public function find(int $idTurnoClase)
+    {
+        return TurnoClase::findOrFail($idTurnoClase);
+    }
 }

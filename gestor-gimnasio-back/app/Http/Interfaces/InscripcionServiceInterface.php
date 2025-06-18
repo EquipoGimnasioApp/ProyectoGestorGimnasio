@@ -21,4 +21,14 @@ interface InscripcionServiceInterface
      * @return int El número de registros eliminados.
      */
     public function cancelarInscripcion($id_usuario, $id_turno_clase);
+
+    /**
+     * Obtiene los usuarios inscriptos en un turno de clase específico.
+     *
+     * @param int $id_turno_clase El ID del turno de clase para el cual se consultarán las inscripciones.
+     * @return array Una lista de inscripciones del usuario en el turno de clase especificado.
+     */
+    public function getInscripcionesPorTurnoClase($id_turno_clase);
+
+    public function cargarAsistencias($idTurnoClase, array $asistencias);
 }
