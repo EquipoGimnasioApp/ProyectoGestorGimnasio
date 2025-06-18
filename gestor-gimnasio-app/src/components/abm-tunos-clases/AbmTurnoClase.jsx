@@ -297,7 +297,7 @@ export default function AbmTurnoClase() {
         throw new Error(errorData.message ?? "Error al eliminar la clase")
       }
 
-      showSnackbar("Sala eliminado exitosamente", "success")
+      showSnackbar("Clase eliminada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
       showSnackbar(error.message ?? "Error al eliminar la clase", "error")
