@@ -64,16 +64,16 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem" }}>
-      {puedeVerAgendarClases && (
-        <Button
-          color="inherit"
-          startIcon={<FitnessCenterIcon />}
-          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-          onClick={() => navigate("/dashboard/agendar-clases")}
-        >
-          Agendar
-        </Button>
-      )}
+     {puedeVerAgendarClases && (
+  <Button
+    color="inherit"
+    startIcon={<FitnessCenterIcon />}
+    sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+    onClick={() => navigate('/dashboard/agendar-clases')}
+  >
+    {idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'Próximas Clases' : 'Agendar'}
+  </Button>
+)}
       {puedeVerActividades && (
         <Button
           color="inherit"
