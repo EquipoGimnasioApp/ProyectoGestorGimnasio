@@ -17,16 +17,9 @@ class TipoActividad extends Model
 
     protected $fillable = [
         'tipo',
-        'id_sala',
     ];
 
     protected $casts = [
         'tipo' => 'string',
-        'id_sala' => 'integer',
     ];
-
-    public function sala()
-    {
-        return $this->belongsTo(Sala::class, 'id_sala', 'id');
-    }
 }

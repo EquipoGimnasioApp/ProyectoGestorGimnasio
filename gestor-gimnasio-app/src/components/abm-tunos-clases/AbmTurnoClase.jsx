@@ -41,6 +41,8 @@ export default function AbmTurnoClase() {
   const [abrirSnackbar, setAbrirSnackbar] = useState(false)
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
+  const [salas, setSalas] = useState([])
+  const [cargandoSalas, setCargandoSalas] = useState(true)
 
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
 
@@ -155,6 +157,37 @@ export default function AbmTurnoClase() {
         setTurnoClases([])
       } finally {
         setCargando(false)
+      }
+    },
+    [showSnackbar]
+  )
+
+  const getSalas = useCallback(
+    async (token) => {
+      setSalas([])
+      setCargandoSalas(true)
+
+      try {
+        const response = await fetch(`${environment.apiUrl}/salas`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Error al obtener las salas")
+        }
+
+        const data = await response.json()
+        setSalas(data)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener las salas", "error")
+        setSalas([])
+      } finally {
+        setCargandoSalas(false)
       }
     },
     [showSnackbar]
@@ -278,7 +311,8 @@ export default function AbmTurnoClase() {
     getTurnoClases(userToken)
     getActividades(userToken)
     getProfesores(userToken)
-  }, [userToken, getTurnoClases, getActividades, getProfesores])
+    getSalas(userToken)
+  }, [userToken, getTurnoClases, getActividades, getProfesores, getSalas])
 
   const deleteTurnoClase = async (turnoClaseEliminado, token) => {
     setCargando(true)
@@ -297,7 +331,7 @@ export default function AbmTurnoClase() {
         throw new Error(errorData.message ?? "Error al eliminar la clase")
       }
 
-      showSnackbar("Sala eliminado exitosamente", "success")
+      showSnackbar("Clase eliminada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
       showSnackbar(error.message ?? "Error al eliminar la clase", "error")
@@ -382,6 +416,7 @@ export default function AbmTurnoClase() {
           <TurnoClasesTabla
             clases={turnoClasesFiltradas}
             onEditar={handleOpenModalEditar}
+            salas={salas}
             onEliminar={(turnoClase) => deleteTurnoClase(turnoClase, userToken)}
           />
         )}
@@ -390,7 +425,7 @@ export default function AbmTurnoClase() {
         <Button
           variant="outlined"
           className="boton-principal"
-          disabled={cargandoActividades && cargandoProfesores}
+          disabled={cargandoActividades && cargandoProfesores && cargandoSalas}
           onClick={handleOpenModalCrear}
         >
           Nueva Clase
@@ -408,6 +443,8 @@ export default function AbmTurnoClase() {
         turnoExistente={modalConfig.turno}
         esEdicion={modalConfig.esEdicion}
         tituloModal={modalConfig.titulo}
+        salas={salas}
+        cargandoSalas={cargandoSalas}
       />
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
@@ -476,6 +513,7 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
           <TableCell>PROFESOR</TableCell>
+          <TableCell>SALA</TableCell>
           <TableCell>FECHA</TableCell>
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
@@ -515,6 +553,10 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
                   {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
                 </TableCell>
                 <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
+                <TableCell>
+                  {clase.descripcionSala.charAt(0).toUpperCase() +
+                    clase.descripcionSala.slice(1).toLowerCase()}
+                </TableCell>
                 <TableCell>{fechaFormateada}</TableCell>
                 <TableCell>{clase.horarioDesde}</TableCell>
                 <TableCell>{clase.horarioHasta}</TableCell>
@@ -585,6 +627,8 @@ TurnoClasesTabla.propTypes = {
       id: PropTypes.number.isRequired,
       idActividad: PropTypes.number.isRequired,
       tipoActividad: PropTypes.string.isRequired,
+      idSala: PropTypes.number.isRequired,
+      descripcionSala: PropTypes.string.isRequired,
       fecha: PropTypes.string.isRequired,
       horarioDesde: PropTypes.string.isRequired,
       horarioHasta: PropTypes.string.isRequired,
@@ -604,6 +648,7 @@ function TurnoClaseModal({
   turnoExistente,
   esEdicion,
   tituloModal,
+  salas,
 }) {
   const styleModal = {
     position: "absolute",
@@ -621,16 +666,18 @@ function TurnoClaseModal({
   }
   const [idActividad, setIdActividad] = useState("")
   const [idProfesor, setIdProfesor] = useState("")
+  const [idSala, setIdSala] = useState("")
   const [fecha, setFecha] = useState(null)
   const [horarioInicio, setHorarioInicio] = useState(null)
   const [horarioFin, setHorarioFin] = useState(null)
   const [cupoMaximo, setCupoMaximo] = useState("")
   const [idTurno, setIdTurno] = useState(null)
 
-  const disabledConfirmButton = !idActividad || !fecha || !horarioInicio || !horarioFin || !cupoMaximo
+  const disabledConfirmButton = !idActividad || !fecha || !horarioInicio || !horarioFin || !cupoMaximo || !idSala
 
   const resetFormValues = () => {
     setIdActividad("")
+    setIdSala("")
     setFecha(null)
     setHorarioInicio(null)
     setHorarioFin(null)
@@ -642,6 +689,7 @@ function TurnoClaseModal({
     const turnoDatos = {
       id_actividad: idActividad,
       id_profesor: idProfesor,
+      id_sala: idSala,
       fecha: fecha ? dayjs(fecha).format("YYYY-MM-DD") : null,
       horario_desde: horarioInicio ? dayjs(horarioInicio).format("HH:mm:ss") : null,
       horario_hasta: horarioFin ? dayjs(horarioFin).format("HH:mm:ss") : null,
@@ -657,6 +705,7 @@ function TurnoClaseModal({
     if (abrirModal && esEdicion && turnoExistente) {
       setIdActividad(turnoExistente.idActividad ?? "")
       setIdProfesor(turnoExistente.idProfesor ?? "")
+      setIdSala(turnoExistente.idSala ?? "")
       setFecha(turnoExistente.fecha ? dayjs(turnoExistente.fecha, "DD/MM/YYYY") : null)
       setHorarioInicio(turnoExistente.horarioDesde ? dayjs(`2000-01-01T${turnoExistente.horarioDesde}`) : null)
       setHorarioFin(turnoExistente.horarioHasta ? dayjs(`2000-01-01T${turnoExistente.horarioHasta}`) : null)
@@ -682,6 +731,10 @@ function TurnoClaseModal({
     }
 
     setCupoMaximo(value.slice(0, 3))
+  }
+
+  const handleSalaChange = (event) => {
+    setIdSala(event.target.value)
   }
 
   return (
@@ -739,6 +792,29 @@ function TurnoClaseModal({
               return (
                 <MenuItem key={profesor.id} value={profesor.id}>
                   {nombreCompleto}
+                </MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
+        
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="sala-select-label">Sala</InputLabel>
+          <Select
+            labelId="sala-select-label"
+            id="sala-select"
+            value={idSala}
+            label="Sala"
+            onChange={handleSalaChange}
+          >
+            <MenuItem value="">
+              <em>Seleccione una Sala</em>
+            </MenuItem>
+            {salas.map((sala) => {
+              return (
+                <MenuItem key={sala.id} value={sala.id}>
+                  {sala.descripcion.charAt(0).toUpperCase() +
+                    sala.descripcion.slice(1).toLowerCase()}
                 </MenuItem>
               )
             })}

@@ -35,7 +35,6 @@ class TipoActividadController extends Controller
     {
         $validatedData = $request->validate([
             'tipo' => 'required|string|max:255',
-            'id_sala' => 'required|numeric',
         ]);
 
         $tipoActividad = $this->tipo_actividad_service->update($id, $validatedData);
@@ -52,8 +51,7 @@ class TipoActividadController extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'tipo' => 'required|string|max:255',
-            'id_sala' => 'required|numeric',
+            'tipo' => 'required|string|max:255'
         ]);
 
         $tipoActividad = $this->tipo_actividad_service->create($validatedData);

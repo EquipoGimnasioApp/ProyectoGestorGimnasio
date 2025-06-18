@@ -6,7 +6,8 @@ class TurnoClaseIncripcionEstadoDto {
     this.idProfesor = data.idProfesor
     this.nombresProfesor = data.nombresProfesor
     this.apellidosProfesor = data.apellidosProfesor
-    this.nombreActividad = data.nombreActividad
+    this.idSala = data.idSala
+    this.descripcionSala = data.descripcionSala
     this.fecha = data.fecha
     this.horarioDesde = data.horarioDesde
     this.horarioHasta = data.horarioHasta

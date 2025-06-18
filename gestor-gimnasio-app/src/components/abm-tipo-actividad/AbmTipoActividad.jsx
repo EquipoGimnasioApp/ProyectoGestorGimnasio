@@ -27,9 +27,9 @@ export default function AbmTipoActividad() {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
 
   const [tiposActividad, setTiposActividad] = useState([])
-  const [salas, setSalas] = useState([])
+ /*  const [salas, setSalas] = useState([]) */
   const [cargando, setCargando] = useState(true)
-  const [cargandoSalas, setCargandoSalas] = useState(true)
+/*   const [cargandoSalas, setCargandoSalas] = useState(true) */
   const [abrirSnackbar, setAbrirSnackbar] = useState(false)
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
@@ -46,7 +46,7 @@ export default function AbmTipoActividad() {
       abrir: true,
       esEdicion: false,
       actividad: null,
-      titulo: "Crear nuevo tipo de actividad",
+      titulo: "Crear nueva actividad",
     })
   }
 
@@ -55,7 +55,7 @@ export default function AbmTipoActividad() {
       abrir: true,
       esEdicion: true,
       actividad: actividadParaEditar,
-      titulo: "Modificar tipo de actividad",
+      titulo: "Modificar actividad",
     })
   }
 
@@ -107,13 +107,13 @@ export default function AbmTipoActividad() {
         })
 
         if (!response.ok) {
-          throw new Error("Error al obtener los tipos de actividad")
+          throw new Error("Error al obtener las actividades")
         }
 
         const data = await response.json()
         setTiposActividad(data)
       } catch (error) {
-        showSnackbar(error.message ?? "Error al obtener los tipos de actividad", "error")
+        showSnackbar(error.message ?? "Error al obtener las actividades", "error")
         setTiposActividad([])
       } finally {
         setCargando(false)
@@ -137,13 +137,13 @@ export default function AbmTipoActividad() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message ?? "Error al crear el tipo de actividad")
+        throw new Error(errorData.message ?? "Error al crear actividad")
       }
 
-      showSnackbar("Tipo de actividad creado exitosamente", "success")
+      showSnackbar("Actividad creada exitosamente", "success")
       await getTiposActividad(token)
     } catch (error) {
-      showSnackbar(error.message ?? "Error al crear el tipo de actividad", "error")
+      showSnackbar(error.message ?? "Error al crear actividad", "error")
       setCargando(false)
     }
   }
@@ -162,18 +162,18 @@ export default function AbmTipoActividad() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message ?? "Error al modificar el tipo de actividad")
+        throw new Error(errorData.message ?? "Error al modificar actividad")
       }
 
-      showSnackbar("Tipo de actividad modificado exitosamente", "success")
+      showSnackbar("Actividad modificada exitosamente", "success")
       await getTiposActividad(token)
     } catch (error) {
-      showSnackbar(error.message ?? "Error al modificar el tipo de actividad", "error")
+      showSnackbar(error.message ?? "Error al modificar actividad", "error")
       setCargando(false)
     }
   }
 
-  const getSalas = useCallback(
+/*   const getSalas = useCallback(
     async (token) => {
       setSalas([])
       setCargandoSalas(true)
@@ -202,12 +202,12 @@ export default function AbmTipoActividad() {
       }
     },
     [showSnackbar]
-  )
+  ) */
 
   useEffect(() => {
     getTiposActividad(userToken)
-    getSalas(userToken)
-  }, [userToken, getTiposActividad, getSalas])
+/*     getSalas(userToken) */
+  }, [userToken, getTiposActividad/* , getSalas */])
 
   const deleteActividad = async (actividadEliminada, token) => {
     setCargando(true)
@@ -226,7 +226,7 @@ export default function AbmTipoActividad() {
         throw new Error(errorData.message ?? "Error al eliminar la actividad")
       }
 
-      showSnackbar("Actividad eliminado exitosamente", "success")
+      showSnackbar("Actividad eliminada exitosamente", "success")
       await getTiposActividad(token)
     } catch (error) {
       showSnackbar(error.message ?? "Error al eliminar la actividad", "error")
@@ -239,18 +239,18 @@ export default function AbmTipoActividad() {
       <h2 className="titulo-clases">ABM Actividades</h2>
       <TableContainer component={Paper} className="tipos-actividad-table">
         {cargando ? (
-          <CargaTabla texto="Cargando tipos de actividad..." />
+          <CargaTabla texto="Cargando actividades..." />
         ) : (
           <TiposActividadTabla
             actividades={tiposActividad}
             onEditar={handleOpenModalEditar}
-            salas={salas}
+/*             salas={salas} */
             onEliminar={(actividad) => deleteActividad(actividad, userToken)}
           />
         )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button variant="outlined" className="boton-principal" disabled={cargandoSalas} onClick={handleOpenModalCrear}>
+        <Button variant="outlined" className="boton-principal" /* disabled={cargandoSalas} */ onClick={handleOpenModalCrear}>
           Nueva Actividad
         </Button>
         <Button
@@ -269,8 +269,8 @@ export default function AbmTipoActividad() {
         actividadExistente={modalConfig.actividad}
         esEdicion={modalConfig.esEdicion}
         tituloModal={modalConfig.titulo}
-        salas={salas}
-        cargandoSalas={cargandoSalas}
+/*         salas={salas}
+        cargandoSalas={cargandoSalas} */
       />
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
@@ -310,7 +310,7 @@ function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
       <TableHead className="cabecera-tabla-abm">
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
-          <TableCell>SALA</TableCell>
+{/*           <TableCell>SALA</TableCell> */}
           <TableCell>MODIFICAR</TableCell>
           <TableCell>ELIMINAR</TableCell>
         </TableRow>
@@ -343,10 +343,10 @@ function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
               <TableCell>
                 {tipoActividad.tipo.charAt(0).toUpperCase() + tipoActividad.tipo.slice(1).toLowerCase()}
               </TableCell>
-              <TableCell>
+{/*               <TableCell>
                 {tipoActividad.descripcionSala.charAt(0).toUpperCase() +
                   tipoActividad.descripcionSala.slice(1).toLowerCase()}
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <Button variant="outlined" className="boton-principal" onClick={() => onEditar(tipoActividad)}>
                   Modificar
@@ -405,8 +405,8 @@ TiposActividadTabla.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       tipo: PropTypes.string.isRequired,
-      idSala: PropTypes.number,
-      descripcionSala: PropTypes.string,
+/*       idSala: PropTypes.number,
+      descripcionSala: PropTypes.string, */
     })
   ).isRequired,
   onEditar: PropTypes.func.isRequired,
@@ -420,8 +420,8 @@ function TipoActividadModal({
   actividadExistente,
   esEdicion,
   tituloModal,
-  salas,
-  cargandoSalas,
+/*   salas,
+  cargandoSalas, */
 }) {
   const styleModal = {
     position: "absolute",
@@ -439,21 +439,21 @@ function TipoActividadModal({
   }
 
   const [tipo, setTipo] = useState("")
-  const [idSala, setIdSala] = useState("")
+/*   const [idSala, setIdSala] = useState("") */
   const [idActividad, setIdActividad] = useState(null)
 
-  const disabledConfirmButton = !tipo.trim() || !idSala
+  const disabledConfirmButton = !tipo.trim() /* || !idSala */
 
   const resetFormValues = () => {
     setTipo("")
-    setIdSala("")
+/*     setIdSala("") */
     setIdActividad(null)
   }
 
   const handleSubmit = () => {
     const actividadDatos = {
       tipo: tipo.trim(),
-      id_sala: parseInt(idSala),
+/*       id_sala: parseInt(idSala), */
     }
     if (esEdicion && idActividad) {
       actividadDatos.id = idActividad
@@ -464,7 +464,7 @@ function TipoActividadModal({
   useEffect(() => {
     if (abrirModal && esEdicion && actividadExistente) {
       setTipo(actividadExistente.tipo ?? "")
-      setIdSala(actividadExistente.idSala ? actividadExistente.idSala.toString() : "")
+/*       setIdSala(actividadExistente.idSala ? actividadExistente.idSala.toString() : "") */
       setIdActividad(actividadExistente.id ?? null)
     } else {
       resetFormValues()
@@ -478,9 +478,9 @@ function TipoActividadModal({
     }
   }
 
-  const handleSalaChange = (event) => {
+ /*  const handleSalaChange = (event) => {
     setIdSala(event.target.value)
-  }
+  } */
 
   return (
     <Modal
@@ -509,7 +509,7 @@ function TipoActividadModal({
           }}
         />
 
-        <FormControl fullWidth margin="normal">
+{/*         <FormControl fullWidth margin="normal">
           <InputLabel id="sala-select-label">Sala</InputLabel>
           <Select
             labelId="sala-select-label"
@@ -529,7 +529,7 @@ function TipoActividadModal({
               ))
             )}
           </Select>
-        </FormControl>
+        </FormControl> */}
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
           <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>
@@ -556,16 +556,16 @@ TipoActividadModal.propTypes = {
   actividadExistente: PropTypes.shape({
     id: PropTypes.number,
     tipo: PropTypes.string,
-    idSala: PropTypes.number,
-    descripcionSala: PropTypes.string,
+/*     idSala: PropTypes.number,
+    descripcionSala: PropTypes.string, */
   }),
   esEdicion: PropTypes.bool.isRequired,
   tituloModal: PropTypes.string.isRequired,
-  salas: PropTypes.arrayOf(
+/*   salas: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       descripcion: PropTypes.string.isRequired,
     })
   ).isRequired,
-  cargandoSalas: PropTypes.bool.isRequired,
+  cargandoSalas: PropTypes.bool.isRequired, */
 }
