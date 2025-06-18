@@ -26,7 +26,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
     idTipoUsuario === TiposUsuarioEnum.ALUMNO || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
   const puedeVerActividades =
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
