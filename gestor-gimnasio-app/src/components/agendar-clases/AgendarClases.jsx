@@ -322,6 +322,7 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
           <TableCell>PROFESOR</TableCell>
+          <TableCell>SALA</TableCell>
           <TableCell>FECHA</TableCell>
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
@@ -405,6 +406,10 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
             <TableRow key={clase.idTurnoClase} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell>{clase.tipoActividad}</TableCell>
               <TableCell>{nombreProfe}</TableCell>
+              <TableCell>
+                {clase.descripcionSala.charAt(0).toUpperCase() +
+                  clase.descripcionSala.slice(1).toLowerCase()}
+              </TableCell>
               <TableCell>{fechaFormateada}</TableCell>
               <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>
               <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>
