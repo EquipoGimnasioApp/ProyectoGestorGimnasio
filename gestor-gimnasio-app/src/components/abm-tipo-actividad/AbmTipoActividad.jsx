@@ -27,9 +27,7 @@ export default function AbmTipoActividad() {
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
 
   const [tiposActividad, setTiposActividad] = useState([])
- /*  const [salas, setSalas] = useState([]) */
   const [cargando, setCargando] = useState(true)
-/*   const [cargandoSalas, setCargandoSalas] = useState(true) */
   const [abrirSnackbar, setAbrirSnackbar] = useState(false)
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
@@ -173,41 +171,10 @@ export default function AbmTipoActividad() {
     }
   }
 
-/*   const getSalas = useCallback(
-    async (token) => {
-      setSalas([])
-      setCargandoSalas(true)
-
-      try {
-        const response = await fetch(`${environment.apiUrl}/salas`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error("Error al obtener las salas")
-        }
-
-        const data = await response.json()
-        setSalas(data)
-      } catch (error) {
-        showSnackbar(error.message ?? "Error al obtener las salas", "error")
-        setSalas([])
-      } finally {
-        setCargandoSalas(false)
-      }
-    },
-    [showSnackbar]
-  ) */
-
   useEffect(() => {
     getTiposActividad(userToken)
-/*     getSalas(userToken) */
-  }, [userToken, getTiposActividad/* , getSalas */])
+
+  }, [userToken, getTiposActividad])
 
   const deleteActividad = async (actividadEliminada, token) => {
     setCargando(true)
@@ -237,20 +204,19 @@ export default function AbmTipoActividad() {
   return (
     <>
       <h2 className="titulo-clases">ABM Actividades</h2>
-      <TableContainer component={Paper} className="tipos-actividad-table">
+      <TableContainer component={Paper} className="equipamiento-table">
         {cargando ? (
           <CargaTabla texto="Cargando actividades..." />
         ) : (
           <TiposActividadTabla
             actividades={tiposActividad}
             onEditar={handleOpenModalEditar}
-/*             salas={salas} */
             onEliminar={(actividad) => deleteActividad(actividad, userToken)}
           />
         )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button variant="outlined" className="boton-principal" /* disabled={cargandoSalas} */ onClick={handleOpenModalCrear}>
+        <Button variant="outlined" className="boton-principal"  disabled={cargando}  onClick={handleOpenModalCrear}>
           Nueva Actividad
         </Button>
         <Button
@@ -269,8 +235,6 @@ export default function AbmTipoActividad() {
         actividadExistente={modalConfig.actividad}
         esEdicion={modalConfig.esEdicion}
         tituloModal={modalConfig.titulo}
-/*         salas={salas}
-        cargandoSalas={cargandoSalas} */
       />
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
@@ -310,7 +274,6 @@ function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
       <TableHead className="cabecera-tabla-abm">
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
-{/*           <TableCell>SALA</TableCell> */}
           <TableCell>MODIFICAR</TableCell>
           <TableCell>ELIMINAR</TableCell>
         </TableRow>
@@ -343,10 +306,6 @@ function TiposActividadTabla({ actividades, onEditar, onEliminar }) {
               <TableCell>
                 {tipoActividad.tipo.charAt(0).toUpperCase() + tipoActividad.tipo.slice(1).toLowerCase()}
               </TableCell>
-{/*               <TableCell>
-                {tipoActividad.descripcionSala.charAt(0).toUpperCase() +
-                  tipoActividad.descripcionSala.slice(1).toLowerCase()}
-              </TableCell> */}
               <TableCell>
                 <Button variant="outlined" className="boton-principal" onClick={() => onEditar(tipoActividad)}>
                   Modificar
@@ -405,8 +364,6 @@ TiposActividadTabla.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       tipo: PropTypes.string.isRequired,
-/*       idSala: PropTypes.number,
-      descripcionSala: PropTypes.string, */
     })
   ).isRequired,
   onEditar: PropTypes.func.isRequired,
@@ -420,8 +377,6 @@ function TipoActividadModal({
   actividadExistente,
   esEdicion,
   tituloModal,
-/*   salas,
-  cargandoSalas, */
 }) {
   const styleModal = {
     position: "absolute",
@@ -439,21 +394,17 @@ function TipoActividadModal({
   }
 
   const [tipo, setTipo] = useState("")
-/*   const [idSala, setIdSala] = useState("") */
   const [idActividad, setIdActividad] = useState(null)
 
-  const disabledConfirmButton = !tipo.trim() /* || !idSala */
-
+  const disabledConfirmButton = !tipo.trim() 
   const resetFormValues = () => {
     setTipo("")
-/*     setIdSala("") */
     setIdActividad(null)
   }
 
   const handleSubmit = () => {
     const actividadDatos = {
       tipo: tipo.trim(),
-/*       id_sala: parseInt(idSala), */
     }
     if (esEdicion && idActividad) {
       actividadDatos.id = idActividad
@@ -464,7 +415,6 @@ function TipoActividadModal({
   useEffect(() => {
     if (abrirModal && esEdicion && actividadExistente) {
       setTipo(actividadExistente.tipo ?? "")
-/*       setIdSala(actividadExistente.idSala ? actividadExistente.idSala.toString() : "") */
       setIdActividad(actividadExistente.id ?? null)
     } else {
       resetFormValues()
@@ -477,10 +427,6 @@ function TipoActividadModal({
       setTipo(value)
     }
   }
-
- /*  const handleSalaChange = (event) => {
-    setIdSala(event.target.value)
-  } */
 
   return (
     <Modal
@@ -509,28 +455,6 @@ function TipoActividadModal({
           }}
         />
 
-{/*         <FormControl fullWidth margin="normal">
-          <InputLabel id="sala-select-label">Sala</InputLabel>
-          <Select
-            labelId="sala-select-label"
-            id="sala-select"
-            value={idSala}
-            label="Sala"
-            onChange={handleSalaChange}
-            disabled={cargandoSalas}
-          >
-            {cargandoSalas ? (
-              <MenuItem disabled>Cargando salas...</MenuItem>
-            ) : (
-              salas.map((sala) => (
-                <MenuItem key={sala.id} value={sala.id.toString()}>
-                  {sala.descripcion}
-                </MenuItem>
-              ))
-            )}
-          </Select>
-        </FormControl> */}
-
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3, gap: 1 }}>
           <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>
             Cancelar
@@ -556,16 +480,7 @@ TipoActividadModal.propTypes = {
   actividadExistente: PropTypes.shape({
     id: PropTypes.number,
     tipo: PropTypes.string,
-/*     idSala: PropTypes.number,
-    descripcionSala: PropTypes.string, */
   }),
   esEdicion: PropTypes.bool.isRequired,
   tituloModal: PropTypes.string.isRequired,
-/*   salas: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      descripcion: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  cargandoSalas: PropTypes.bool.isRequired, */
 }
