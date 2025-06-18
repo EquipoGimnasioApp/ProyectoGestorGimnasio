@@ -42,4 +42,15 @@ class TurnoClase extends Model
     {
         return $this->belongsTo(Usuario::class, 'id_profesor', 'id');
     }
+
+    public function sala()
+    {
+        return $this->belongsTo(Sala::class, 'id_sala', 'id');
+    }
+
+    public function descripcionSala()
+    {
+        return $this->sala ? $this->sala->descripcion : '';
+    }
+
 }

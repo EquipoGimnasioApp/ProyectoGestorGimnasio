@@ -41,6 +41,7 @@ class TurnoClaseController extends Controller
             [
                 'id_actividad' => REQUIRED_NUMERIC,
                 'id_profesor' => REQUIRED_NUMERIC,
+                'id_sala' => REQUIRED_NUMERIC,
                 'fecha' => 'required|date',
                 'horario_desde' => 'required|date_format:H:i:s',
                 'horario_hasta' => 'required|date_format:H:i:s|after:horarioDesde',
@@ -49,6 +50,7 @@ class TurnoClaseController extends Controller
             [
                 'id_actividad.required' => 'El ID de actividad es obligatorio.',
                 'id_profesor.required' => 'El ID de profesor es obligatorio.',
+                'id_sala.required' => 'El ID de sala es obligatorio.',
                 'fecha.required' => 'La fecha es obligatoria.',
                 'fecha.date' => 'La fecha debe ser una fecha válida.',
                 'horario_desde.required' => 'El horario desde es obligatorio.',
@@ -70,6 +72,7 @@ class TurnoClaseController extends Controller
         $validatedData = $request->validate([
            'id_actividad' => REQUIRED_NUMERIC,
             'id_profesor' => 'required|numeric|exists:usuario,id',
+            'id_sala' => 'required|numeric|exists:sala,id',
             'fecha' => 'required|date',
             'horario_desde' => 'required|date_format:H:i:s',
             'horario_hasta' => 'required|date_format:H:i:s|after:horario_desde',
