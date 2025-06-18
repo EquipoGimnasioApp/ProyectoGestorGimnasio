@@ -326,7 +326,9 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
           <TableCell>FECHA</TableCell>
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
-          <TableCell>DISPONIBILIDAD</TableCell>
+          <TableCell>
+            {tipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'INSCRIPTOS' : 'DISPONIBILIDAD'}
+          </TableCell>
           {tipoUsuario !== TiposUsuarioEnum.ADMINISTRADOR && (
             <>
               <TableCell>INSCRIPTO</TableCell>
@@ -391,6 +393,15 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
     )
   }
 
+  function capitalizarNombreCompleto(nombreCompleto) {
+  return nombreCompleto
+    .split(' ')
+    .map(palabra =>
+      palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+    )
+    .join(' ');
+}
+
   return (
     <Table sx={{ minWidth: 900 }} aria-label='tabla de clases'>
       {encabezadoTabla()}
@@ -398,7 +409,7 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
         {clases.map((clase) => {
           const soloFechas = clase.fecha.split(' ')[0].split('-')
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
-          const nombreProfe = `${clase.nombresProfesor} ${clase.apellidosProfesor}`
+          const nombreProfe = capitalizarNombreCompleto(`${clase.nombresProfesor} ${clase.apellidosProfesor}`);
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
           const disponibilidad = clase.cupoMaximo - clase.totalInscriptos
 
@@ -407,8 +418,7 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
               <TableCell>{clase.tipoActividad}</TableCell>
               <TableCell>{nombreProfe}</TableCell>
               <TableCell>
-                {clase.descripcionSala.charAt(0).toUpperCase() +
-                  clase.descripcionSala.slice(1).toLowerCase()}
+                {capitalizarNombreCompleto(clase.descripcionSala)}
               </TableCell>
               <TableCell>{fechaFormateada}</TableCell>
               <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>

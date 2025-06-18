@@ -292,6 +292,18 @@ function SalasTabla({ salas, onEditar, onEliminar }) {
     )
   }
 
+function capitalizarFrase(frase) {
+  return typeof frase === 'string'
+    ? frase
+        .split(' ')
+        .map(
+          palabra =>
+            palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+        )
+        .join(' ')
+    : '';
+}
+
   return (
     <>
       <Table aria-label="tabla de abm salas">
@@ -300,7 +312,7 @@ function SalasTabla({ salas, onEditar, onEliminar }) {
           {salas.map((sala) => (
             <TableRow key={sala.id}>
               <TableCell>
-                {sala.descripcion.charAt(0).toUpperCase() + sala.descripcion.slice(1).toLowerCase()}
+                {capitalizarFrase(sala.descripcion)}
               </TableCell>
               <TableCell>
                 <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>

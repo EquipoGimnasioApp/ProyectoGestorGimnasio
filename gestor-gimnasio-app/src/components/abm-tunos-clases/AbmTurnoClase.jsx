@@ -540,6 +540,15 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
     )
   }
 
+function capitalizarFrase(frase) {
+  return frase
+    .split(' ')
+    .map(palabra =>
+      palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+    )
+    .join(' ');
+}
+
   return (
     <>
       <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
@@ -550,12 +559,11 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
             return (
               <TableRow key={clase.id}>
                 <TableCell>
-                  {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
+                 <TableCell> {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} </TableCell>
                 </TableCell>
-                <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
+                <TableCell>{capitalizarFrase(clase.profesor)}</TableCell>
                 <TableCell>
-                  {clase.descripcionSala.charAt(0).toUpperCase() +
-                    clase.descripcionSala.slice(1).toLowerCase()}
+                  {capitalizarFrase(clase.descripcionSala)}
                 </TableCell>
                 <TableCell>{fechaFormateada}</TableCell>
                 <TableCell>{clase.horarioDesde}</TableCell>
