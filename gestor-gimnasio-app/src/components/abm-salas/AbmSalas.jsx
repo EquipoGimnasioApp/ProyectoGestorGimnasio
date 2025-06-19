@@ -201,7 +201,10 @@ export default function AbmSalas() {
   return (
     <>
       <h2 className="titulo-clases">ABM Salas</h2>
-      <TableContainer component={Paper} className="equipamiento-table">
+      <TableContainer component={Paper} className="equipamiento-table"  sx={{
+    border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+  }}>
         {cargando ? (
           <CargaTabla texto="Cargando salas..." />
         ) : (
@@ -306,7 +309,7 @@ function capitalizarFrase(frase) {
 
   return (
     <>
-      <Table aria-label="tabla de abm salas">
+      <Table aria-label="tabla de abm salas" >
         {encabezadosTabla()}
         <TableBody>
           {salas.map((sala) => (

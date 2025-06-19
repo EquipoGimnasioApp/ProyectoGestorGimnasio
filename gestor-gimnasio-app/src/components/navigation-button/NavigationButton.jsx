@@ -7,6 +7,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import BuildIcon from "@mui/icons-material/Build"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import PlaylistAddCheck from "@mui/icons-material/PlaylistAddCheck"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
@@ -27,6 +28,9 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
 
   const puedeVerActividades =
     idTipoUsuario === TiposUsuarioEnum.PROFESOR
+
+  const puedeVerTomarAsistencia =
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
@@ -92,6 +96,15 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           onClick={() => navigate("/dashboard/mensajes")}
         >
           Mensajes
+        </Button>
+      )}
+      {puedeVerTomarAsistencia && (<Button
+          color="inherit"
+          startIcon={<PlaylistAddCheck />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/tomar-asistencia")}
+        >
+          Tomar Asistencia
         </Button>
       )}
       {puedeVerAbm && (

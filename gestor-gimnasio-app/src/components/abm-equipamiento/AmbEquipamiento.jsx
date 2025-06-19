@@ -206,7 +206,7 @@ export default function AbmEquipamiento() {
   return (
     <>
       <h2 className="titulo-clases">ABM Equipamiento</h2>
-      <TableContainer component={Paper} className="equipamiento-table">
+      <TableContainer component={Paper} className="equipamiento-table" sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
         {cargando ? (
           <Carga />
         ) : (
