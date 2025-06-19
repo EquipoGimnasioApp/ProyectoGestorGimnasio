@@ -18,6 +18,7 @@ class TurnoClase extends Model
     protected $fillable = [
         'id_actividad',
         'id_profesor',
+        'id_sala',
         'fecha',
         'horario_desde',
         'horario_hasta',
@@ -27,6 +28,7 @@ class TurnoClase extends Model
     protected $casts = [
         'id_actividad' => 'integer',
         'id_profesor' => 'integer',
+        'id_sala' => 'integer',
         'fecha' => 'date',
         'horario_desde' => 'datetime:H:i',
         'horario_hasta' => 'datetime:H:i',

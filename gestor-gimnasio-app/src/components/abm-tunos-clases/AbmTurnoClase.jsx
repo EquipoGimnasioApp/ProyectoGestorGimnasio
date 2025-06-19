@@ -85,7 +85,7 @@ export default function AbmTurnoClase() {
       abrir: true,
       esEdicion: false,
       turno: null,
-      titulo: "Crear nuevo turno clase",
+      titulo: "Crear nueva clase",
     })
   }
 
@@ -94,7 +94,7 @@ export default function AbmTurnoClase() {
       abrir: true,
       esEdicion: true,
       turno: turnoParaEditar,
-      titulo: "Modificar turno clase",
+      titulo: "Modificar clase",
     })
   }
 
@@ -147,13 +147,13 @@ export default function AbmTurnoClase() {
         })
 
         if (!response.ok) {
-          throw new Error("Error al obtener los turnos de clases")
+          throw new Error("Error al obtener las clases")
         }
 
         const data = await response.json()
         setTurnoClases(data)
       } catch (error) {
-        showSnackbar(error.message ?? "Error al obtener los turnos de clases", "error")
+        showSnackbar(error.message ?? "Error al obtener las clases", "error")
         setTurnoClases([])
       } finally {
         setCargando(false)
@@ -194,6 +194,7 @@ export default function AbmTurnoClase() {
   )
 
   const createTurnoCLase = async (nuevoTurno, token) => {
+    console.log("Nuevo turno a crear:", nuevoTurno)
     setCargando(true)
     try {
       const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
@@ -211,10 +212,10 @@ export default function AbmTurnoClase() {
         throw new Error(errorData.message ?? "Error al crear el turno de clase")
       }
 
-      showSnackbar("Turno de clase creado exitosamente", "success")
+      showSnackbar("Clase creada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
-      showSnackbar(error.message ?? "Error al crear el turno de clase", "error")
+      showSnackbar(error.message ?? "Error al crear la clase", "error")
       setCargando(false)
     }
   }
@@ -234,13 +235,13 @@ export default function AbmTurnoClase() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message ?? "Error al modificar el turno de clase")
+        throw new Error(errorData.message ?? "Error al modificar la clase")
       }
 
-      showSnackbar("Turno de clase modificado exitosamente", "success")
+      showSnackbar("Clase modificada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
-      showSnackbar(error.message ?? "Error al modificar el turno de clase", "error")
+      showSnackbar(error.message ?? "Error al modificar la clase", "error")
       setCargando(false)
     }
   }
@@ -540,14 +541,14 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
     )
   }
 
-function capitalizarFrase(frase) {
-  return frase
-    .split(' ')
-    .map(palabra =>
-      palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
-    )
-    .join(' ');
-}
+  function capitalizarFrase(frase) {
+    return frase
+      .split(' ')
+      .map(palabra =>
+        palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+      )
+      .join(' ');
+  }
 
   return (
     <>
@@ -558,9 +559,7 @@ function capitalizarFrase(frase) {
             const fechaFormateada = formatearFecha(clase.fecha)
             return (
               <TableRow key={clase.id}>
-                <TableCell>
-                 <TableCell> {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} </TableCell>
-                </TableCell>
+                <TableCell> {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} </TableCell>
                 <TableCell>{capitalizarFrase(clase.profesor)}</TableCell>
                 <TableCell>
                   {capitalizarFrase(clase.descripcionSala)}
@@ -741,10 +740,6 @@ function TurnoClaseModal({
     setCupoMaximo(value.slice(0, 3))
   }
 
-  const handleSalaChange = (event) => {
-    setIdSala(event.target.value)
-  }
-
   return (
     <Modal
       open={abrirModal}
@@ -805,7 +800,7 @@ function TurnoClaseModal({
             })}
           </Select>
         </FormControl>
-        
+
         <FormControl fullWidth margin="normal">
           <InputLabel id="sala-select-label">Sala</InputLabel>
           <Select
@@ -813,7 +808,7 @@ function TurnoClaseModal({
             id="sala-select"
             value={idSala}
             label="Sala"
-            onChange={handleSalaChange}
+            onChange={(e) => setIdSala(e.target.value)}
           >
             <MenuItem value="">
               <em>Seleccione una Sala</em>
@@ -875,7 +870,7 @@ function TurnoClaseModal({
           <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>
             Cancelar
           </Button>
-          <Button variant="contained" onClick={handleSubmit} disabled={disabledConfirmButton}>
+          <Button variant="contained" className="boton-principal" onClick={handleSubmit} disabled={disabledConfirmButton}>
             Confirmar
           </Button>
         </Box>
@@ -899,6 +894,12 @@ TurnoClaseModal.propTypes = {
       id: PropTypes.any.isRequired,
       nombre: PropTypes.string.isRequired,
       apellido: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  salas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.any.isRequired,
+      descripcion: PropTypes.string.isRequired,
     })
   ).isRequired,
   turnoExistente: PropTypes.shape({
