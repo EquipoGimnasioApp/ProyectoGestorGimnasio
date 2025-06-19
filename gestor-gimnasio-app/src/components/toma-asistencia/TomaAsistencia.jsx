@@ -14,6 +14,7 @@ export default function TomaAsistencia() {
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
 
   const [cargando, setCargando] = useState(true)
+  const [cargandoGuardado, setCargandoGuardado] = useState(false);
 
   const [turnoClases, setTurnoClases] = useState([])
   const [alumnos, setAlumnos] = useState([])
@@ -110,7 +111,6 @@ export default function TomaAsistencia() {
 
   useEffect(() => {
     getTurnoClases(userToken)
-    /*     getAlumnos(userToken) */
   }, [userToken, getTurnoClases])
 
   const toggleAsistenciaAlumno = (idAlumno) => {
@@ -126,7 +126,10 @@ export default function TomaAsistencia() {
       presente: asistencia[alumno.id] ? 1 : 0,
     }))
 
-    setCargando(true)
+    setCargandoGuardado(true);
+
+    setAlumnos([]);
+    setAsistencia({});
     try {
       const response = await fetch(`${environment.apiUrl}/inscripciones/cargar-asistencia/${claseSeleccionada}`, {
         method: "POST",
@@ -144,11 +147,11 @@ export default function TomaAsistencia() {
       }
 
       showSnackbar("Asistencia cargada exitosamente", "success")
-      //await getSalas(token)
+      setClaseSeleccionada("");
     } catch (error) {
       showSnackbar(error.message ?? "Error al cargar asistencia", "error")
     } finally {
-      setCargando(false)
+      setCargandoGuardado(false);
     }
 
   }
@@ -171,54 +174,70 @@ export default function TomaAsistencia() {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', pt: 8, background: '#fff' }}>
       <Typography variant="h4" fontWeight={700} mb={4} align="center">
-        Toma de Asistencia
+        Tomar Asistencia
       </Typography>
-      <Paper elevation={1} sx={{ p: 4, borderRadius: 3, minWidth: 500, maxWidth: 540, mx: 'auto' }}>
+      <Paper elevation={1} sx={{ p: 4, borderRadius: 3, minWidth: 500, maxWidth: 540, mx: 'auto', border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
         {cargando ? (
-          <CargaTabla texto="Cargando clases..." />
-        ) : (
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-            <Typography fontSize={20} fontWeight={500} sx={{ mr: 2 }}>
-              Seleccionar clase:
-            </Typography>
-            <FormControl fullWidth sx={{ maxWidth: 250 }}>
-              <Select
-                value={claseSeleccionada}
-                displayEmpty
-                onChange={handleSeleccionClase}
-                sx={{ background: '#fff' }}
-              >
-                <MenuItem value="" disabled>Seleccione una clase</MenuItem>
-                {turnoClasesHoy.map(clase => (
-                  <MenuItem key={clase.id} value={clase.id}>
-                    {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} - {clase.horarioDesde} a {clase.horarioHasta}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-        )}
+          <CargaTabla texto='Cargando clases...' />
+        )
+          : (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+              <Typography fontSize={20} fontWeight={500} sx={{ mr: 2 }}>
+                Seleccionar clase:
+              </Typography>
+              <FormControl fullWidth sx={{ maxWidth: 250 }}>
+                <Select
+                  value={claseSeleccionada}
+                  displayEmpty
+                  onChange={handleSeleccionClase}
+                  sx={{ background: '#fff' }}
+                >
+                  <MenuItem value="" disabled>Seleccione una clase</MenuItem>
+                  {turnoClasesHoy.map(clase => (
+                    <MenuItem key={clase.id} value={clase.id}>
+                      {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} - {clase.horarioDesde} a {clase.horarioHasta}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          )}
 
         {claseSeleccionada && (
           <>
             <Box sx={{ mb: 3, pl: 5 }}>
-              {alumnos.map(alumno => (
-                <FormControlLabel
-                  key={alumno.id}
-                  control={
-                    <Checkbox
-                      checked={asistencia[alumno.id] || false}
-                      onChange={() => toggleAsistenciaAlumno(alumno.id)}
-                      sx={{ color: '#000' }}
-                    />
-                  }
-                  label={<Typography fontSize={18}>{alumno.nombres} {alumno.apellidos}</Typography>}
-                  sx={{ display: 'flex', mb: 1 }}
-                />
-              ))}
+              {cargandoGuardado ? (
+                <CargaTabla texto='Guardando asistencia...' />
+              ) : cargandoAlumnos ? (
+                <CargaTabla texto='Cargando alumnos...' />
+              ) : alumnos.length === 0 ? (
+                <Typography color='text.secondary' align='center' sx={{ my: 2 }}>
+                  No hay alumnos inscriptos para esta clase.
+                </Typography>
+              ) : (
+                alumnos.map(alumno => (
+                  <FormControlLabel
+                    key={alumno.id}
+                    control={
+                      <Checkbox
+                        checked={asistencia[alumno.id] || false}
+                        onChange={() => toggleAsistenciaAlumno(alumno.id)}
+                        sx={{ color: '#000' }}
+                      />
+                    }
+                    label={
+                      <Typography fontSize={18}>
+                        {alumno.nombres} {alumno.apellidos}
+                      </Typography>
+                    }
+                    sx={{ display: 'flex', mb: 1 }}
+                  />
+                ))
+              )}
             </Box>
             <Button
-              variant="contained"
+              variant='contained'
               fullWidth
               sx={{
                 background: '#000',
@@ -231,6 +250,7 @@ export default function TomaAsistencia() {
                 '&:hover': { background: '#222' }
               }}
               onClick={guardarAsistencia}
+              disabled={cargando || alumnos.length === 0}
             >
               Guardar asistencia
             </Button>

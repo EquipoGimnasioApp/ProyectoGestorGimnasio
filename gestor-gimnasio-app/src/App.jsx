@@ -41,7 +41,7 @@ function App() {
             <Route path="/dashboard/agendar-clases" element={<AgendarClases />} />
             <Route path="/dashboard/actividades" element={<Actividades />} />
             <Route path="/dashboard/mensajes" element={<Mensajes />} />
-            <Route path="/dashboard/toma-asistencia" element={<TomaAsistencia />} />
+            <Route path="/dashboard/tomar-asistencia" element={<TomaAsistencia />} />
             <Route path="/dashboard/admin-mensajes" element={<MensajesAdministrador />} />
             <Route path="/dashboard/abm/clases" element={<AbmTurnoClase />} />
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />

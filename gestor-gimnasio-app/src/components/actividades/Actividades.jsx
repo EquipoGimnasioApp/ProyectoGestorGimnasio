@@ -83,7 +83,10 @@ export default function Actividades() {
   return (
     <>
       <h2 className="titulo-clases">Actividades</h2>
-      <TableContainer component={Paper} className="equipamiento-table">
+      <TableContainer component={Paper} className="equipamiento-table"  sx={{
+    border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+  }}>
         {cargando ? <Carga /> : <TiposActividadTabla actividades={tiposActividad} />}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>

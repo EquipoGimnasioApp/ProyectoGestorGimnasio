@@ -271,7 +271,7 @@ function Clases() {
         </Box>
       </Box>
 
-      <TableContainer component={Paper} className="clases-table">
+      <TableContainer component={Paper} className="equipamiento-table" sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.22)' }}>
         {isLoading ? (
           <CargaTabla texto="Cargando clases..." />
         ) : (
