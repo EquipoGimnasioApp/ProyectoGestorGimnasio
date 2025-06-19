@@ -423,7 +423,7 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
               <TableCell>{fechaFormateada}</TableCell>
               <TableCell>{clase.horarioDesde.slice(0, 5)}</TableCell>
               <TableCell>{clase.horarioHasta.slice(0, 5)}</TableCell>
-              <TableCell>{disponibilidad}/{clase.cupoMaximo}</TableCell>
+              <TableCell>{clase.totalInscriptos}/{clase.cupoMaximo}</TableCell>
               {tipoUsuario !== TiposUsuarioEnum.ADMINISTRADOR && (
                 <>
                   <TableCell>
