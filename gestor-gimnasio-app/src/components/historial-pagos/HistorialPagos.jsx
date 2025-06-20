@@ -31,7 +31,7 @@ const HistorialPagos = () => {
   }, []);
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className="equipamiento-table">
       <Table>
         <TableHead>
           <TableRow>
@@ -56,7 +56,7 @@ const HistorialPagos = () => {
                 <TableCell>{pago.id}</TableCell>
                 <TableCell>{pago.fecha}</TableCell>
                 <TableCell>{pago.monto}</TableCell>
-                <TableCell>{pago.id_forma_pago}</TableCell>
+                <TableCell>{pago.forma_pago.descripcion}</TableCell>
               </TableRow>
             ))
           )}

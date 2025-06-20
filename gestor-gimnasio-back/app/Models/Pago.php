@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Usuario; // Asegúrate de importar el modelo Usuario si es necesario
+use App\Models\FormaPago; // Asegúrate de importar el modelo FormaPago si es necesario
 
 class Pago extends Model
 {
@@ -15,5 +16,10 @@ class Pago extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');
+    }
+
+    public function formaPago()
+    {
+        return $this->belongsTo(FormaPago::class, 'id_forma_pago', 'id');
     }
 }
