@@ -39,8 +39,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
     idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const puedeVerHistorialPagos =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
 
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget)
