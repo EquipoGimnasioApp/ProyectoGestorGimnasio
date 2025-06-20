@@ -24,4 +24,11 @@ interface TipoActividadServiceInterface
      * @return mixed
      */
     public function create(array $tipoActividad);
+
+    /**
+     * Eliminar un tipo actividad existente.
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id);
 }

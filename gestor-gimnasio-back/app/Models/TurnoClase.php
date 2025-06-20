@@ -17,6 +17,8 @@ class TurnoClase extends Model
 
     protected $fillable = [
         'id_actividad',
+        'id_profesor',
+        'id_sala',
         'fecha',
         'horario_desde',
         'horario_hasta',
@@ -25,6 +27,8 @@ class TurnoClase extends Model
 
     protected $casts = [
         'id_actividad' => 'integer',
+        'id_profesor' => 'integer',
+        'id_sala' => 'integer',
         'fecha' => 'date',
         'horario_desde' => 'datetime:H:i',
         'horario_hasta' => 'datetime:H:i',
@@ -35,4 +39,20 @@ class TurnoClase extends Model
     {
         return $this->belongsTo(TipoActividad::class, 'id_actividad', 'id');
     }
+
+    public function profesor()
+    {
+        return $this->belongsTo(Usuario::class, 'id_profesor', 'id');
+    }
+
+    public function sala()
+    {
+        return $this->belongsTo(Sala::class, 'id_sala', 'id');
+    }
+
+    public function descripcionSala()
+    {
+        return $this->sala ? $this->sala->descripcion : '';
+    }
+
 }

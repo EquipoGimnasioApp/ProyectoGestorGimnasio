@@ -35,7 +35,6 @@ class TipoActividadController extends Controller
     {
         $validatedData = $request->validate([
             'tipo' => 'required|string|max:255',
-            'id_sala' => 'required|numeric',
         ]);
 
         $tipoActividad = $this->tipo_actividad_service->update($id, $validatedData);
@@ -52,12 +51,23 @@ class TipoActividadController extends Controller
     public function create(Request $request)
     {
         $validatedData = $request->validate([
-            'tipo' => 'required|string|max:255',
-            'id_sala' => 'required|numeric',
+            'tipo' => 'required|string|max:255'
         ]);
 
         $tipoActividad = $this->tipo_actividad_service->create($validatedData);
 
         return response()->json($tipoActividad, Response::HTTP_CREATED);
+    }
+
+    /**
+     * Eliminar un tipo actividad existente.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(int $id)
+    {
+        $this->tipo_actividad_service->destroy($id);
+        return response()->json(['message' => 'Actividad eliminada correctamente'], \Illuminate\Http\Response::HTTP_OK);
     }
 }

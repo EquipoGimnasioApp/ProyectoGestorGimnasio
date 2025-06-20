@@ -31,6 +31,13 @@ interface UsuarioRepositoryInterface
     public function getByEmail(string $email): ?Usuario;
 
     /**
+     * Obtener todos los usuarios que son profesores.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Una colección de usuarios que son profesores.
+     */
+    public function getProfesores();
+
+    /**
      * Verifica si un correo electrónico ya existe en la base de datos.
      *
      * @param string $email El correo electrónico a verificar.

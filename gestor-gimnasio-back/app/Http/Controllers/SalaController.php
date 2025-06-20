@@ -59,4 +59,16 @@ class SalaController extends Controller
 
         return response()->json($sala, Response::HTTP_CREATED);
     }
+
+    /**
+     * Eliminar una sala existente.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(int $id)
+    {
+        $this->salaService->destroy($id);
+        return response()->json(['message' => 'Sala eliminada correctamente'], \Illuminate\Http\Response::HTTP_OK);
+    }
 }

@@ -46,7 +46,7 @@ function Header() {
   return (
     <>
       {usuario && (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
           <AppBar position="static" sx={{ backgroundColor: '#f8fafc' }}>
             <Toolbar>
               <img src="/logo_app.png" alt="Logo" style={{ height: 40, marginRight: 10 }} />

@@ -1,98 +1,124 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import BuildIcon from '@mui/icons-material/Build';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import TiposUsuarioEnum from '../../models/enums/TiposUsuarioEnum.models.enum.js';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter"
+import EventNoteIcon from "@mui/icons-material/EventNote"
+import MailOutlineIcon from "@mui/icons-material/MailOutline"
+import BuildIcon from "@mui/icons-material/Build"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import PlaylistAddCheck from "@mui/icons-material/PlaylistAddCheck"
+import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
+import PropTypes from "prop-types"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
-function NavigationButton({ usuario, colorButtons = '#000' }) {
-  const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
+function NavigationButton({ usuario, colorButtons = "#000" }) {
+  const navigate = useNavigate()
+  const [anchorEl, setAnchorEl] = useState(null)
 
   if (!usuario) {
-    return null;
+    return null
   }
 
-  const idTipoUsuario = parseInt(usuario.idTipoUsuario, 10);
+  const idTipoUsuario = parseInt(usuario.idTipoUsuario, 10)
 
   const puedeVerAgendarClases =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
-
-  const puedeVerContactoAlumno =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
   const puedeVerActividades =
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR ||
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
-  const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
+  const puedeVerTomarAsistencia =
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
+
+  const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
+
+  const puedeVerMensajes = 
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const puedeVerHistorialPagos =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
     idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR;
 
   const handleAbmClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleAbmClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleAbmClasesClick = () => {
-    navigate('/dashboard/abm/clases');
-    handleAbmClose();
-  };
+    navigate("/dashboard/abm/clases")
+    handleAbmClose()
+  }
 
   const handleAbmTiposActividadClick = () => {
-    navigate('/dashboard/abm/tipos-actividad');
-    handleAbmClose();
-  };
+    navigate("/dashboard/abm/tipos-actividad")
+    handleAbmClose()
+  }
 
   const handleAbmSalasClick = () => {
-    navigate('/dashboard/abm/salas');
-    handleAbmClose();
-  };
+    navigate("/dashboard/abm/salas")
+    handleAbmClose()
+  }
+
+  const handleAbmEquipamientoClick = () => {
+    navigate("/dashboard/abm/equipamiento")
+    handleAbmClose()
+  }
 
   return (
-    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.15rem' }}>
-      {puedeVerAgendarClases && (
-        <Button
-          color="inherit"
-          startIcon={<FitnessCenterIcon />}
-          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
-          onClick={() => navigate('/dashboard/agendar-clases')}
-        >
-          Agendar
-        </Button>
-      )}
-      {puedeVerContactoAlumno && (
-        <Button
-          color="inherit"
-          startIcon={<MailOutlineIcon />}
-          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
-          onClick={() => navigate('/dashboard/contacto')}
-        >
-          Contacto
-        </Button>
-      )}
+    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem" }}>
+     {puedeVerAgendarClases && (
+  <Button
+    color="inherit"
+    startIcon={<FitnessCenterIcon />}
+    sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+    onClick={() => navigate('/dashboard/agendar-clases')}
+  >
+    {idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'Próximas Clases' : 'Agendar'}
+  </Button>
+)}
       {puedeVerActividades && (
         <Button
           color="inherit"
           startIcon={<EventNoteIcon />}
-          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/actividades")}
         >
           Actividades
+        </Button>
+      )}
+      {puedeVerMensajes && (
+        <Button
+          color="inherit"
+          startIcon={<MailOutlineIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/mensajes")}
+        >
+          Mensajes
+        </Button>
+      )}
+      {puedeVerTomarAsistencia && (<Button
+          color="inherit"
+          startIcon={<PlaylistAddCheck />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/tomar-asistencia")}
+        >
+          Tomar Asistencia
+        </Button>
+      )}
+      {puedeVerAbm && (
+        <Button
+          color="inherit"
+          startIcon={<MailOutlineIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/admin-mensajes")}
+        >
+          Mensajes
         </Button>
       )}
       {puedeVerAbm && (
@@ -101,7 +127,7 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
             color="inherit"
             startIcon={<BuildIcon />}
             endIcon={<ArrowDropDownIcon />}
-            sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
+            sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
             onClick={handleAbmClick}
             aria-controls="abm-menu"
             aria-haspopup="true"
@@ -115,23 +141,18 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
             open={Boolean(anchorEl)}
             onClose={handleAbmClose}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
+              vertical: "bottom",
+              horizontal: "left",
             }}
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
+              vertical: "top",
+              horizontal: "left",
             }}
           >
-            <MenuItem onClick={handleAbmClasesClick}>
-              ABM Clases
-            </MenuItem>
-            <MenuItem onClick={handleAbmTiposActividadClick}>
-              ABM Tipos de Actividad
-            </MenuItem>
-            <MenuItem onClick={handleAbmSalasClick}>
-              ABM Salas
-            </MenuItem>
+            <MenuItem onClick={handleAbmClasesClick}>ABM Clases</MenuItem>
+            <MenuItem onClick={handleAbmTiposActividadClick}>ABM Actividades</MenuItem>
+            <MenuItem onClick={handleAbmSalasClick}>ABM Salas</MenuItem>
+            <MenuItem onClick={handleAbmEquipamientoClick}>ABM Equipamiento</MenuItem>
           </Menu>
         </>
       )}
@@ -145,18 +166,15 @@ function NavigationButton({ usuario, colorButtons = '#000' }) {
         </Button>
       )}
     </Box>
-  );
+  )
 }
 
 NavigationButton.propTypes = {
   usuario: PropTypes.shape({
-    idTipoUsuario: PropTypes.oneOf([
-      TiposUsuarioEnum.ALUMNO,
-      TiposUsuarioEnum.PROFESOR,
-      TiposUsuarioEnum.ADMINISTRADOR,
-    ]).isRequired,
+    idTipoUsuario: PropTypes.oneOf([TiposUsuarioEnum.ALUMNO, TiposUsuarioEnum.PROFESOR, TiposUsuarioEnum.ADMINISTRADOR])
+      .isRequired,
   }),
   colorButtons: PropTypes.string,
-};
+}
 
-export default NavigationButton;
+export default NavigationButton

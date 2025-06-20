@@ -41,4 +41,16 @@ class SalaRepository implements SalaRepositoryInterface
     {
         return Sala::create($sala);
     }
+
+    /**
+     * Eliminar una sala existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        $sala = Sala::findOrFail($id);
+        return $sala->delete();
+    }
 }

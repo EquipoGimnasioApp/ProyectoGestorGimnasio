@@ -25,4 +25,11 @@ interface SalaRepositoryInterface
      * @return mixed
      */
     public function create(array $sala);
+
+    /**
+     * Eliminar una sala existente.
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id);
 }

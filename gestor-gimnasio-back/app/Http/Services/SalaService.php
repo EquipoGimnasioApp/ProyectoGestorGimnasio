@@ -43,4 +43,15 @@ class SalaService implements SalaServiceInterface
     {
         return $this->sala_repository->create($sala);
     }
+
+    /**
+     * Eliminar una sala existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        return $this->sala_repository->destroy($id);
+    }
 }

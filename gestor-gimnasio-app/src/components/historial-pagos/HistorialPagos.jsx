@@ -31,14 +31,16 @@ const HistorialPagos = () => {
   }, []);
 
   return (
+    <>
+    <h2 className="titulo-clases">Historial de Pagos</h2>
     <TableContainer component={Paper} className="equipamiento-table">
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>N° Comprobante</TableCell>
-            <TableCell>Fecha</TableCell>
-            <TableCell>Monto</TableCell>
-            <TableCell>Forma de pago</TableCell>
+            <TableCell>N° COMPROBANTE</TableCell>
+            <TableCell>FECHA</TableCell>
+            <TableCell>MONTO</TableCell>
+            <TableCell>FORMA DE PAGO</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -63,6 +65,7 @@ const HistorialPagos = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 };
 

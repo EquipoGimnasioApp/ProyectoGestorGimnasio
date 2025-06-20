@@ -18,11 +18,14 @@ use App\Http\Interfaces\TipoActividadRepositoryInterface;
 use App\Http\Interfaces\TipoActividadServiceInterface;
 use App\Http\Interfaces\TurnoClaseRepositoryInterface;
 use App\Http\Interfaces\TurnoClaseServiceInterface;
+use App\Http\Interfaces\MaterialRepositoryInterface;
+use App\Http\Interfaces\MaterialServiceInterface;
 use App\Http\Repositories\ContactoRepository;
 use App\Http\Repositories\InscripcionRepository;
 use App\Http\Repositories\SalaRepository;
 use App\Http\Repositories\TipoActividadRepository;
 use App\Http\Repositories\TurnoClaseRepository;
+use App\Http\Repositories\MaterialRepository;
 use App\Http\Services\AuthService;
 use App\Http\Services\ContactoService;
 use App\Http\Services\InscripcionService;
@@ -33,6 +36,9 @@ use App\Http\Repositories\PagoRepository;
 use App\Http\Interfaces\PagoRepositoryInterface;
 use App\Http\Services\PagoService;
 use App\Http\Interfaces\PagoServiceInterface;
+use App\Http\Services\MaterialService;
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -115,6 +121,9 @@ class AppServiceProvider extends ServiceProvider
             PagoServiceInterface::class,
             PagoService::class
         );
+
+        $this->app->bind(MaterialServiceInterface::class, MaterialService::class);
+        $this->app->bind(MaterialRepositoryInterface::class, MaterialRepository::class);
     }
 
     /**

@@ -14,9 +14,7 @@ class TipoActividadRepository implements TipoActividadRepositoryInterface
      */
     public function getAll()
     {
-        return TipoActividad::with('sala')
-            ->orderBy('id')
-            ->get();
+        return TipoActividad::orderBy('id')->get();
     }
 
     /**
@@ -42,5 +40,17 @@ class TipoActividadRepository implements TipoActividadRepositoryInterface
     public function create(array $tipoActividad)
     {
         return TipoActividad::create($tipoActividad);
+    }
+
+    /**
+     * Eliminar un tipo actividad existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        $tipoActividad = TipoActividad::findOrFail($id);
+        return $tipoActividad->delete();
     }
 }

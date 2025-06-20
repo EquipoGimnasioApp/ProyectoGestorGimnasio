@@ -48,4 +48,15 @@ class TipoActividadService implements TipoActividadServiceInterface
     {
         return $this->tipo_actividad_repository->create($tipoActividad);
     }
+
+    /**
+     * Eliminar un tipo actividad existente.
+     *
+     * @param int $id
+     * @return mixed
+     */
+    public function destroy(int $id)
+    {
+        return $this->tipo_actividad_repository->destroy($id);
+    }
 }

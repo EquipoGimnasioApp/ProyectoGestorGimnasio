@@ -85,6 +85,7 @@ function Landing() {
   return (
     <>
       <Box
+        className="landing-section"
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -388,6 +389,7 @@ function Landing() {
               WebApp para los clientes
             </Box>
             <Button
+             href="#contactoLanding"
               variant="contained"
               sx={{
                 backgroundColor: "#111",

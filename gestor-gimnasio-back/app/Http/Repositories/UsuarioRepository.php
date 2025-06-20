@@ -47,6 +47,32 @@ class UsuarioRepository implements UsuarioRepositoryInterface
     }
 
     /**
+     * Obtener todos los usuarios que son profesores.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Una colección de usuarios que son profesores.
+     */
+    public function getProfesores()
+    {
+        return Usuario::with('tipoUsuario')
+            ->where('id_tipo_usuario', 3)
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * Obtener todos los usuarios que son alumnos.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Una colección de usuarios que son alumnos.
+     */
+    public function getAlumnos()
+    {
+        return Usuario::with('tipoUsuario')
+            ->where('id_tipo_usuario', 2)
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
      * Verifica si un correo electrónico ya existe en la base de datos.
      *
      * @param string $email El correo electrónico a verificar.
