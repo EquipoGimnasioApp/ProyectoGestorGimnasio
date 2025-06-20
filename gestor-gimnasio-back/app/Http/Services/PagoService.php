@@ -2,16 +2,14 @@
 
 namespace App\Http\Services;
 
+use App\Http\Interfaces\PagoServiceInterface;
 use App\Http\Interfaces\PagoRepositoryInterface;
 
-class PagoService
+class PagoService implements PagoServiceInterface
 {
-    protected $pagoRepository;
-
-    public function __construct(PagoRepositoryInterface $pagoRepository)
-    {
-        $this->pagoRepository = $pagoRepository;
-    }
+    public function __construct(
+        protected PagoRepositoryInterface $pagoRepository
+    ) { }
 
     public function getHistorialByUsuarioId($usuarioId)
     {

@@ -29,6 +29,10 @@ use App\Http\Services\InscripcionService;
 use App\Http\Services\SalaService;
 use App\Http\Services\TipoActividadService;
 use App\Http\Services\TurnoClaseService;
+use App\Http\Repositories\PagoRepository;
+use App\Http\Interfaces\PagoRepositoryInterface;
+use App\Http\Services\PagoService;
+use App\Http\Interfaces\PagoServiceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -103,13 +107,13 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \App\Http\Interfaces\PagoRepositoryInterface::class,
-            \App\Http\Repositories\PagoRepository::class
+            PagoRepositoryInterface::class,
+            PagoRepository::class
         );
 
         $this->app->bind(
-            \App\Http\Interfaces\PagoServiceInterface::class,
-            \App\Http\Services\PagoService::class
+            PagoServiceInterface::class,
+            PagoService::class
         );
     }
 

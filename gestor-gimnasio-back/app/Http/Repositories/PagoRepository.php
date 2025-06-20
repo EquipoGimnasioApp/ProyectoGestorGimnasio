@@ -3,8 +3,9 @@
 namespace App\Http\Repositories;
 
 use App\Models\Pago;
+use App\Http\Interfaces\PagoRepositoryInterface;
 
-class PagoRepository
+class PagoRepository implements PagoRepositoryInterface
 {
     public function getHistorialByUsuarioId($usuarioId)
     {

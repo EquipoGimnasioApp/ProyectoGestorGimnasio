@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Usuario; // Asegúrate de importar el modelo Usuario si es necesario
 
 class Pago extends Model
 {
@@ -10,4 +11,9 @@ class Pago extends Model
 
     protected $primaryKey = 'id';
     public $timestamps = false; // Si no usas created_at y updated_at
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario');
+    }
 }

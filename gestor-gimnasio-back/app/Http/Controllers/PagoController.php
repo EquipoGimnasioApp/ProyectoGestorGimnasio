@@ -1,19 +1,5 @@
-<!-- namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Models\Pago;
-
-class PagoController extends Controller
-{
-    public function historial(Request $request)
-    {
-        $userId = $request->user()->id;
-        $pagos = Pago::where('usuario_id', $userId)->orderBy('fecha', 'desc')->get();
-        return response()->json($pagos);
-    }
-}  -->
-
 <?php
+namespace App\Http\Controllers;
 use App\Http\Interfaces\PagoServiceInterface;
 
 class PagoController extends Controller
@@ -25,10 +11,9 @@ class PagoController extends Controller
         $this->pagoService = $pagoService;
     }
 
-    public function historial(Request $request)
+    public function historial($id)
     {
-        $userId = $request->user()->id;
-        $pagos = $this->pagoService->getHistorialByUsuarioId($userId);
+        $pagos = $this->pagoService->getHistorialByUsuarioId($id);
         return response()->json($pagos);
     }
 }
