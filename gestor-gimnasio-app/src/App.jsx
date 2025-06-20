@@ -15,15 +15,16 @@ import Actividades from "./components/actividades/Actividades"
 import MensajesAdministrador from "./components/mensajes-internos-administrador/MensajesAdministrador"
 import Mensajes from "./components/mensajes-internos/Mensajes"
 import TomaAsistencia from "./components/toma-asistencia/TomaAsistencia"
+import HistorialPagos from "./components/historial-pagos/HistorialPagos";
 
-import dayjs from "dayjs"
-import "dayjs/locale/es"
-import Landing from "./components/layouts/landing/Landing"
+import dayjs from "dayjs";
+import "dayjs/locale/es";
+import Landing from "./components/layouts/landing/Landing";
 
-dayjs.locale("es")
+dayjs.locale("es");
 
 function App() {
-  const usuarioEstaLogueado = localStorage.getItem("usuarioAccesToken")
+  const usuarioEstaLogueado = localStorage.getItem("usuarioAccesToken");
 
   return (
     <Router>
@@ -46,17 +47,15 @@ function App() {
             <Route path="/dashboard/abm/clases" element={<AbmTurnoClase />} />
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />
             <Route path="/dashboard/abm/salas" element={<AbmSalas />} />
+            <Route path="/dashboard/historial-pagos" element={<HistorialPagos />} />
             <Route path="/dashboard/abm/equipamiento" element={<AbmEquipamiento />} />
           </Route>
         </Route>
-
-        <Route
-          path="*"
-          element={usuarioEstaLogueado ? <Navigate to="/dashboard" replace /> : <Navigate to="/" replace />}
-        />
+          <Route path="*" element={usuarioEstaLogueado ? 
+            (<Navigate to="/dashboard" replace />) : ( <Navigate to="/" replace />)} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

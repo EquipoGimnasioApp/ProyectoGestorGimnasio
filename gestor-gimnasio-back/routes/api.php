@@ -10,6 +10,7 @@ use App\Http\Controllers\TurnoClaseController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
 
 if (!defined('AUTH_SANCTION')) {
@@ -19,6 +20,8 @@ if (!defined('AUTH_SANCTION')) {
 if (!defined('ID_ROUTE_PARAMETER')) {
     define('ID_ROUTE_PARAMETER', '/{id}');
 }
+
+Route::get('/pagos/{id}', [PagoController::class, 'historial']);
 
 Route::post('auth/login', [AuthController::class, 'login'])
     ->name('login');
