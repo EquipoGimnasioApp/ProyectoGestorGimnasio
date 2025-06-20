@@ -14,13 +14,13 @@ import SnackbarMensaje from "../utils/SnackbarMensaje"
 import Carga from "../carga/Carga"
 
 const TIPOS_USUARIO = [
-  { value: "todos_usuarios", label: "Todos los usuarios" },
-  { value: "todos_administradores", label: "Todos los administradores" },
-  { value: "todos_profesores", label: "Todos los profesores" },
-  { value: "todos_alumnos", label: "Todos los alumnos" },
+  { value: "todos_usuarios", label: "Todos los Usuarios" },
+  { value: "todos_administradores", label: "Todos los Administradores" },
+  { value: "todos_profesores", label: "Todos los Profesores" },
+  { value: "todos_alumnos", label: "Todos los Alumnos" },
   { value: 1, label: "Administradores" },
-  { value: 2, label: "Profesores" },
-  { value: 3, label: "Alumnos" },
+  { value: 3, label: "Profesores" },
+  { value: 2, label: "Alumnos" },
 ]
 
 export default function RedactarMensajeAdministrador({ onClose, mensajeOriginal, modo }) {
@@ -80,18 +80,18 @@ export default function RedactarMensajeAdministrador({ onClose, mensajeOriginal,
   const usuariosFiltrados = useMemo(() => {
     if (tipoUsuario === "todos_usuarios") return usuarios
     if (tipoUsuario === "todos_administradores") return usuarios.filter((u) => u.idTipoUsuario === 1)
-    if (tipoUsuario === "todos_profesores") return usuarios.filter((u) => u.idTipoUsuario === 2)
-    if (tipoUsuario === "todos_alumnos") return usuarios.filter((u) => u.idTipoUsuario === 3)
+    if (tipoUsuario === "todos_profesores") return usuarios.filter((u) => u.idTipoUsuario === 3)
+    if (tipoUsuario === "todos_alumnos") return usuarios.filter((u) => u.idTipoUsuario === 2)
     if (tipoUsuario) return usuarios.filter((u) => u.idTipoUsuario === tipoUsuario)
     return usuarios
   }, [usuarios, tipoUsuario])
 
   // Etiqueta para el destinatario según selección
   const destinatarioLabel = useMemo(() => {
-    if (tipoUsuario === "todos_usuarios") return "Todos los usuarios"
-    if (tipoUsuario === "todos_administradores") return "Todos los administradores"
-    if (tipoUsuario === "todos_profesores") return "Todos los profesores"
-    if (tipoUsuario === "todos_alumnos") return "Todos los alumnos"
+    if (tipoUsuario === "todos_usuarios") return "Todos los Usuarios"
+    if (tipoUsuario === "todos_administradores") return "Todos los Administradores"
+    if (tipoUsuario === "todos_profesores") return "Todos los Profesores"
+    if (tipoUsuario === "todos_alumnos") return "Todos los Alumnos"
     const tipo = TIPOS_USUARIO.find((t) => t.value === tipoUsuario)
     return tipo ? tipo.label : "Selecciona destinatario"
   }, [tipoUsuario])
@@ -160,7 +160,7 @@ export default function RedactarMensajeAdministrador({ onClose, mensajeOriginal,
             Authorization: `Bearer ${userToken}`,
           },
           body: JSON.stringify({
-            remitente_id: usuarioId, // Usar el ID real del usuario logueado
+            remitente_id: usuarioId,
             destinatario_id: destId,
             asunto,
             mensaje,
@@ -230,7 +230,7 @@ export default function RedactarMensajeAdministrador({ onClose, mensajeOriginal,
                   }}
                   disabled={enviando}
                 >
-                  <MenuItem value="">Todos</MenuItem>
+                  <MenuItem value="">-</MenuItem>
                   {TIPOS_USUARIO.map((t) => (
                     <MenuItem key={t.value} value={t.value}>
                       {t.label}
