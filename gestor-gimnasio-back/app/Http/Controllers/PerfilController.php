@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Interfaces\PerfilServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class PerfilController extends Controller
 {
@@ -25,8 +26,9 @@ class PerfilController extends Controller
         return response()->json(['message' => 'Perfil con ID ' . $id . ' no encontrado'], 404);
     }
 
-    /* public function updateForUser(Request $request, int $id)
+    public function update(int $userId, Request $request)
     {
+        Log::info('PerfilController@update: Recibida petición de actualización', ['userId' => $userId, 'request' => $request->all()]);
         $data = $request->validate([
             'fecha_nacimiento' => 'nullable|date',
             'telefono' => 'nullable|string|max:50',
@@ -41,7 +43,14 @@ class PerfilController extends Controller
             'pais' => 'nullable|string|max:100',
         ]);
 
-        $perfil = $this->perfilSrv->updateForUser($id, $data);
+        $perfil = $this->perfilSrv->update($userId, $data);
+
+        if (!$perfil) {
+            Log::warning('PerfilController@update: Perfil no encontrado', ['userId' => $userId]);
+            return response()->json(['message' => 'Perfil con ID ' . $userId . ' no encontrado'], 404);
+        }
+
+        Log::info('PerfilController@update: Perfil actualizado correctamente', ['perfil' => $perfil]);
         return response()->json($perfil, Response::HTTP_OK);
-    } */
+    }
 }

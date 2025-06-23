@@ -21,7 +21,6 @@ class Perfil extends Model
         'telefono',
         'telefono_emergencia',
         'id_tipo_documento',
-        'tipo_documento',
         'documento_identidad',
         'cobertura_medica',
         'observaciones_salud',

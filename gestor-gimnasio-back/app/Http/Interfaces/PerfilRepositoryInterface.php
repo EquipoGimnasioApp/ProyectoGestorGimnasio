@@ -10,5 +10,5 @@ interface PerfilRepositoryInterface
 
     public function create(array $data);
 
-    /*    public function updateForUser(int $userId, array $data); */
+    public function update(int $userId, array $data);
 }

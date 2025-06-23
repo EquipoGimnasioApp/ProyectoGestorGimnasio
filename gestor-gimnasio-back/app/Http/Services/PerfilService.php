@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\PerfilRepositoryInterface;
 use App\Http\Interfaces\PerfilServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 class PerfilService implements PerfilServiceInterface
 {
@@ -38,8 +39,11 @@ class PerfilService implements PerfilServiceInterface
         ]);
     }
 
-    /* public function updateForUser($userId, $data)
+    public function update(int $userId, array $data)
     {
-        return $this->perfilRepository->updateForUser($userId, $data);
-    } */
+        Log::info('PerfilService@update: Llamando a repository para actualizar perfil', ['userId' => $userId, 'data' => $data]);
+        $result = $this->perfilRepository->update($userId, $data);
+        Log::info('PerfilService@update: Resultado de la actualización', ['result' => $result]);
+        return $result;
+    }
 }

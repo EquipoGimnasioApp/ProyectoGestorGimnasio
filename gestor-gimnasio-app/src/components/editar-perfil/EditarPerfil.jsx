@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react"
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import {
     Box,
     Typography,
@@ -9,32 +9,30 @@ import {
     Select,
     InputLabel,
     FormControl,
-} from "@mui/material"
+} from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { es } from 'date-fns/locale'
-import UsuarioAcceesToken from "../../models/auth/UsuarioAccessToken"
-import environment from "../../environments/environment"
-import SnackbarMensaje from "../utils/SnackbarMensaje"
-import Carga from "../carga/Carga"
+import UsuarioAcceesToken from '../../models/auth/UsuarioAccessToken'
+import environment from '../../environments/environment'
+import SnackbarMensaje from '../utils/SnackbarMensaje'
+import Carga from '../carga/Carga'
 
 export default function EditarPerfil() {
-    const usuario = useMemo(() => new UsuarioAcceesToken(JSON.parse(localStorage.getItem("usuario"))).usuario, [])
-    const token = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
+    const usuario = useMemo(() => new UsuarioAcceesToken(JSON.parse(localStorage.getItem('usuario'))).usuario, [])
+    const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
     const [cargando, setCargando] = useState(true)
     const [tiposDocumento, setTiposDocumento] = useState([])
     const [fotoPerfil, setFotoPerfil] = useState(null)
-
     const [abrirSnackbar, setAbrirSnackbar] = useState(false)
-    const [mensajeSnackbar, setMensajeSnackbar] = useState("")
-    const [snackbarSeverity, setSnackbarSeverity] = useState("info")
+    const [mensajeSnackbar, setMensajeSnackbar] = useState('')
+    const [snackbarSeverity, setSnackbarSeverity] = useState('info')
 
     const handleCloseSnackbar = (event, reason) => {
-        if (reason === "clickaway") {
+        if (reason === 'clickaway') {
             return
         }
-
         setAbrirSnackbar(false)
     }
 
@@ -44,46 +42,42 @@ export default function EditarPerfil() {
         setAbrirSnackbar(true)
     }, [])
 
-
+    // Estado con nombres iguales a la base de datos
     const [form, setForm] = useState({
-        imagen: null,
-        fechaNacimiento: null,
-        telefono: "",
-        telefonoEmergencia: "",
-        tipoDocumento: "",
-        documento: "",
-        coberturaMedica: "",
-        observaciones: "",
-        direccion: "",
-        ciudad: "",
-        codigoPostal: "",
-        pais: "",
-        estadoMembresia: "",
+        fecha_nacimiento: null,
+        telefono: '',
+        telefono_emergencia: '',
+        id_tipo_documento: '',
+        documento_identidad: '',
+        cobertura_medica: '',
+        observaciones_salud: '',
+        direccion: '',
+        ciudad: '',
+        codigo_postal: '',
+        pais: '',
+        estado_membresia: '',
     })
 
     const getTiposDocumento = useCallback(
         async (token) => {
             setTiposDocumento([])
             setCargando(true)
-
             try {
                 const response = await fetch(`${environment.apiUrl}/tipos-documento`, {
-                    method: "GET",
+                    method: 'GET',
                     headers: {
-                        "Content-Type": "application/json",
-                        Accept: "application/json",
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
                 })
-
                 if (!response.ok) {
-                    throw new Error("Error al obtener los tipos de documento")
+                    throw new Error('Error al obtener los tipos de documento')
                 }
-
                 const data = await response.json()
                 setTiposDocumento(data)
             } catch (error) {
-                showSnackbar(error.message ?? "Error al obtener los tipos de documento", "error")
+                showSnackbar(error.message ?? 'Error al obtener los tipos de documento', 'error')
                 setTiposDocumento([])
             } finally {
                 setCargando(false)
@@ -96,41 +90,38 @@ export default function EditarPerfil() {
         async (usuario, token) => {
             setCargando(true)
             const idUsuario = usuario.id
-
             try {
                 await getTiposDocumento(token)
                 const response = await fetch(`${environment.apiUrl}/perfiles/${idUsuario}`, {
-                    method: "GET",
+                    method: 'GET',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
                 })
-
                 if (!response.ok) {
-                    throw new Error("Error al obtener el perfil")
+                    throw new Error('Error al obtener el perfil')
                 }
-
                 const data = await response.json()
-                console.log("Perfil obtenido:", data)
                 setForm({
-                    fechaNacimiento: data.fecha_nacimiento ? new Date(data.fecha_nacimiento) : null,
-                    telefono: data.telefono || "",
-                    telefonoEmergencia: data.telefono_emergencia || "",
-                    tipoDocumento: data.id_tipo_documento?.id || "",
-                    documento: data.documento_identidad || "",
-                    coberturaMedica: data.cobertura_medica || "",
-                    observaciones: data.observaciones_salud || "",
-                    direccion: data.direccion || "",
-                    ciudad: data.ciudad || "",
-                    codigoPostal: data.codigo_postal || "",
+                    fecha_nacimiento: data.fecha_nacimiento ? new Date(data.fecha_nacimiento) : null,
+                    telefono: data.telefono || '',
+                    telefono_emergencia: data.telefono_emergencia || '',
+                    id_tipo_documento: data.id_tipo_documento || '',
+                    documento_identidad: data.documento_identidad || '',
+                    cobertura_medica: data.cobertura_medica || '',
+                    observaciones_salud: data.observaciones_salud || '',
+                    direccion: data.direccion || '',
+                    ciudad: data.ciudad || '',
+                    codigo_postal: data.codigo_postal || '',
                     pais: data.pais
                         ? data.pais.charAt(0).toUpperCase() + data.pais.slice(1).toLowerCase()
                         : 'Argentina',
-                    estadoMembresia: data.estado_membresia || "No disponible",
+                    estado_membresia: data.estado_membresia || 'No disponible',
                 })
+                setFotoPerfil(data.imagen ? `${environment.apiUrl}/storage/${data.imagen}` : null)
             } catch (error) {
-                showSnackbar(error.message || "Error al tratar de obtener el perfil", "error")
+                showSnackbar(error.message || 'Error al tratar de obtener el perfil', 'error')
             } finally {
                 setCargando(false)
             }
@@ -143,42 +134,6 @@ export default function EditarPerfil() {
         getTiposDocumento(token)
     }, [getPerfil, usuario, token, getTiposDocumento])
 
-    /*  const updatePerfil = async () => {
-         try {
-             setCargando(true)
-             const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}`, {
-                 method: 'PUT',
-                 headers: {
-                     'Content-Type': 'application/json',
-                     Authorization: `Bearer ${token}`,
-                 },
-                 body: JSON.stringify({
-                     fecha_nacimiento: form.fechaNacimiento,
-                     telefono: form.telefono,
-                     telefono_emergencia: form.telefonoEmergencia,
-                     id_tipo_documento: form.tipoDocumento,
-                     documento_identidad: form.documento,
-                     cobertura_medica: form.coberturaMedica,
-                     observaciones_salud: form.observaciones,
-                     direccion: form.direccion,
-                     ciudad: form.ciudad,
-                     codigo_postal: form.codigoPostal,
-                     pais: form.pais,
-                 }),
-             })
- 
-             if (!response.ok) {
-                 throw new Error('Error al actualizar el perfil')
-             }
- 
-             showSnackbar('Perfil actualizado correctamente', 'success')
-         } catch (error) {
-             showSnackbar(error.message || 'Error al actualizar el perfil', 'error')
-         } finally {
-             setCargando(false)
-         }
-     }
-  */
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
@@ -186,29 +141,68 @@ export default function EditarPerfil() {
     const handleFotoChange = (e) => {
         const file = e.target.files[0]
         if (file) {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setFotoPerfil(reader.result)
-            }
-            reader.readAsDataURL(file)
+            setFotoPerfil(file)
         }
     }
 
-    /* const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        await updatePerfil()
-    } */
+        try {
+            setCargando(true)
+            /* const formData = new FormData()
+            formData.append('fecha_nacimiento', form.fecha_nacimiento instanceof Date ? form.fecha_nacimiento.toISOString().split('T')[0] : form.fecha_nacimiento)
+            formData.append('telefono', form.telefono)
+            formData.append('telefono_emergencia', form.telefono_emergencia)
+            formData.append('id_tipo_documento', form.id_tipo_documento)
+            formData.append('documento_identidad', form.documento_identidad)
+            formData.append('cobertura_medica', form.cobertura_medica)
+            formData.append('observaciones_salud', form.observaciones_salud)
+            formData.append('direccion', form.direccion)
+            formData.append('ciudad', form.ciudad)
+            formData.append('codigo_postal', form.codigo_postal)
+            formData.append('pais', form.pais)
+            if (fotoPerfil && fotoPerfil instanceof File) {
+                formData.append('imagen', fotoPerfil)
+            } */
+            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(form)
+            })
+            if (!response.ok) {
+                throw new Error('Error al actualizar el perfil')
+            }
+            showSnackbar('Perfil actualizado correctamente', 'success')
+            getPerfil(usuario, token)
+        } catch (error) {
+            showSnackbar(error.message || 'Error al actualizar el perfil', 'error')
+        } finally {
+            setCargando(false)
+        }
+    }
 
-    const capitalizar = (str) => (str ? str.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase()) : "")
+    const capitalizar = (str) => (str ? str.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase()) : '')
 
     return (
         <>
-            <h2 className="titulo-clases" > Editar mi Perfil</h2>
-            <Box sx={{ maxWidth: 800, mx: "auto", mt: 6 }}>
-                <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", mb: 3 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1, justifyContent: "center" }}>
-                        <Avatar src={fotoPerfil} sx={{ width: 150, height: 150, mr: 3 }} />
-                        <Box sx={{ display: "flex", flexDirection: "column", width: "180px" }}>
+            <h2 className='titulo-clases'>Editar mi Perfil</h2>
+            <Box sx={{ maxWidth: 800, mx: 'auto', mt: 6 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 3 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'center' }}>
+                        <Avatar
+                            src={
+                                fotoPerfil
+                                    ? fotoPerfil instanceof File
+                                        ? URL.createObjectURL(fotoPerfil)
+                                        : fotoPerfil
+                                    : undefined
+                            }
+                            sx={{ width: 150, height: 150, mr: 3 }}
+                        />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '180px' }}>
                             <Button
                                 variant='outlined'
                                 color='black'
@@ -235,53 +229,53 @@ export default function EditarPerfil() {
                         </Box>
                     </Box>
                 </Box>
-                <Typography variant="h4" align="center" mb={2} sx={{ marginBottom: 2, marginTop: 9 }}>
+                <Typography variant='h4' align='center' mb={2} sx={{ marginBottom: 2, marginTop: 9 }}>
                     {`${capitalizar(usuario.nombres)} ${capitalizar(usuario.apellidos)}`}
                 </Typography>
-                {cargando || !form.estadoMembresia || !form.pais ? (
+                {cargando || !form.estado_membresia || !form.pais ? (
                     <Carga />
                 ) : (
                     <>
                         <Typography
                             variant='subtitle1'
-                            align="center"
+                            align='center'
                             sx={{ mb: 4, color: 'text.secondary', fontWeight: 'bold' }}
                         >
-                            Estado de membresía: {form.estadoMembresia || 'No disponible'}
+                            Estado de membresía: {form.estado_membresia || 'No disponible'}
                         </Typography>
-                        <form /* onSubmit={handleSubmit} */>
+                        <form onSubmit={handleSubmit}>
                             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                                 <DatePicker
                                     label='Fecha de nacimiento'
                                     value={form.fecha_nacimiento ?? null}
-                                    onChange={newValue => setForm({ ...form, fechaNacimiento: newValue })}
+                                    onChange={newValue => setForm({ ...form, fecha_nacimiento: newValue })}
                                     format='yyyy-MM-dd'
                                     slotProps={{
-                                        textField: { fullWidth: true, size: 'medium' }
+                                        textField: { fullWidth: true, size: 'medium' },
                                     }}
                                 />
                             </LocalizationProvider>
                             <TextField
-                                label="Teléfono"
-                                name="telefono"
+                                label='Teléfono'
+                                name='telefono'
                                 value={form.telefono}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
                             <TextField
-                                label="Teléfono de Emergencia"
-                                name="telefonoEmergencia"
-                                value={form.telefonoEmergencia}
+                                label='Teléfono de Emergencia'
+                                name='telefono_emergencia'
+                                value={form.telefono_emergencia}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
                             <FormControl fullWidth margin='normal'>
                                 <InputLabel>Tipo de Documento</InputLabel>
                                 <Select
-                                    name='tipoDocumento'
-                                    value={form.tipoDocumento}
+                                    name='id_tipo_documento'
+                                    value={form.id_tipo_documento}
                                     label='Tipo de Documento'
                                     onChange={handleChange}
                                 >
@@ -293,32 +287,31 @@ export default function EditarPerfil() {
                                 </Select>
                             </FormControl>
                             <TextField
-                                label="Documento de Identidad"
-                                name="documento"
-                                value={form.documento}
+                                label='Documento de Identidad'
+                                name='documento_identidad'
+                                value={form.documento_identidad}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
                             <TextField
-                                label="Obra Social / Seguro Médico"
-                                name="coberturaMedica"
-                                value={form.coberturaMedica}
+                                label='Obra Social / Seguro Médico'
+                                name='cobertura_medica'
+                                value={form.cobertura_medica}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
                             <TextField
-                                label="Observaciones sobre Salud"
-                                name="observaciones"
-                                value={form.observaciones}
+                                label='Observaciones sobre Salud'
+                                name='observaciones_salud'
+                                value={form.observaciones_salud}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                                 multiline
                                 rows={2}
                             />
-
                             <TextField
                                 label='País/región'
                                 name='pais'
@@ -329,34 +322,33 @@ export default function EditarPerfil() {
                                 disabled
                             />
                             <TextField
-                                label="Ciudad"
-                                name="ciudad"
+                                label='Ciudad'
+                                name='ciudad'
                                 value={form.ciudad}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
                             <TextField
-                                label="Dirección"
-                                name="direccion"
+                                label='Dirección'
+                                name='direccion'
                                 value={form.direccion}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
-
                             <TextField
-                                label="Código postal"
-                                name="codigoPostal"
-                                value={form.codigoPostal}
+                                label='Código postal'
+                                name='codigo_postal'
+                                value={form.codigo_postal}
                                 onChange={handleChange}
                                 fullWidth
-                                margin="normal"
+                                margin='normal'
                             />
                             <Button
-                                type="submit"
-                                variant="contained"
-                                className="boton-principal"
+                                type='submit'
+                                variant='contained'
+                                className='boton-principal'
                                 sx={{ mt: 3, mb: 2 }}
                                 fullWidth
                             >
@@ -365,7 +357,6 @@ export default function EditarPerfil() {
                         </form>
                     </>
                 )}
-
             </Box>
             <SnackbarMensaje
                 abrirSnackbar={abrirSnackbar}

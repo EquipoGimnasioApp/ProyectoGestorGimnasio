@@ -9,5 +9,5 @@ interface PerfilServiceInterface
 
     public function createForUser(int $userId);
 
-    /*   public function updateForUser(int $userId, array $data); */
+    public function update(int $userId, array $data);
 }
