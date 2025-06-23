@@ -20,6 +20,8 @@ class Perfil extends Model
         'fecha_nacimiento',
         'telefono',
         'telefono_emergencia',
+        'id_tipo_documento',
+        'tipo_documento',
         'documento_identidad',
         'cobertura_medica',
         'observaciones_salud',
@@ -36,6 +38,7 @@ class Perfil extends Model
         'fecha_nacimiento' => 'date',
         'telefono' => 'string',
         'telefono_emergencia' => 'string',
+        'id_tipo_documento' => 'integer',
         'documento_identidad' => 'string',
         'cobertura_medica' => 'string',
         'observaciones_salud' => 'string',
@@ -50,5 +53,10 @@ class Perfil extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario', 'id');
+    }
+
+    public function tipoDocumento()
+    {
+        return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento', 'id');
     }
 }

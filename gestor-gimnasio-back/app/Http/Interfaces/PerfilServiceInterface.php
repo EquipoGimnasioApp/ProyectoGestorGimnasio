@@ -5,5 +5,9 @@ namespace App\Http\Interfaces;
 interface PerfilServiceInterface
 {
 
-    public function getById(int $id);
+    public function getByUserId(int $id);
+
+    public function createForUser(int $userId);
+
+    /*   public function updateForUser(int $userId, array $data); */
 }
