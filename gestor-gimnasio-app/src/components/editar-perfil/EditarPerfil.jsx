@@ -46,6 +46,7 @@ export default function EditarPerfil() {
 
 
     const [form, setForm] = useState({
+        imagen: null,
         fechaNacimiento: null,
         telefono: "",
         telefonoEmergencia: "",
@@ -57,8 +58,8 @@ export default function EditarPerfil() {
         ciudad: "",
         codigoPostal: "",
         pais: "",
+        estadoMembresia: "",
     })
-
 
     const getTiposDocumento = useCallback(
         async (token) => {
