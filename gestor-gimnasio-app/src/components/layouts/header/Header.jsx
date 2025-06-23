@@ -12,6 +12,7 @@ import Button from '@mui/material/Button'
 import UsuarioDto from '../../../models/dtos/UsuarioDto.model.dto'
 import NavigationButton from '../../navigation-button/NavigationButton'
 import './Header.css'
+import Avatar from '@mui/material/Avatar'
 
 function Header() {
   const [anchorMenuUsu, setAnchorMenuUsu] = useState(null)
@@ -43,6 +44,12 @@ function Header() {
     navigate('/login')
   }
 
+  const fotoPerfilUrl = usuario && usuario.imagen
+    ? `http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/storage/imagenes/${usuario.imagen}`
+    : undefined
+
+  console.log('fotoPerfilUrl:', fotoPerfilUrl)
+
   return (
     <>
       {usuario && (
@@ -63,7 +70,12 @@ function Header() {
                   onClick={handleMenu}
                   sx={{ color: '#000' }}
                 >
-                  <AccountCircle sx={{ fontSize: 35 }} />
+                  <Avatar
+                    src={fotoPerfilUrl}
+                    sx={{ width: 35, height: 35 }}
+                  >
+                    {!fotoPerfilUrl && <AccountCircle sx={{ fontSize: 35 }} />}
+                  </Avatar>
                 </IconButton>
                 <Menu
                   id="menu-appbar"
@@ -129,8 +141,9 @@ function Header() {
               </div>
             </Toolbar>
           </AppBar>
-        </Box>
-      )}
+        </Box >
+      )
+      }
     </>
   )
 }

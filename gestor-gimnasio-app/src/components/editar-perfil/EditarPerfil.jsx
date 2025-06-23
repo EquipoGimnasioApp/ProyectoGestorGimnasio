@@ -42,7 +42,6 @@ export default function EditarPerfil() {
         setAbrirSnackbar(true)
     }, [])
 
-    // Estado con nombres iguales a la base de datos
     const [form, setForm] = useState({
         fecha_nacimiento: null,
         telefono: '',
@@ -119,7 +118,10 @@ export default function EditarPerfil() {
                         : 'Argentina',
                     estado_membresia: data.estado_membresia || 'No disponible',
                 })
-                setFotoPerfil(data.imagen ? `${environment.apiUrl}/storage/${data.imagen}` : null)
+                setFotoPerfil(data.imagen
+                    ? 'http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/storage/imagenes/' + data.imagen
+                    : null
+                )
             } catch (error) {
                 showSnackbar(error.message || 'Error al tratar de obtener el perfil', 'error')
             } finally {
@@ -138,10 +140,33 @@ export default function EditarPerfil() {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    const handleFotoChange = (e) => {
+    const handleFotoChange = async (e) => {
         const file = e.target.files[0]
-        if (file) {
-            setFotoPerfil(file)
+        if (!file) return
+
+        setFotoPerfil(file)
+
+        const formData = new FormData()
+        formData.append('imagen', file)
+
+        try {
+            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}/imagen`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            })
+
+            if (!response.ok) {
+                throw new Error('Error al subir la imagen')
+            }
+
+            await response.json()
+            showSnackbar('Imagen actualizada correctamente', 'success')
+
+        } catch (error) {
+            showSnackbar(error.message || 'Error al subir la imagen', 'error')
         }
     }
 
@@ -149,28 +174,13 @@ export default function EditarPerfil() {
         e.preventDefault()
         try {
             setCargando(true)
-            /* const formData = new FormData()
-            formData.append('fecha_nacimiento', form.fecha_nacimiento instanceof Date ? form.fecha_nacimiento.toISOString().split('T')[0] : form.fecha_nacimiento)
-            formData.append('telefono', form.telefono)
-            formData.append('telefono_emergencia', form.telefono_emergencia)
-            formData.append('id_tipo_documento', form.id_tipo_documento)
-            formData.append('documento_identidad', form.documento_identidad)
-            formData.append('cobertura_medica', form.cobertura_medica)
-            formData.append('observaciones_salud', form.observaciones_salud)
-            formData.append('direccion', form.direccion)
-            formData.append('ciudad', form.ciudad)
-            formData.append('codigo_postal', form.codigo_postal)
-            formData.append('pais', form.pais)
-            if (fotoPerfil && fotoPerfil instanceof File) {
-                formData.append('imagen', fotoPerfil)
-            } */
             const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(form)
+                body: JSON.stringify(form),
             })
             if (!response.ok) {
                 throw new Error('Error al actualizar el perfil')
@@ -181,6 +191,30 @@ export default function EditarPerfil() {
             showSnackbar(error.message || 'Error al actualizar el perfil', 'error')
         } finally {
             setCargando(false)
+        }
+    }
+
+    const [eliminandoFoto, setEliminandoFoto] = useState(false)
+
+    const handleEliminarFoto = async () => {
+        setEliminandoFoto(true)
+        try {
+            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}/imagen`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            if (!response.ok) {
+                throw new Error('Error al eliminar la imagen')
+            }
+            setFotoPerfil(null)
+            showSnackbar('Imagen eliminada correctamente', 'success')
+            getPerfil(usuario, token)
+        } catch (error) {
+            showSnackbar(error.message || 'Error al eliminar la imagen', 'error')
+        } finally {
+            setEliminandoFoto(false)
         }
     }
 
@@ -202,6 +236,7 @@ export default function EditarPerfil() {
                             }
                             sx={{ width: 150, height: 150, mr: 3 }}
                         />
+
                         <Box sx={{ display: 'flex', flexDirection: 'column', width: '180px' }}>
                             <Button
                                 variant='outlined'
@@ -222,7 +257,7 @@ export default function EditarPerfil() {
                                 variant='outlined'
                                 fullWidth
                                 color='error'
-                                onClick={() => setFotoPerfil(null)}
+                                onClick={handleEliminarFoto}
                             >
                                 Eliminar la foto
                             </Button>

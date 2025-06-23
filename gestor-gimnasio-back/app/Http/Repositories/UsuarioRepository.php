@@ -15,7 +15,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      */
     public function getAll(): Collection
     {
-        return Usuario::with('tipoUsuario')
+        return Usuario::with(['tipoUsuario', 'perfil'])
             ->orderBy('id')
             ->get();
     }
