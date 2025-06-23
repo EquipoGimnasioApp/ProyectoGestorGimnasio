@@ -16,6 +16,7 @@ class UsuarioDto
         public ?Carbon $fechaBaja,
         public int $idTipoUsuario,
         public string $descTipoUsuario,
+        public ?string $imagen,
     ) {}
 
     public static function fromUser(Usuario $user)
@@ -29,6 +30,7 @@ class UsuarioDto
             $user->fecha_baja,
             $user->id_tipo_usuario,
             $user->tipoUsuario->tipo ?? '',
+            $user->perfil->imagen ?? null,
         );
     }
 }

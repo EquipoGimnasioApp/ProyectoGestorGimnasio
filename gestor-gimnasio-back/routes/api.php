@@ -12,6 +12,8 @@ use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
+use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\TipoDocumentoController;
 
 if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
@@ -122,6 +124,19 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('equipamiento.destroy');
     });
 
+    Route::prefix('perfiles')->group(function () {
+        Route::get('/{userId}', [PerfilController::class, 'show'])
+            ->name('perfiles.show');
+        Route::put('/{userId}', [PerfilController::class, 'update'])
+            ->name('perfiles.update');
+        Route::post('/{userId}/imagen', [PerfilController::class, 'subirImagen']);
+        Route::delete('/{userId}/imagen', [PerfilController::class, 'eliminarImagen']);
+    });
+
+    Route::prefix('tipos-documento')->group(function () {
+        Route::get('/', [TipoDocumentoController::class, 'index'])
+            ->name('tipos-documento.index');
+    });
     Route::post('/mensajes/enviar', [MensajeController::class, 'enviar']);
     Route::get('/mensajes/recibidos/{usuarioId}', [MensajeController::class, 'recibidos']);
     Route::get('/mensajes/enviados/{usuarioId}', [MensajeController::class, 'enviados']);

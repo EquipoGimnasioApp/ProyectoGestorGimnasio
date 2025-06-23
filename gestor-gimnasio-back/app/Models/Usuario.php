@@ -43,6 +43,7 @@ class Usuario extends Authenticatable
         'email',
         'password',
         'id_tipo_usuario',
+        'id_usuario',
     ];
 
     /**
@@ -63,6 +64,7 @@ class Usuario extends Authenticatable
         'fecha_alta' => 'datetime',
         'fecha_baja' => 'datetime',
         'id_tipo_usuario' => 'integer',
+        'id_usuario' => 'integer',
     ];
 
     /**
@@ -71,5 +73,10 @@ class Usuario extends Authenticatable
     public function tipoUsuario()
     {
         return $this->belongsTo(TipoUsuario::class, 'id_tipo_usuario', 'id');
+    }
+
+    public function perfil()
+    {
+        return $this->hasOne(Perfil::class, 'id_usuario');
     }
 }
