@@ -201,7 +201,10 @@ export default function AbmSalas() {
   return (
     <>
       <h2 className="titulo-clases">ABM Salas</h2>
-      <TableContainer component={Paper} className="equipamiento-table">
+      <TableContainer component={Paper} className="equipamiento-table"  sx={{
+    border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+  }}>
         {cargando ? (
           <CargaTabla texto="Cargando salas..." />
         ) : (
@@ -292,15 +295,27 @@ function SalasTabla({ salas, onEditar, onEliminar }) {
     )
   }
 
+function capitalizarFrase(frase) {
+  return typeof frase === 'string'
+    ? frase
+        .split(' ')
+        .map(
+          palabra =>
+            palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+        )
+        .join(' ')
+    : '';
+}
+
   return (
     <>
-      <Table aria-label="tabla de abm salas">
+      <Table aria-label="tabla de abm salas" >
         {encabezadosTabla()}
         <TableBody>
           {salas.map((sala) => (
             <TableRow key={sala.id}>
               <TableCell>
-                {sala.descripcion.charAt(0).toUpperCase() + sala.descripcion.slice(1).toLowerCase()}
+                {capitalizarFrase(sala.descripcion)}
               </TableCell>
               <TableCell>
                 <Button variant="outlined" className="boton-principal" onClick={() => onEditar(sala)}>

@@ -33,18 +33,19 @@ class Contacto extends Model
     /**
      * Los atributos que se pueden asignar masivamente.
      *
-     * @var array<int, string>
      */
     protected $fillable = [
+        'nombres',
+        'apellidos',
         'email',
         'asunto',
-        'mensaje'
+        'mensaje',
+        'rol',
     ];
 
     /**
      * Los atributos que deben ser convertidos a tipos nativos.
      *
-     * @var array<string, string>
      */
     protected $casts = [
         'fecha_envio' => 'datetime',

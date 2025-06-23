@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactoLandingMail extends Mailable
+class ContactoMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +23,7 @@ class ContactoLandingMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Consulta desde Landing Page',
+            subject: 'Consulta desde el login o desde el sistema',
         );
     }
 
@@ -33,7 +33,7 @@ class ContactoLandingMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contacto-landing',
+            view: 'emails.contacto',
             with: [
                 'datos' => $this->datos,
             ]

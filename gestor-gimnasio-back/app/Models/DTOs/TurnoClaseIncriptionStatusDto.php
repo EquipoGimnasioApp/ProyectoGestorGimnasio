@@ -9,6 +9,8 @@ class TurnoClaseIncriptionStatusDto
         public int $idActividad,
         public string $tipoActividad,
         public int $idProfesor,
+        public int $idSala,
+        public string $descripcionSala,
         public string $nombresProfesor,
         public string $apellidosProfesor,
         public string $fecha,

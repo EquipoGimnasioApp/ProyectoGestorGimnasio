@@ -10,6 +10,7 @@ use App\Http\Controllers\TurnoClaseController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TipoDocumentoController;
@@ -22,16 +23,22 @@ if (!defined('ID_ROUTE_PARAMETER')) {
     define('ID_ROUTE_PARAMETER', '/{id}');
 }
 
+Route::get('/pagos/{id}', [PagoController::class, 'historial']);
+
 Route::post('auth/login', [AuthController::class, 'login'])
     ->name('login');
 Route::prefix('usuarios')->group(function () {
     Route::post('/', [UsuarioController::class, 'store'])
         ->name('usuarios.store');
 });
+
 Route::prefix('contactos')->group(function () {
     Route::post('/', [ContactoController::class, 'create'])
         ->name('contactos.create');
 });
+
+
+Route::post('/contactos', [ContactoController::class, 'enviar']);
 
 Route::post('/contactoslanding', [ContactoLandingController::class, 'enviar']);
 
@@ -46,6 +53,9 @@ Route::middleware(AUTH_SANCTION)->group(function () {
 
         Route::get('/profesores', [UsuarioController::class, 'getProfesores'])
             ->name('usuarios.getProfesores');
+
+        Route::get('/alumnos', [UsuarioController::class, 'getAlumnos'])
+            ->name('usuarios.getAlumnos');
 
         Route::get(ID_ROUTE_PARAMETER, [UsuarioController::class, 'show'])
             ->name('usuarios.show');
@@ -73,9 +83,12 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('inscripciones')->group(function () {
         Route::post('/', [InscripcionController::class, 'inscribirUsuario'])
             ->name('inscripciones.inscribir-usuario');
-
         Route::delete('/{id_usuario}/{id_turno_clase}', [InscripcionController::class, 'cancelarInscripcion'])
             ->name('inscripciones.cancelar-inscripcion');
+        Route::get('/turnos-clase/{claseId}', [InscripcionController::class, 'getInscripcionesPorTurnoClase'])
+            ->name('inscripciones.inscripciones-por-turno-clase');
+        Route::post('/cargar-asistencia/{id_turno_clase}', [InscripcionController::class, 'cargarAsistencia'])
+            ->name('inscripciones.cargar-asistencia');
     });
 
     Route::prefix('tipos-actividad')->group(function () {

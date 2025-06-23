@@ -15,6 +15,8 @@ import Actividades from "./components/actividades/Actividades"
 import MensajesAdministrador from "./components/mensajes-internos-administrador/MensajesAdministrador"
 import Mensajes from "./components/mensajes-internos/Mensajes"
 import EditarPerfil from "./components/editar-perfil/EditarPerfil"
+import TomaAsistencia from "./components/toma-asistencia/TomaAsistencia"
+import HistorialPagos from "./components/historial-pagos/HistorialPagos"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -42,18 +44,17 @@ function App() {
             <Route path="/dashboard/actividades" element={<Actividades />} />
             <Route path="/dashboard/mensajes" element={<Mensajes />} />
             <Route path="/dashboard/editar-perfil" element={<EditarPerfil />} />
+            <Route path="/dashboard/tomar-asistencia" element={<TomaAsistencia />} />
             <Route path="/dashboard/admin-mensajes" element={<MensajesAdministrador />} />
             <Route path="/dashboard/abm/clases" element={<AbmTurnoClase />} />
             <Route path="/dashboard/abm/tipos-actividad" element={<AbmTipoActividad />} />
             <Route path="/dashboard/abm/salas" element={<AbmSalas />} />
+            <Route path="/dashboard/historial-pagos" element={<HistorialPagos />} />
             <Route path="/dashboard/abm/equipamiento" element={<AbmEquipamiento />} />
           </Route>
         </Route>
-
-        <Route
-          path="*"
-          element={usuarioEstaLogueado ? <Navigate to="/dashboard" replace /> : <Navigate to="/" replace />}
-        />
+        <Route path="*" element={usuarioEstaLogueado ?
+          (<Navigate to="/dashboard" replace />) : (<Navigate to="/" replace />)} />
       </Routes>
     </Router>
   )

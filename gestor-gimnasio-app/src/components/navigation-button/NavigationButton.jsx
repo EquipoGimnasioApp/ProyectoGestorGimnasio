@@ -7,6 +7,7 @@ import EventNoteIcon from "@mui/icons-material/EventNote"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import BuildIcon from "@mui/icons-material/Build"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import PlaylistAddCheck from "@mui/icons-material/PlaylistAddCheck"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
@@ -26,13 +27,19 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
     idTipoUsuario === TiposUsuarioEnum.ALUMNO || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
   const puedeVerActividades =
-    idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
+
+  const puedeVerTomarAsistencia =
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
   const puedeVerMensajes = 
     idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
     idTipoUsuario === TiposUsuarioEnum.PROFESOR
+
+  const puedeVerHistorialPagos =
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
 
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -64,16 +71,16 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
 
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem" }}>
-      {puedeVerAgendarClases && (
-        <Button
-          color="inherit"
-          startIcon={<FitnessCenterIcon />}
-          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-          onClick={() => navigate("/dashboard/agendar-clases")}
-        >
-          Agendar
-        </Button>
-      )}
+     {puedeVerAgendarClases && (
+  <Button
+    color="inherit"
+    startIcon={<FitnessCenterIcon />}
+    sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+    onClick={() => navigate('/dashboard/agendar-clases')}
+  >
+    {idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'Próximas Clases' : 'Agendar'}
+  </Button>
+)}
       {puedeVerActividades && (
         <Button
           color="inherit"
@@ -92,6 +99,15 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           onClick={() => navigate("/dashboard/mensajes")}
         >
           Mensajes
+        </Button>
+      )}
+      {puedeVerTomarAsistencia && (<Button
+          color="inherit"
+          startIcon={<PlaylistAddCheck />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/tomar-asistencia")}
+        >
+          Tomar Asistencia
         </Button>
       )}
       {puedeVerAbm && (
@@ -138,6 +154,15 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
             <MenuItem onClick={handleAbmEquipamientoClick}>ABM Equipamiento</MenuItem>
           </Menu>
         </>
+      )}
+      {puedeVerHistorialPagos && (
+        <Button
+          color="inherit"
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
+          onClick={() => navigate('/dashboard/historial-pagos')}
+        >
+          Historial de Pagos
+        </Button>
       )}
     </Box>
   )

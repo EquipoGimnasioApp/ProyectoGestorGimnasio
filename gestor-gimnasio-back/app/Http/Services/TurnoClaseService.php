@@ -34,6 +34,8 @@ class TurnoClaseService implements TurnoClaseServiceInterface
                 idProfesor: $turno->idProfesor,
                 nombresProfesor: $turno->nombresProfesor,
                 apellidosProfesor: $turno->apellidosProfesor,
+                idSala: $turno->idSala,
+                descripcionSala: $turno->descripcionSala,
                 fecha: $turno->fecha,
                 horarioDesde: $turno->horarioDesde,
                 horarioHasta: $turno->horarioHasta,

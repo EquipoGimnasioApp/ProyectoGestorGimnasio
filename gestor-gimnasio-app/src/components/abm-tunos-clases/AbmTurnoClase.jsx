@@ -41,6 +41,8 @@ export default function AbmTurnoClase() {
   const [abrirSnackbar, setAbrirSnackbar] = useState(false)
   const [mensajeSnackbar, setMensajeSnackbar] = useState("")
   const [snackbarSeverity, setSnackbarSeverity] = useState("info")
+  const [salas, setSalas] = useState([])
+  const [cargandoSalas, setCargandoSalas] = useState(true)
 
   const userToken = useMemo(() => localStorage.getItem("usuarioAccesToken"), [])
 
@@ -83,7 +85,7 @@ export default function AbmTurnoClase() {
       abrir: true,
       esEdicion: false,
       turno: null,
-      titulo: "Crear nuevo turno clase",
+      titulo: "Crear nueva clase",
     })
   }
 
@@ -92,7 +94,7 @@ export default function AbmTurnoClase() {
       abrir: true,
       esEdicion: true,
       turno: turnoParaEditar,
-      titulo: "Modificar turno clase",
+      titulo: "Modificar clase",
     })
   }
 
@@ -145,13 +147,13 @@ export default function AbmTurnoClase() {
         })
 
         if (!response.ok) {
-          throw new Error("Error al obtener los turnos de clases")
+          throw new Error("Error al obtener las clases")
         }
 
         const data = await response.json()
         setTurnoClases(data)
       } catch (error) {
-        showSnackbar(error.message ?? "Error al obtener los turnos de clases", "error")
+        showSnackbar(error.message ?? "Error al obtener las clases", "error")
         setTurnoClases([])
       } finally {
         setCargando(false)
@@ -160,7 +162,39 @@ export default function AbmTurnoClase() {
     [showSnackbar]
   )
 
+  const getSalas = useCallback(
+    async (token) => {
+      setSalas([])
+      setCargandoSalas(true)
+
+      try {
+        const response = await fetch(`${environment.apiUrl}/salas`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Error al obtener las salas")
+        }
+
+        const data = await response.json()
+        setSalas(data)
+      } catch (error) {
+        showSnackbar(error.message ?? "Error al obtener las salas", "error")
+        setSalas([])
+      } finally {
+        setCargandoSalas(false)
+      }
+    },
+    [showSnackbar]
+  )
+
   const createTurnoCLase = async (nuevoTurno, token) => {
+    console.log("Nuevo turno a crear:", nuevoTurno)
     setCargando(true)
     try {
       const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
@@ -178,10 +212,10 @@ export default function AbmTurnoClase() {
         throw new Error(errorData.message ?? "Error al crear el turno de clase")
       }
 
-      showSnackbar("Turno de clase creado exitosamente", "success")
+      showSnackbar("Clase creada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
-      showSnackbar(error.message ?? "Error al crear el turno de clase", "error")
+      showSnackbar(error.message ?? "Error al crear la clase", "error")
       setCargando(false)
     }
   }
@@ -201,13 +235,13 @@ export default function AbmTurnoClase() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message ?? "Error al modificar el turno de clase")
+        throw new Error(errorData.message ?? "Error al modificar la clase")
       }
 
-      showSnackbar("Turno de clase modificado exitosamente", "success")
+      showSnackbar("Clase modificada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
-      showSnackbar(error.message ?? "Error al modificar el turno de clase", "error")
+      showSnackbar(error.message ?? "Error al modificar la clase", "error")
       setCargando(false)
     }
   }
@@ -278,7 +312,8 @@ export default function AbmTurnoClase() {
     getTurnoClases(userToken)
     getActividades(userToken)
     getProfesores(userToken)
-  }, [userToken, getTurnoClases, getActividades, getProfesores])
+    getSalas(userToken)
+  }, [userToken, getTurnoClases, getActividades, getProfesores, getSalas])
 
   const deleteTurnoClase = async (turnoClaseEliminado, token) => {
     setCargando(true)
@@ -297,7 +332,7 @@ export default function AbmTurnoClase() {
         throw new Error(errorData.message ?? "Error al eliminar la clase")
       }
 
-      showSnackbar("Sala eliminado exitosamente", "success")
+      showSnackbar("Clase eliminada exitosamente", "success")
       await getTurnoClases(token)
     } catch (error) {
       showSnackbar(error.message ?? "Error al eliminar la clase", "error")
@@ -375,13 +410,17 @@ export default function AbmTurnoClase() {
         />
       </Box>
 
-      <TableContainer component={Paper} className="equipamiento-table">
+      <TableContainer component={Paper} className="equipamiento-table"  sx={{
+    border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+  }}>
         {cargando ? (
           <CargaTabla texto="Cargando clases..." />
         ) : (
           <TurnoClasesTabla
             clases={turnoClasesFiltradas}
             onEditar={handleOpenModalEditar}
+            salas={salas}
             onEliminar={(turnoClase) => deleteTurnoClase(turnoClase, userToken)}
           />
         )}
@@ -390,7 +429,7 @@ export default function AbmTurnoClase() {
         <Button
           variant="outlined"
           className="boton-principal"
-          disabled={cargandoActividades && cargandoProfesores}
+          disabled={cargandoActividades && cargandoProfesores && cargandoSalas}
           onClick={handleOpenModalCrear}
         >
           Nueva Clase
@@ -408,6 +447,8 @@ export default function AbmTurnoClase() {
         turnoExistente={modalConfig.turno}
         esEdicion={modalConfig.esEdicion}
         tituloModal={modalConfig.titulo}
+        salas={salas}
+        cargandoSalas={cargandoSalas}
       />
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
@@ -476,6 +517,7 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
         <TableRow>
           <TableCell>ACTIVIDAD</TableCell>
           <TableCell>PROFESOR</TableCell>
+          <TableCell>SALA</TableCell>
           <TableCell>FECHA</TableCell>
           <TableCell>DESDE</TableCell>
           <TableCell>HASTA</TableCell>
@@ -502,25 +544,29 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
     )
   }
 
-  const clasesOrdenadas = [...clases].sort((a, b) => {
-    const fechaA = parseFecha(a.fecha)
-    const fechaB = parseFecha(b.fecha)
-    return fechaA - fechaB
-  })
+  function capitalizarFrase(frase) {
+    return frase
+      .split(' ')
+      .map(palabra =>
+        palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+      )
+      .join(' ');
+  }
 
   return (
     <>
       <Table sx={{ minWidth: 900 }} aria-label="tabla de abm turno clases">
         {encabezadosTabla()}
         <TableBody>
-          {clasesOrdenadas.map((clase) => {
+          {clases.map((clase) => {
             const fechaFormateada = formatearFecha(clase.fecha)
             return (
               <TableRow key={clase.id}>
+                <TableCell> {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()} </TableCell>
+                <TableCell>{capitalizarFrase(clase.profesor)}</TableCell>
                 <TableCell>
-                  {clase.tipoActividad.charAt(0).toUpperCase() + clase.tipoActividad.slice(1).toLowerCase()}
+                  {capitalizarFrase(clase.descripcionSala)}
                 </TableCell>
-                <TableCell>{clase.profesor.charAt(0).toUpperCase() + clase.profesor.slice(1).toLowerCase()}</TableCell>
                 <TableCell>{fechaFormateada}</TableCell>
                 <TableCell>{clase.horarioDesde}</TableCell>
                 <TableCell>{clase.horarioHasta}</TableCell>
@@ -591,6 +637,8 @@ TurnoClasesTabla.propTypes = {
       id: PropTypes.number.isRequired,
       idActividad: PropTypes.number.isRequired,
       tipoActividad: PropTypes.string.isRequired,
+      idSala: PropTypes.number.isRequired,
+      descripcionSala: PropTypes.string.isRequired,
       fecha: PropTypes.string.isRequired,
       horarioDesde: PropTypes.string.isRequired,
       horarioHasta: PropTypes.string.isRequired,
@@ -598,6 +646,7 @@ TurnoClasesTabla.propTypes = {
     })
   ).isRequired,
   onEditar: PropTypes.func.isRequired,
+  onEliminar: PropTypes.func.isRequired,
 }
 
 function TurnoClaseModal({
@@ -609,6 +658,7 @@ function TurnoClaseModal({
   turnoExistente,
   esEdicion,
   tituloModal,
+  salas,
 }) {
   const styleModal = {
     position: "absolute",
@@ -626,16 +676,18 @@ function TurnoClaseModal({
   }
   const [idActividad, setIdActividad] = useState("")
   const [idProfesor, setIdProfesor] = useState("")
+  const [idSala, setIdSala] = useState("")
   const [fecha, setFecha] = useState(null)
   const [horarioInicio, setHorarioInicio] = useState(null)
   const [horarioFin, setHorarioFin] = useState(null)
   const [cupoMaximo, setCupoMaximo] = useState("")
   const [idTurno, setIdTurno] = useState(null)
 
-  const disabledConfirmButton = !idActividad || !fecha || !horarioInicio || !horarioFin || !cupoMaximo
+  const disabledConfirmButton = !idActividad || !fecha || !horarioInicio || !horarioFin || !cupoMaximo || !idSala
 
   const resetFormValues = () => {
     setIdActividad("")
+    setIdSala("")
     setFecha(null)
     setHorarioInicio(null)
     setHorarioFin(null)
@@ -647,6 +699,7 @@ function TurnoClaseModal({
     const turnoDatos = {
       id_actividad: idActividad,
       id_profesor: idProfesor,
+      id_sala: idSala,
       fecha: fecha ? dayjs(fecha).format("YYYY-MM-DD") : null,
       horario_desde: horarioInicio ? dayjs(horarioInicio).format("HH:mm:ss") : null,
       horario_hasta: horarioFin ? dayjs(horarioFin).format("HH:mm:ss") : null,
@@ -662,6 +715,7 @@ function TurnoClaseModal({
     if (abrirModal && esEdicion && turnoExistente) {
       setIdActividad(turnoExistente.idActividad ?? "")
       setIdProfesor(turnoExistente.idProfesor ?? "")
+      setIdSala(turnoExistente.idSala ?? "")
       setFecha(turnoExistente.fecha ? dayjs(turnoExistente.fecha, "DD/MM/YYYY") : null)
       setHorarioInicio(turnoExistente.horarioDesde ? dayjs(`2000-01-01T${turnoExistente.horarioDesde}`) : null)
       setHorarioFin(turnoExistente.horarioHasta ? dayjs(`2000-01-01T${turnoExistente.horarioHasta}`) : null)
@@ -750,6 +804,29 @@ function TurnoClaseModal({
           </Select>
         </FormControl>
 
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="sala-select-label">Sala</InputLabel>
+          <Select
+            labelId="sala-select-label"
+            id="sala-select"
+            value={idSala}
+            label="Sala"
+            onChange={(e) => setIdSala(e.target.value)}
+          >
+            <MenuItem value="">
+              <em>Seleccione una Sala</em>
+            </MenuItem>
+            {salas.map((sala) => {
+              return (
+                <MenuItem key={sala.id} value={sala.id}>
+                  {sala.descripcion.charAt(0).toUpperCase() +
+                    sala.descripcion.slice(1).toLowerCase()}
+                </MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
+
         <DatePicker
           label="Fecha"
           value={fecha}
@@ -796,7 +873,7 @@ function TurnoClaseModal({
           <Button variant="outlined" className="boton-secundario" onClick={handleCerrar}>
             Cancelar
           </Button>
-          <Button variant="contained" onClick={handleSubmit} disabled={disabledConfirmButton}>
+          <Button variant="contained" className="boton-principal" onClick={handleSubmit} disabled={disabledConfirmButton}>
             Confirmar
           </Button>
         </Box>
@@ -820,6 +897,12 @@ TurnoClaseModal.propTypes = {
       id: PropTypes.any.isRequired,
       nombre: PropTypes.string.isRequired,
       apellido: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  salas: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.any.isRequired,
+      descripcion: PropTypes.string.isRequired,
     })
   ).isRequired,
   turnoExistente: PropTypes.shape({
