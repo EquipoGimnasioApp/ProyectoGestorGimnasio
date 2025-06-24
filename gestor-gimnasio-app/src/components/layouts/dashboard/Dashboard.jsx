@@ -2,9 +2,17 @@ import Header from "../header/Header"
 import Container from "@mui/material/Container"
 import Box from "@mui/material/Box"
 import Footer from "../footer/Footer"
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 
 function Dashboard() {
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const location = useLocation();
+  // Verifica si el usuario está en la ruta del dashboard
+  // y si el usuario tiene un nombre definido
+  const mostrarSaludo = location.pathname === '/dashboard';
+
+
+  console.log("Usuario en Dashboard:", usuario);
   return (
     <Box
       sx={{
@@ -27,6 +35,9 @@ function Dashboard() {
           alignItems: "center",
         }}
       >
+        {mostrarSaludo && (
+          <h1 className="saludo-bienvenida">Bienvenido {usuario.nombres}!!</h1>
+        )}
         <Box
           sx={{
             p: 3,

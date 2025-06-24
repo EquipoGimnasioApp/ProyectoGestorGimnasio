@@ -77,3 +77,19 @@
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: #696969 !important;
 }
+
+body {
+  background-image: url('/background/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+}
+
+.saludo-bienvenida {
+  position: relative;
+  z-index: 1;
+  font-size: 4.5rem; /* Puedes ajustar este valor según lo grande que quieras el saludo */
+  font-weight: bold;
+  letter-spacing: 1px;
+}
