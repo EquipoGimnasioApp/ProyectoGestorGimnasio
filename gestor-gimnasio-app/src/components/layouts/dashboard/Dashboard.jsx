@@ -13,6 +13,10 @@ function Dashboard() {
   useEffect(() => {
     if (usuario && usuario.idTipoUsuario === 1 && location.pathname === "/dashboard") {
       navigate("/dashboard/admin", { replace: true })
+    } else if (usuario && usuario.idTipoUsuario === 2 && location.pathname === "/dashboard") {
+      navigate("/dashboard/alumno", { replace: true })
+    } else if (usuario && usuario.idTipoUsuario === 3 && location.pathname === "/dashboard") {
+      navigate("/dashboard/profesor", { replace: true })
     }
   }, [usuario, navigate, location.pathname])
 
