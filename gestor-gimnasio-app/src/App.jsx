@@ -18,6 +18,7 @@ import AbmUsuarios from "./components/abm-usuarios/AbmUsuarios"
 import EditarPerfil from "./components/editar-perfil/EditarPerfil"
 import TomaAsistencia from "./components/toma-asistencia/TomaAsistencia"
 import HistorialPagos from "./components/historial-pagos/HistorialPagos"
+import AdminDashboard from "./components/admin-dashboard/AdminDashboard"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -53,6 +54,7 @@ function App() {
             <Route path="/dashboard/historial-pagos" element={<HistorialPagos />} />
             <Route path="/dashboard/abm/equipamiento" element={<AbmEquipamiento />} />
             <Route path="/dashboard/abm/usuarios" element={<AbmUsuarios />} />
+            <Route path="/dashboard/admin" element={<AdminDashboard />} />
           </Route>
         </Route>
         <Route path="*" element={usuarioEstaLogueado ?
