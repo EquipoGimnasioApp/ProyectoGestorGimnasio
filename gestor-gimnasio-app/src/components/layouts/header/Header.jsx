@@ -56,15 +56,23 @@ function Header() {
         <Box>
           <AppBar position="static" sx={{ backgroundColor: '#f8fafc' }}>
             <Toolbar>
-              <img 
-                src="/logo_app.png" alt="Logo" style={{ height: 40, marginRight: 10 , cursor: 'pointer' }}
-                onClick={() => navigate('/dashboard')}
-              />
-              <Typography variant="h5" component="div" sx={{ color: '#000' }}
-                style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/dashboard')}>
+              <>
+              <img src="/logo_app.png" alt="Logo" style={{ height: 40, marginRight: 10 }} />
+              <Typography
+                variant='h5'
+                component='div'
+                sx={{ color: '#000', cursor: 'pointer' }}
+                onClick={() => {
+                  if (usuario && usuario.idTipoUsuario === 1) {
+                    navigate('/dashboard/admin')
+                  } else {
+                    navigate('/dashboard')
+                  }
+                }}
+              >
                 Fit Manager
               </Typography>
+              </>
               <NavigationButton usuario={usuario} colorButtons="#000" />
               <div>
                 <IconButton

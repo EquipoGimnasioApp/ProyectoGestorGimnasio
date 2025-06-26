@@ -14,9 +14,13 @@ import Contacto from "./components/contacto/Contacto"
 import Actividades from "./components/actividades/Actividades"
 import MensajesAdministrador from "./components/mensajes-internos-administrador/MensajesAdministrador"
 import Mensajes from "./components/mensajes-internos/Mensajes"
+import AbmUsuarios from "./components/abm-usuarios/AbmUsuarios"
 import EditarPerfil from "./components/editar-perfil/EditarPerfil"
 import TomaAsistencia from "./components/toma-asistencia/TomaAsistencia"
 import HistorialPagos from "./components/historial-pagos/HistorialPagos"
+import AdminDashboard from "./components/bienvenida/AdminDashboard"
+import AlumnoDashboard from "./components/bienvenida/AlumnoDashboard"
+import ProfesorDashboard from "./components/bienvenida/ProfesorDashboard"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -51,6 +55,10 @@ function App() {
             <Route path="/dashboard/abm/salas" element={<AbmSalas />} />
             <Route path="/dashboard/historial-pagos" element={<HistorialPagos />} />
             <Route path="/dashboard/abm/equipamiento" element={<AbmEquipamiento />} />
+            <Route path="/dashboard/abm/usuarios" element={<AbmUsuarios />} />
+            <Route path="/dashboard/admin" element={<AdminDashboard />} />
+            <Route path="/dashboard/alumno" element={<AlumnoDashboard />} />
+            <Route path="/dashboard/profesor" element={<ProfesorDashboard />} />
           </Route>
         </Route>
         <Route path="*" element={usuarioEstaLogueado ?
