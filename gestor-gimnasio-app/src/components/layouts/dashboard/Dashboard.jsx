@@ -2,9 +2,20 @@ import Header from "../header/Header"
 import Container from "@mui/material/Container"
 import Box from "@mui/material/Box"
 import Footer from "../footer/Footer"
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate, useLocation } from "react-router-dom"
+import { useEffect } from "react"
 
 function Dashboard() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const usuario = JSON.parse(localStorage.getItem("usuario"))
+
+  useEffect(() => {
+    if (usuario && usuario.idTipoUsuario === 1 && location.pathname === "/dashboard") {
+      navigate("/dashboard/admin", { replace: true })
+    }
+  }, [usuario, navigate, location.pathname])
+
   return (
     <Box
       sx={{
