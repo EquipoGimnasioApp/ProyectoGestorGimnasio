@@ -75,6 +75,10 @@ class Usuario extends Authenticatable
         return $this->belongsTo(TipoUsuario::class, 'id_tipo_usuario', 'id');
     }
 
+    public function getDescTipoUsuarioAttribute()
+{
+    return $this->tipoUsuario ? $this->tipoUsuario->tipo : null;
+}
     public function perfil()
     {
         return $this->hasOne(Perfil::class, 'id_usuario');

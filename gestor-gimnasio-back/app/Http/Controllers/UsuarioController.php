@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Interfaces\UsuarioServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Models\Usuario;
 
 class UsuarioController extends Controller
 {
@@ -16,7 +17,7 @@ class UsuarioController extends Controller
 
     public function index()
     {
-        $usuarios = $this->usuarioSrv->getAll();
+        $usuarios = Usuario::with('tipoUsuario')->get();
         return response()->json($usuarios);
     }
 
@@ -65,5 +66,12 @@ class UsuarioController extends Controller
         $existe = $this->usuarioSrv->checkEmailExists($email);
 
         return response()->json(['existe' => $existe], Response::HTTP_OK);
+    }
+
+    public function destroy($id)
+    {
+    $usuario = Usuario::findOrFail($id);
+    $usuario->delete();
+    return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
 }

@@ -59,6 +59,9 @@ Route::middleware(AUTH_SANCTION)->group(function () {
 
         Route::get(ID_ROUTE_PARAMETER, [UsuarioController::class, 'show'])
             ->name('usuarios.show');
+
+        Route::delete(ID_ROUTE_PARAMETER, [UsuarioController::class, 'destroy'])
+            ->name('usuarios.destroy');
     });
 
     Route::prefix('turnos-clase')->group(function () {
