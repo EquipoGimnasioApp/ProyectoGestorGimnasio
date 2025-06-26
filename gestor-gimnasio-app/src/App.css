@@ -77,3 +77,11 @@
 .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: #696969 !important;
 }
+
+body {
+  background-image: url('/background/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
+}
