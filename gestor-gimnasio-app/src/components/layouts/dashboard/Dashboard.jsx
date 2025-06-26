@@ -35,9 +35,6 @@ function Dashboard() {
           alignItems: "center",
         }}
       >
-        {mostrarSaludo && (
-          <h1 className="saludo-bienvenida">Bienvenido {usuario.nombres}!!</h1>
-        )}
         <Box
           sx={{
             p: 3,
