@@ -39,4 +39,22 @@ class InscripcionController extends Controller
             return response()->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    public function getInscripcionesPorTurnoClase($id_turno_clase)
+    {
+        try {
+            $alumnosInscriptos = $this->inscripcionService->getInscripcionesPorTurnoClase($id_turno_clase);
+            return response()->json($alumnosInscriptos, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Turno de clase no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function cargarAsistencia($id_turno_clase, Request $request)
+    {
+        $asistencias = $request->all();
+        $this->inscripcionService->cargarAsistencias($id_turno_clase, $asistencias);
+
+        return response()->json(['success' => true]);
+    }
 }

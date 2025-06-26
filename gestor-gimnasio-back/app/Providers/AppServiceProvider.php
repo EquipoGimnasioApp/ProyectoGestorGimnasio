@@ -32,8 +32,15 @@ use App\Http\Services\InscripcionService;
 use App\Http\Services\SalaService;
 use App\Http\Services\TipoActividadService;
 use App\Http\Services\TurnoClaseService;
+use App\Http\Repositories\PagoRepository;
+use App\Http\Interfaces\PagoRepositoryInterface;
+use App\Http\Services\PagoService;
+use App\Http\Interfaces\PagoServiceInterface;
 use App\Http\Services\MaterialService;
-
+use App\Http\Interfaces\PerfilServiceInterface;
+use App\Http\Services\PerfilService;
+use App\Http\Interfaces\PerfilRepositoryInterface;
+use App\Http\Repositories\PerfilRepository;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -108,8 +115,28 @@ class AppServiceProvider extends ServiceProvider
             ContactoRepository::class
         );
 
+        $this->app->bind(
+            PagoRepositoryInterface::class,
+            PagoRepository::class
+        );
+
+        $this->app->bind(
+            PagoServiceInterface::class,
+            PagoService::class
+        );
+
         $this->app->bind(MaterialServiceInterface::class, MaterialService::class);
         $this->app->bind(MaterialRepositoryInterface::class, MaterialRepository::class);
+
+        $this->app->bind(
+            PerfilServiceInterface::class,
+            PerfilService::class
+        );
+
+        $this->app->bind(
+            PerfilRepositoryInterface::class,
+            PerfilRepository::class
+        );
     }
 
     /**

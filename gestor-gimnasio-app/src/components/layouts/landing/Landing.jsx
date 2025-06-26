@@ -389,6 +389,7 @@ function Landing() {
               WebApp para los clientes
             </Box>
             <Button
+             href="#contactoLanding"
               variant="contained"
               sx={{
                 backgroundColor: "#111",

@@ -1,47 +1,54 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import Button from '@mui/material/Button';
-import UsuarioDto from '../../../models/dtos/UsuarioDto.model.dto';
-import NavigationButton from '../../navigation-button/NavigationButton';
-import './Header.css';
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import MenuItem from '@mui/material/MenuItem'
+import Menu from '@mui/material/Menu'
+import Button from '@mui/material/Button'
+import UsuarioDto from '../../../models/dtos/UsuarioDto.model.dto'
+import NavigationButton from '../../navigation-button/NavigationButton'
+import './Header.css'
+import Avatar from '@mui/material/Avatar'
 
 function Header() {
-  const [anchorMenuUsu, setAnchorMenuUsu] = useState(null);
-  const [usuario, setUsuario] = useState(null);
-  const navigate = useNavigate();
+  const [anchorMenuUsu, setAnchorMenuUsu] = useState(null)
+  const [usuario, setUsuario] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const usuarioGuardado = localStorage.getItem('usuario');
+    const usuarioGuardado = localStorage.getItem('usuario')
     if (usuarioGuardado) {
-      const usuarioParseado = JSON.parse(usuarioGuardado);
-      setUsuario(new UsuarioDto(usuarioParseado));
+      const usuarioParseado = JSON.parse(usuarioGuardado)
+      setUsuario(new UsuarioDto(usuarioParseado))
     }
-  }, []);
+  }, [])
 
   const handleMenu = (event) => {
-    setAnchorMenuUsu(event.currentTarget);
-  };
+    setAnchorMenuUsu(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorMenuUsu(null);
-  };
+    setAnchorMenuUsu(null)
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('usuarioAccesToken');
-    localStorage.removeItem('usuarioTokenType');
-    setUsuario(null);
-    handleClose();
-    navigate('/login');
-  };
+    localStorage.removeItem('usuario')
+    localStorage.removeItem('usuarioAccesToken')
+    localStorage.removeItem('usuarioTokenType')
+    setUsuario(null)
+    handleClose()
+    navigate('/login')
+  }
+
+  const fotoPerfilUrl = usuario && usuario.imagen
+    ? `http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/storage/imagenes/${usuario.imagen}`
+    : undefined
+
+  console.log('fotoPerfilUrl:', fotoPerfilUrl)
 
   return (
     <>
@@ -63,7 +70,12 @@ function Header() {
                   onClick={handleMenu}
                   sx={{ color: '#000' }}
                 >
-                  <AccountCircle sx={{ fontSize: 35 }} />
+                  <Avatar
+                    src={fotoPerfilUrl}
+                    sx={{ width: 35, height: 35 }}
+                  >
+                    {!fotoPerfilUrl && <AccountCircle sx={{ fontSize: 35 }} />}
+                  </Avatar>
                 </IconButton>
                 <Menu
                   id="menu-appbar"
@@ -99,9 +111,28 @@ function Header() {
                     }}
                   >
                     <Button
+                      href="/dashboard/editar-perfil"
                       variant="contained"
-                      className="logout-button-custom-red"
+                      className="boton-secundario"
+                      sx={{ width: '70%' }}
+                    >
+                      Mi Perfil
+                    </Button>
+                  </MenuItem>
+                  <MenuItem
+                    sx={{
+                      justifyContent: 'center',
+                      paddingY: '6px',
+                      '&:hover, &.Mui-focusVisible': {
+                        backgroundColor: 'transparent',
+                      },
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      className="boton-principal"
                       onClick={handleLogout}
+                      sx={{ width: '70%' }}
                     >
                       Cerrar Sesión
                     </Button>
@@ -110,10 +141,11 @@ function Header() {
               </div>
             </Toolbar>
           </AppBar>
-        </Box>
-      )}
+        </Box >
+      )
+      }
     </>
-  );
+  )
 }
 
-export default Header;
+export default Header

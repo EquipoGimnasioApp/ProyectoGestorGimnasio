@@ -11,7 +11,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
 {
     public function getAll(): Collection
     {
-        return TurnoClase::with(['tipoActividad', 'profesor'])
+        return TurnoClase::with(['tipoActividad', 'profesor','sala'])
             ->orderBy('id', 'DESC')
             ->get();
     }
@@ -29,6 +29,8 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                 'turno_clase.id_profesor AS idProfesor',
                 'usuario.nombres AS nombresProfesor',
                 'usuario.apellidos AS apellidosProfesor',
+                'turno_clase.id_sala AS idSala',
+                'sala.descripcion AS descripcionSala',
                 'turno_clase.fecha',
                 'turno_clase.horario_desde AS horarioDesde',
                 'turno_clase.horario_hasta AS horarioHasta',
@@ -41,11 +43,19 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                 DB::raw('CASE WHEN inscripcion.id IS NOT NULL THEN TRUE ELSE FALSE END AS inscripto')
             ])
             ->leftJoin('tipo_actividad', 'turno_clase.id_actividad', '=', 'tipo_actividad.id')
+             ->leftJoin('sala', 'turno_clase.id_sala', '=', 'sala.id')
             ->leftJoin('inscripcion', function ($join) use ($userId) {
                 $join->on('turno_clase.id', '=', 'inscripcion.id_turno_clase')
                     ->where('inscripcion.id_usuario', '=', $userId);
             })
             ->join('usuario', 'turno_clase.id_profesor', '=', 'usuario.id')
+            ->where(function ($query) {
+                $query->whereDate('turno_clase.fecha', '>', now()->toDateString())
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->whereDate('turno_clase.fecha', '=', now()->toDateString())
+                            ->whereTime('turno_clase.horario_desde', '>', now()->toTimeString());
+                    });
+            })
             ->orderBy('turno_clase.fecha', 'DESC')
             ->orderBy('turno_clase.id_actividad')
             ->orderBy('turno_clase.horario_desde')
@@ -65,7 +75,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         return TurnoClase::query()
             ->select(DB::raw('cupo_maximo - COUNT(inscripcion.id) AS cupoActual'))
-            ->join('inscripcion', 'turno_clase.id', '=', 'inscripcion.id_turno_clase')
+            ->leftJoin('inscripcion', 'turno_clase.id', '=', 'inscripcion.id_turno_clase')
             ->where('turno_clase.id', $idTurnoClase)
             ->groupBy('turno_clase.cupo_maximo')
             ->value('cupoActual');
@@ -100,5 +110,10 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         $turnoClase = TurnoClase::findOrFail($id);
         return $turnoClase->delete();
+    }
+
+    public function find(int $idTurnoClase)
+    {
+        return TurnoClase::findOrFail($idTurnoClase);
     }
 }

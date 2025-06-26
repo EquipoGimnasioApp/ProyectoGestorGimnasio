@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Interfaces\UsuarioRepositoryInterface;
 use App\Http\Interfaces\UsuarioServiceInterface;
+use App\Http\Interfaces\PerfilServiceInterface;
 use App\Models\DTOs\UsuarioDto;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
@@ -12,7 +13,8 @@ use Illuminate\Support\Collection;
 class UsuarioService implements UsuarioServiceInterface
 {
     public function __construct(
-        protected UsuarioRepositoryInterface $usuarioRepoInterface
+        protected UsuarioRepositoryInterface $usuarioRepoInterface,
+        protected PerfilServiceInterface $perfilService
     ) {}
 
     public function getAll(): Collection
@@ -47,6 +49,19 @@ class UsuarioService implements UsuarioServiceInterface
         });
     }
 
+    /**
+     * Obtener todos los usuarios que son alumnos.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Una colección de usuarios que son alumnos.
+     */
+    public function getAlumnos()
+    {
+        $alumnos = $this->usuarioRepoInterface->getAlumnos();
+        return $alumnos->map(function (Usuario $usuario) {
+            return UsuarioDto::fromUser($usuario);
+        });
+    }
+
     public function checkEmailExists(string $email): bool
     {
         return $this->usuarioRepoInterface->checkEmailExists($email);
@@ -55,6 +70,8 @@ class UsuarioService implements UsuarioServiceInterface
     public function create(array $data): Usuario
     {
         $data['password'] = Hash::make($data['password']);
-        return $this->usuarioRepoInterface->create($data);
+        $usuario = $this->usuarioRepoInterface->create($data);
+        $this->perfilService->createForUser($usuario->id);
+        return $usuario;
     }
 }

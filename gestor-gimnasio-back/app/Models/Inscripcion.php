@@ -19,12 +19,14 @@ class Inscripcion extends Model
         'id_usuario',
         'id_turno_clase',
         'fecha',
+        'presente'
     ];
 
     protected $casts = [
         'id_usuario' => 'integer',
         'id_turno_clase' => 'integer',
         'fecha' => 'date',
+        'presente' => 'boolean'
     ];
 
     public function usuario()

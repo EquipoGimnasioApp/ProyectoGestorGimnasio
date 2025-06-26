@@ -9,6 +9,7 @@ class UsuarioDto {
      * @param {Date|string|null} data.fechaBaja
      * @param {number} data.idTipoUsuario
      * @param {string} data.descTipoUsuario
+     * @param {string|null} data.imagen
      */
     constructor(data = {}) {
         this.id = data.id;
@@ -19,6 +20,7 @@ class UsuarioDto {
         this.fechaBaja = data.fechaBaja;
         this.idTipoUsuario = data.idTipoUsuario;
         this.descTipoUsuario = data.descTipoUsuario;
+        this.imagen = data.imagen ?? null;
     }
 }
 

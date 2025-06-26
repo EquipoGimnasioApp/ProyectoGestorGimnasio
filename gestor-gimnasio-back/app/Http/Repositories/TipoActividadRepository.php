@@ -14,9 +14,7 @@ class TipoActividadRepository implements TipoActividadRepositoryInterface
      */
     public function getAll()
     {
-        return TipoActividad::with('sala')
-            ->orderBy('id')
-            ->get();
+        return TipoActividad::orderBy('id')->get();
     }
 
     /**

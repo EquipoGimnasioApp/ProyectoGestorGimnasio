@@ -21,4 +21,8 @@ interface InscripcionRepositoryInterface
      * @return int El número de registros eliminados.
      */
     public function cancelarInscripcion($id_usuario, $id_turno_clase);
+
+    public function getInscripcionesPorTurnoClase($id_turno_clase);
+
+    public function cargarAsistencias($idTurnoClase, array $asistencias);
 }

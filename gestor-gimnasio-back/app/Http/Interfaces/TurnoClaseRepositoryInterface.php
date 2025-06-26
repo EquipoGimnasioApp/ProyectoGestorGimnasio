@@ -71,4 +71,6 @@ interface TurnoClaseRepositoryInterface
      * @return mixed
      */
     public function destroy(int $id);
+
+    public function find(int $idTurnoClase);
 }

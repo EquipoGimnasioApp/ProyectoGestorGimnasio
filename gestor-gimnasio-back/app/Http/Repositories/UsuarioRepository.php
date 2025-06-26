@@ -15,7 +15,7 @@ class UsuarioRepository implements UsuarioRepositoryInterface
      */
     public function getAll(): Collection
     {
-        return Usuario::with('tipoUsuario')
+        return Usuario::with(['tipoUsuario', 'perfil'])
             ->orderBy('id')
             ->get();
     }
@@ -55,6 +55,19 @@ class UsuarioRepository implements UsuarioRepositoryInterface
     {
         return Usuario::with('tipoUsuario')
             ->where('id_tipo_usuario', 3)
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * Obtener todos los usuarios que son alumnos.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection Una colección de usuarios que son alumnos.
+     */
+    public function getAlumnos()
+    {
+        return Usuario::with('tipoUsuario')
+            ->where('id_tipo_usuario', 2)
             ->orderBy('id')
             ->get();
     }

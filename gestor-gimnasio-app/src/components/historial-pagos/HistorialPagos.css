@@ -1,0 +1,45 @@
+.clases-table .MuiTableCell-root {
+  text-align: center;
+}
+
+/* Contenedor de la tabla */
+.clases-table {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(60, 60, 60, 0.22);
+  margin: 32px auto;
+  max-width: 900px;
+}
+
+/* Cabecera de la tabla */
+.cabecera-tabla {
+  background: #f8fafc;
+}
+
+.cabecera-tabla .MuiTableCell-head {
+  color: #222;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #e0e0e0;
+  text-align: center;
+}
+
+/* Celdas de la tabla */
+.MuiTableCell-root {
+  text-align: center;
+  font-size: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Fila al pasar el mouse */
+.MuiTableRow-root:hover {
+  background: #f8fafc;
+}
+
+.titulo-clases {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 24px 0 12px 0;
+  font-family: "Roboto", Arial, sans-serif;
+  letter-spacing: -1px;
+}

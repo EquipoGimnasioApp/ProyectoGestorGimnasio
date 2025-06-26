@@ -1,7 +1,7 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import environment from '../../../environments/environment';
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Link from '@mui/material/Link'
+import environment from '../../../environments/environment'
 
 function Footer() {
   return (
@@ -29,10 +29,10 @@ function Footer() {
           },
         }}
       >
-        Contactate con el gimnasio
+        Contactate con Fit Manager
       </Link>
     </Box>
-  );
+  )
 }
 
-export default Footer;
+export default Footer
