@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
 import { EventNote, Message, Today } from '@mui/icons-material';
 
-const AlumnoDashboard = ({ alumnoName = "Alumno/a" }) => {
+const usuario = JSON.parse(localStorage.getItem('usuario'))
+const AlumnoDashboard = ({ alumnoName = usuario.nombres }) => {
   return (
     <div className="p-6 space-y-6">
       <Typography variant="h4" gutterBottom>
