@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent, Typography, Grid, Button } from '@mui/material';
 import { BarChart, People, Message, Warning, EventNote, Settings } from '@mui/icons-material';
 
-const AdminDashboard = ({ adminName = "Administrador/a" }) => {
+const usuario = JSON.parse(localStorage.getItem('usuario'))
+const AdminDashboard = ({ adminName = usuario.nombres }) => {
 
   return (
     <div className="p-6 space-y-6">
