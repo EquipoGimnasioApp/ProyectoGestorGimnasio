@@ -38,4 +38,12 @@ class InscripcionRepository implements InscripcionRepositoryInterface
                 ->update(['presente' => $asistencia['presente']]);
         }
     }
+
+    public function getInscripcionesPorUsuario($id_usuario)
+    {
+        return Inscripcion::where('id_usuario', $id_usuario)
+            // ->with('turnoClase')
+            ->with(['turnoClase.tipoActividad', 'turnoClase.sala', 'turnoClase.profesor'])
+            ->get();
+    }
 }
