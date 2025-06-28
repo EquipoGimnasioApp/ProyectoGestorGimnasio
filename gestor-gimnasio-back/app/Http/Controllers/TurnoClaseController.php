@@ -94,4 +94,10 @@ class TurnoClaseController extends Controller
         $this->turnoClaseService->destroy($id);
         return response()->json(['message' => 'Clase eliminada correctamente'], \Illuminate\Http\Response::HTTP_OK);
     }
+
+    public function getClasesPorProfesor($idProfesor)
+    {
+        $clases = $this->turnoClaseService->getClasesPorProfesor($idProfesor);
+        return response()->json($clases, Response::HTTP_OK);
+    }
 }

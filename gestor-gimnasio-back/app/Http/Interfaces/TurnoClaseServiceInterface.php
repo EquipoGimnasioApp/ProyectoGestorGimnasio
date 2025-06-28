@@ -49,4 +49,12 @@ interface TurnoClaseServiceInterface
      * @return mixed
      */
     public function destroy(int $id);
+
+    /**
+     * Obtiene todas las clases para un profesor específico.
+     *
+     * @param int $idProfesor El ID del profesor.
+     * @return App\Models\TurnoClaseDto[]|Collection
+     */
+    public function getClasesPorProfesor(int $idProfesor);
 }
