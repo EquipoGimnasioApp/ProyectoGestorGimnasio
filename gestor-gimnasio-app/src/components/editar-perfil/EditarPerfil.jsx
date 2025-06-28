@@ -118,10 +118,19 @@ export default function EditarPerfil() {
                         : 'Argentina',
                     estado_membresia: data.estado_membresia || 'No disponible',
                 })
-                setFotoPerfil(data.imagen
-                    ? 'http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/storage/imagenes/' + data.imagen
-                    : null
-                )
+                // Obtener la foto como blob
+                const fotoRes = await fetch(`${environment.apiUrl}/perfiles/${idUsuario}/foto`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                if (fotoRes.ok) {
+                    const blob = await fotoRes.blob()
+                    setFotoPerfil(URL.createObjectURL(blob))
+                } else {
+                    setFotoPerfil(null)
+                }
             } catch (error) {
                 showSnackbar(error.message || 'Error al tratar de obtener el perfil', 'error')
             } finally {
@@ -140,33 +149,35 @@ export default function EditarPerfil() {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    const handleFotoChange = async (e) => {
+    const handleFotoChange = (e) => {
         const file = e.target.files[0]
         if (!file) return
-
         setFotoPerfil(file)
+    }
 
+    const handleFotoUpload = async () => {
+        if (!fotoPerfil || !(fotoPerfil instanceof File)) {
+            showSnackbar('Selecciona una imagen válida', 'warning')
+            return
+        }
         const formData = new FormData()
-        formData.append('imagen', file)
-
+        formData.append('foto', fotoPerfil)
         try {
-            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}/imagen`, {
+            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}/foto`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
                 body: formData,
             })
-
             if (!response.ok) {
-                throw new Error('Error al subir la imagen')
+                throw new Error('Error al subir la foto')
             }
-
             await response.json()
-            showSnackbar('Imagen actualizada correctamente', 'success')
-
+            showSnackbar('Foto actualizada correctamente', 'success')
+            getPerfil(usuario, token)
         } catch (error) {
-            showSnackbar(error.message || 'Error al subir la imagen', 'error')
+            showSnackbar(error.message || 'Error al subir la foto', 'error')
         }
     }
 
@@ -199,20 +210,20 @@ export default function EditarPerfil() {
     const handleEliminarFoto = async () => {
         setEliminandoFoto(true)
         try {
-            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}/imagen`, {
+            const response = await fetch(`${environment.apiUrl}/perfiles/${usuario.id}/foto`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             if (!response.ok) {
-                throw new Error('Error al eliminar la imagen')
+                throw new Error('Error al eliminar la foto')
             }
             setFotoPerfil(null)
-            showSnackbar('Imagen eliminada correctamente', 'success')
+            showSnackbar('Foto eliminada correctamente', 'success')
             getPerfil(usuario, token)
         } catch (error) {
-            showSnackbar(error.message || 'Error al eliminar la imagen', 'error')
+            showSnackbar(error.message || 'Error al eliminar la foto', 'error')
         } finally {
             setEliminandoFoto(false)
         }
@@ -245,7 +256,7 @@ export default function EditarPerfil() {
                                 component='label'
                                 sx={{ mb: 1 }}
                             >
-                                Subir una foto
+                                Seleccionar foto
                                 <input
                                     type='file'
                                     accept='image/*'
@@ -254,12 +265,13 @@ export default function EditarPerfil() {
                                 />
                             </Button>
                             <Button
-                                variant='outlined'
+                                variant='contained'
+                                color='primary'
                                 fullWidth
-                                color='error'
-                                onClick={handleEliminarFoto}
+                                sx={{ mb: 1 }}
+                                onClick={handleFotoUpload}
                             >
-                                Eliminar la foto
+                                Subir foto
                             </Button>
                         </Box>
                     </Box>

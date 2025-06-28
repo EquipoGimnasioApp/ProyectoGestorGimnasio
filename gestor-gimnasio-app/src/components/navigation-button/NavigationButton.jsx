@@ -137,7 +137,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
             aria-haspopup="true"
             aria-expanded={Boolean(anchorEl)}
           >
-            ABM
+            Administrar
           </Button>
           <Menu
             id="abm-menu"
@@ -153,11 +153,11 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
               horizontal: "left",
             }}
           >
-            <MenuItem onClick={handleAbmClasesClick}>ABM Clases</MenuItem>
-            <MenuItem onClick={handleAbmTiposActividadClick}>ABM Actividades</MenuItem>
-            <MenuItem onClick={handleAbmSalasClick}>ABM Salas</MenuItem>
-            <MenuItem onClick={handleAbmEquipamientoClick}>ABM Equipamiento</MenuItem>
-            <MenuItem onClick={handleAbmUsuariosClick}>ABM Usuarios</MenuItem>
+            <MenuItem onClick={handleAbmClasesClick}>Clases</MenuItem>
+            <MenuItem onClick={handleAbmTiposActividadClick}>Actividades</MenuItem>
+            <MenuItem onClick={handleAbmSalasClick}>Salas</MenuItem>
+            <MenuItem onClick={handleAbmEquipamientoClick}>Equipamiento</MenuItem>
+            <MenuItem onClick={handleAbmUsuariosClick}>Usuarios</MenuItem>
           </Menu>
         </>
       )}

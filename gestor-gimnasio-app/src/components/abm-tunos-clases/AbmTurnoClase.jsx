@@ -342,7 +342,7 @@ export default function AbmTurnoClase() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <h2 className="titulo">ABM Clases</h2>
+      <h2 className="titulo">Administrar clases</h2>
 
       <Box
         sx={{

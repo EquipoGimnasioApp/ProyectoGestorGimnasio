@@ -27,6 +27,17 @@ function Header() {
     }
   }, [])
 
+  const [fotoPerfilUrl, setFotoPerfilUrl] = useState(undefined)
+
+  useEffect(() => {
+    if (usuario && usuario.id) {
+      const url = `http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/api/perfil/${usuario.id}/foto`
+      setFotoPerfilUrl(url)
+    } else {
+      setFotoPerfilUrl(undefined)
+    }
+  }, [usuario])
+
   const handleMenu = (event) => {
     setAnchorMenuUsu(event.currentTarget)
   }
@@ -43,10 +54,6 @@ function Header() {
     handleClose()
     navigate('/login')
   }
-
-  const fotoPerfilUrl = usuario && usuario.imagen
-    ? `http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/storage/imagenes/${usuario.imagen}`
-    : undefined
 
   console.log('fotoPerfilUrl:', fotoPerfilUrl)
 
@@ -74,6 +81,13 @@ function Header() {
               </Typography>
               </>
               <NavigationButton usuario={usuario} colorButtons="#000" />
+              <Box sx={{ flexGrow: 1 }} />
+              <Typography
+                variant="subtitle1"
+                sx={{ color: '#000', mr: 2, fontWeight: 500, display: { xs: 'none', sm: 'block' } }}
+              >
+                {`¡Bienvenido${usuario?.nombres ? `, ${usuario.nombres}` : ''}!`}
+              </Typography>
               <div>
                 <IconButton
                   size="large"
