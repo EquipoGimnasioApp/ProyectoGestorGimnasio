@@ -90,6 +90,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('inscripciones.cancelar-inscripcion');
         Route::get('/turnos-clase/{claseId}', [InscripcionController::class, 'getInscripcionesPorTurnoClase'])
             ->name('inscripciones.inscripciones-por-turno-clase');
+        Route::get('/turnos-clase/usuario/{id_usuario}', [InscripcionController::class, 'getInscripcionesPorUsuario'])
+            ->name('inscripciones.inscripciones-por-turno-clase');
         Route::post('/cargar-asistencia/{id_turno_clase}', [InscripcionController::class, 'cargarAsistencia'])
             ->name('inscripciones.cargar-asistencia');
     });

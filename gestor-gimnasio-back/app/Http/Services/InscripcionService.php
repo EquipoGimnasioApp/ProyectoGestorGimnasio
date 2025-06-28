@@ -74,6 +74,11 @@ class InscripcionService implements InscripcionServiceInterface
     {
         $this->inscripcionRepository->cargarAsistencias($idTurnoClase, $asistencias);
     }
+
+    public function getInscripcionesPorUsuario($id_usuario)
+    {
+        return $this->inscripcionRepository->getInscripcionesPorUsuario($id_usuario);
+    }
 }
 
 class CupoActualClaseException extends \Exception

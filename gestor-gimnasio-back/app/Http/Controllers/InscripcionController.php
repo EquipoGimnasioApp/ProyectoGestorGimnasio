@@ -57,4 +57,14 @@ class InscripcionController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function getInscripcionesPorUsuario($id_usuario)
+    {
+        try {
+            $inscripciones = $this->inscripcionService->getInscripcionesPorUsuario($id_usuario);
+            return response()->json($inscripciones, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+    }
 }
