@@ -81,6 +81,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('turnos-clase.create');
         Route::delete(ID_ROUTE_PARAMETER, [TurnoClaseController::class, 'destroy'])
             ->name('turnos-clase.destroy');
+        Route::get('/profesor/{idProfesor}', [TurnoClaseController::class, 'getClasesPorProfesor'])
+            ->name('turnos-clase.clases-por-profesor');
     });
 
     Route::prefix('inscripciones')->group(function () {

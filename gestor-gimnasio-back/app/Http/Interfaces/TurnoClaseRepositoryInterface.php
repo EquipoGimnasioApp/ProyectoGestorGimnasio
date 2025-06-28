@@ -73,4 +73,6 @@ interface TurnoClaseRepositoryInterface
     public function destroy(int $id);
 
     public function find(int $idTurnoClase);
+
+    public function getClasesPorProfesor($idProfesor);
 }

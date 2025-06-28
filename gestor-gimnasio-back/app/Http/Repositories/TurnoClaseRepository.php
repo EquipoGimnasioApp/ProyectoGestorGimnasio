@@ -116,4 +116,12 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         return TurnoClase::findOrFail($idTurnoClase);
     }
+    
+    public function getClasesPorProfesor($idProfesor)
+    {
+        return TurnoClase::with(['tipoActividad', 'profesor', 'sala'])
+            ->where('id_profesor', $idProfesor)
+            ->orderBy('fecha', 'DESC')
+            ->get();
+    }
 }

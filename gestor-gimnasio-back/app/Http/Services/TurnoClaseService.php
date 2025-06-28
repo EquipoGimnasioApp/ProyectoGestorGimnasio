@@ -81,6 +81,14 @@ class TurnoClaseService implements TurnoClaseServiceInterface
     {
         return $this->turnoClaseRepository->destroy($id);
     }
+
+    public function getClasesPorProfesor($idProfesor)
+    {
+        $clases = $this->turnoClaseRepository->getClasesPorProfesor($idProfesor);
+        return $clases->map(function ($turno) {
+            return \App\Models\DTOs\TurnoClaseDto::fromTurnoClase($turno);
+        });
+    }
 }
 
 class TurnoFechaHorarioException extends \Exception
