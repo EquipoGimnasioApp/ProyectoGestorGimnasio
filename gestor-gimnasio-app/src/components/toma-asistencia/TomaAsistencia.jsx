@@ -82,14 +82,11 @@ export default function TomaAsistencia() {
           },
         })
 
-        console.log('Response:', response)
-
         if (!response.ok) {
           throw new Error("Error al obtener los alumnos")
         }
 
         const data = await response.json()
-        console.log(data)
         const usuarios = data.map(inscripcion =>
           inscripcion.usuario
         )
@@ -176,8 +173,10 @@ export default function TomaAsistencia() {
       <Typography variant="h4" fontWeight={700} mb={4} align="center">
         Tomar Asistencia
       </Typography>
-      <Paper elevation={1} sx={{ p: 4, borderRadius: 3, minWidth: 500, maxWidth: 540, mx: 'auto', border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
-    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
+      <Paper elevation={1} sx={{
+        p: 4, borderRadius: 3, minWidth: 500, maxWidth: 540, mx: 'auto', border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+        boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+      }}>
         {cargando ? (
           <CargaTabla texto='Cargando clases...' />
         )

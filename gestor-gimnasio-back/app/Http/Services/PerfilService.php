@@ -14,14 +14,11 @@ class PerfilService implements PerfilServiceInterface
 
     public function getByUserId(int $id)
     {
-        $perfil = $this->perfilRepository->getByUserId($id);
-        return $perfil;
+        return $this->perfilRepository->getByUserId($id);
     }
 
     public function createForUser(int $userId)
     {
-        // Aquí podrías implementar la lógica para crear un perfil para un usuario.
-        // Por ejemplo, podrías llamar a un método en el repositorio para guardar el perfil.
         return $this->perfilRepository->create([
             'id_usuario' => $userId,
             'fecha_nacimiento' => null,

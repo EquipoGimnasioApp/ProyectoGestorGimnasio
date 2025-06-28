@@ -16,7 +16,7 @@ class Perfil extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'imagen',
+        'foto',
         'fecha_nacimiento',
         'telefono',
         'telefono_emergencia',
@@ -33,7 +33,6 @@ class Perfil extends Model
     ];
 
     protected $casts = [
-        'imagen' => 'string',
         'fecha_nacimiento' => 'date',
         'telefono' => 'string',
         'telefono_emergencia' => 'string',

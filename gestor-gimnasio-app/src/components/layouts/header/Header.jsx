@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -13,11 +13,18 @@ import UsuarioDto from '../../../models/dtos/UsuarioDto.model.dto'
 import NavigationButton from '../../navigation-button/NavigationButton'
 import './Header.css'
 import Avatar from '@mui/material/Avatar'
+import environment from '../../../environments/environment'
 
 function Header() {
+  const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
   const [anchorMenuUsu, setAnchorMenuUsu] = useState(null)
   const [usuario, setUsuario] = useState(null)
   const navigate = useNavigate()
+  const mensajeDeBienvenida = useMemo(() => {
+    return usuario?.nombres
+      ? `¡Bienvenido, ${usuario.nombres}!`
+      : '¡Bienvenido!'
+  }, [usuario?.nombres])
 
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem('usuario')
@@ -26,6 +33,40 @@ function Header() {
       setUsuario(new UsuarioDto(usuarioParseado))
     }
   }, [])
+
+  const [fotoPerfilUrl, setFotoPerfilUrl] = useState(undefined)
+
+  useEffect(() => {
+    if (usuario?.id) {
+      getFotoPerfil(usuario.id)
+    } else {
+      setFotoPerfilUrl(undefined)
+    }
+  }, [usuario])
+
+  const getFotoPerfil = async (idUsuario) => {
+    try {
+      const response = await fetch(`${environment.apiUrl}/perfiles/${idUsuario}/foto`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!response.ok) {
+        setFotoPerfilUrl(undefined)
+        return
+      }
+
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      setFotoPerfilUrl(url)
+    }
+    catch (error) {
+      console.error('Error al obtener la foto de perfil:', error)
+      setFotoPerfilUrl(undefined)
+    }
+  }
 
   const handleMenu = (event) => {
     setAnchorMenuUsu(event.currentTarget)
@@ -44,12 +85,6 @@ function Header() {
     navigate('/login')
   }
 
-  const fotoPerfilUrl = usuario && usuario.imagen
-    ? `http://localhost/ProyectoGestorGimnasio/gestor-gimnasio-back/public/storage/imagenes/${usuario.imagen}`
-    : undefined
-
-  console.log('fotoPerfilUrl:', fotoPerfilUrl)
-
   return (
     <>
       {usuario && (
@@ -57,23 +92,30 @@ function Header() {
           <AppBar position="static" sx={{ backgroundColor: '#f8fafc' }}>
             <Toolbar>
               <>
-              <img src="/logo_app.png" alt="Logo" style={{ height: 40, marginRight: 10 }} />
-              <Typography
-                variant='h5'
-                component='div'
-                sx={{ color: '#000', cursor: 'pointer' }}
-                onClick={() => {
-                  if (usuario && usuario.idTipoUsuario === 1) {
-                    navigate('/dashboard/admin')
-                  } else {
-                    navigate('/dashboard')
-                  }
-                }}
-              >
-                Fit Manager
-              </Typography>
+                <img src="/logo_app.png" alt="Logo" style={{ height: 40, marginRight: 10 }} />
+                <Typography
+                  variant='h5'
+                  component='div'
+                  sx={{ color: '#000', cursor: 'pointer' }}
+                  onClick={() => {
+                    if (usuario && usuario.idTipoUsuario === 1) {
+                      navigate('/dashboard/admin')
+                    } else {
+                      navigate('/dashboard')
+                    }
+                  }}
+                >
+                  Fit Manager
+                </Typography>
               </>
               <NavigationButton usuario={usuario} colorButtons="#000" />
+
+              <Typography
+                variant="subtitle1"
+                sx={{ color: '#000', fontWeight: 500, display: { xs: 'none', sm: 'block' } }}
+              >
+                {mensajeDeBienvenida}
+              </Typography>
               <div>
                 <IconButton
                   size="large"

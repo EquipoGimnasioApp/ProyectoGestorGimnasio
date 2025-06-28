@@ -194,7 +194,6 @@ export default function AbmTurnoClase() {
   )
 
   const createTurnoCLase = async (nuevoTurno, token) => {
-    console.log("Nuevo turno a crear:", nuevoTurno)
     setCargando(true)
     try {
       const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
@@ -342,7 +341,7 @@ export default function AbmTurnoClase() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <h2 className="titulo">ABM Clases</h2>
+      <h2 className="titulo">Administrar clases</h2>
 
       <Box
         sx={{
@@ -410,10 +409,10 @@ export default function AbmTurnoClase() {
         />
       </Box>
 
-      <TableContainer component={Paper} className="equipamiento-table"  sx={{
-    border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
-    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
-  }}>
+      <TableContainer component={Paper} className="equipamiento-table" sx={{
+        border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+        boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+      }}>
         {cargando ? (
           <CargaTabla texto="Cargando clases..." />
         ) : (

@@ -132,8 +132,8 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('perfiles.show');
         Route::put('/{userId}', [PerfilController::class, 'update'])
             ->name('perfiles.update');
-        Route::post('/{userId}/imagen', [PerfilController::class, 'subirImagen']);
-        Route::delete('/{userId}/imagen', [PerfilController::class, 'eliminarImagen']);
+        Route::post('/{userId}/foto', [PerfilController::class, 'subirFoto']);
+        Route::get('/{userId}/foto', [PerfilController::class, 'obtenerFoto']);
     });
 
     Route::prefix('tipos-documento')->group(function () {
