@@ -34,7 +34,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
 
   const puedeVerAbm = idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
-  const puedeVerMensajes = 
+  const puedeVerMensajes =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO ||
     idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
@@ -75,17 +75,17 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
   }
 
   return (
-    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem" }}>
-     {puedeVerAgendarClases && (
-  <Button
-    color="inherit"
-    startIcon={<FitnessCenterIcon />}
-    sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-    onClick={() => navigate('/dashboard/agendar-clases')}
-  >
-    {idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'Próximas Clases' : 'Agendar'}
-  </Button>
-)}
+    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem", paddingLeft: "5rem" }}>
+      {puedeVerAgendarClases && (
+        <Button
+          color="inherit"
+          startIcon={<FitnessCenterIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate('/dashboard/agendar-clases')}
+        >
+          {idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'Próximas Clases' : 'Agendar'}
+        </Button>
+      )}
       {puedeVerActividades && (
         <Button
           color="inherit"
@@ -107,13 +107,13 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
         </Button>
       )}
       {puedeVerTomarAsistencia && (<Button
-          color="inherit"
-          startIcon={<PlaylistAddCheck />}
-          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
-          onClick={() => navigate("/dashboard/tomar-asistencia")}
-        >
-          Tomar Asistencia
-        </Button>
+        color="inherit"
+        startIcon={<PlaylistAddCheck />}
+        sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+        onClick={() => navigate("/dashboard/tomar-asistencia")}
+      >
+        Tomar Asistencia
+      </Button>
       )}
       {puedeVerAbm && (
         <Button

@@ -16,7 +16,7 @@ class Perfil extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'foto', // Usar el campo BLOB
+        'foto',
         'fecha_nacimiento',
         'telefono',
         'telefono_emergencia',

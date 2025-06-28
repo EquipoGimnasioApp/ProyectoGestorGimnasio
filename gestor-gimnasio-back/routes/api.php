@@ -134,8 +134,6 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('perfiles.update');
         Route::post('/{userId}/foto', [PerfilController::class, 'subirFoto']);
         Route::get('/{userId}/foto', [PerfilController::class, 'obtenerFoto']);
-        
-        
     });
 
     Route::prefix('tipos-documento')->group(function () {
