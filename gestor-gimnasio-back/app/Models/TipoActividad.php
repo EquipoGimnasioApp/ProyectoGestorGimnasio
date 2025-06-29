@@ -22,4 +22,9 @@ class TipoActividad extends Model
     protected $casts = [
         'tipo' => 'string',
     ];
+
+    public function turnosClase()
+    {
+        return $this->hasMany(TurnoClase::class, 'id_actividad', 'id');
+    }
 }
