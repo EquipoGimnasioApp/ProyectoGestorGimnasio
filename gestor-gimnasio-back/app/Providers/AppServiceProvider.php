@@ -41,6 +41,10 @@ use App\Http\Interfaces\PerfilServiceInterface;
 use App\Http\Services\PerfilService;
 use App\Http\Interfaces\PerfilRepositoryInterface;
 use App\Http\Repositories\PerfilRepository;
+use App\Http\Repositories\RutinaRepository;
+use App\Http\Interfaces\RutinaRepositoryInterface;
+use App\Http\Services\RutinaService;
+use App\Http\Interfaces\RutinaServiceInterface;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -136,6 +140,15 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             PerfilRepositoryInterface::class,
             PerfilRepository::class
+        );
+
+        $this->app->bind(
+            RutinaRepositoryInterface::class,
+            RutinaRepository::class
+        );
+        $this->app->bind(
+            RutinaServiceInterface::class,
+            RutinaService::class
         );
     }
 

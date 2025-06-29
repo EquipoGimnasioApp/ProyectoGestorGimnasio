@@ -14,6 +14,8 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\FormaPagoController;
+use App\Http\Controllers\RutinaController;
 
 if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
@@ -149,4 +151,15 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::get('/mensajes/enviados/{usuarioId}', [MensajeController::class, 'enviados']);
     Route::patch('/mensajes/{id}/leido', [MensajeController::class, 'marcarLeido']);
     Route::delete('/mensajes/{id}', [MensajeController::class, 'eliminar'])->name('mensajes.destroy');
+
+    Route::prefix('rutina')->group(function () {
+        Route::get('/{usuarioId}', [RutinaController::class, 'getByUsuario'])
+            ->name('rutina.getByUsuario');
+        Route::post('/create', [RutinaController::class, 'create'])
+            ->name('rutina.create');
+        Route::put('update/{usuarioId}', [RutinaController::class, 'update'])
+            ->name('rutina.update');
+        Route::delete('/delete', [RutinaController::class, 'destroy'])
+            ->name('rutina.destroy');
+    });
 });

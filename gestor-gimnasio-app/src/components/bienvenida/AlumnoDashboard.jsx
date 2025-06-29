@@ -23,7 +23,6 @@ const AlumnoDashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log('Respuesta del backend:', data);
           setProximasClases(data);
           setCargandoClases(false);
         } else {
