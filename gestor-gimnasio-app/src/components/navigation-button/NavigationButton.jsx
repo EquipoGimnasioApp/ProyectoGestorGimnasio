@@ -194,7 +194,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           color="inherit"
           startIcon={<SportsGymnasticsIcon />}
           sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
-          onClick={() => navigate('/dashboard/mi-rutina')}
+          onClick={() => navigate('/dashboard/asignar-rutina')}
         >
           Asignar Rutina
         </Button>

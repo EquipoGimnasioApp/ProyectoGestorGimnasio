@@ -46,10 +46,10 @@ const MiRutina = () => {
 
   return (
     <Box className='p-6 space-y-6'>
-      <Typography variant='h4' gutterBottom>
+      <Typography variant='h4'sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} gutterBottom>
         🏋️‍♂️ Mi Rutina de Gimnasio
       </Typography>
-      <Typography variant='body1' marginBottom={2}>
+      <Typography variant='body1' marginBottom={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         Esta es tu rutina semanal. ¡Dale con todo!
       </Typography  >
       <Card sx={{ mb: 3 }}>

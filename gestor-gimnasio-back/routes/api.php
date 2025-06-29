@@ -155,7 +155,7 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('rutina')->group(function () {
         Route::get('/{usuarioId}', [RutinaController::class, 'getByUsuario'])
             ->name('rutina.getByUsuario');
-        Route::post('/create', [RutinaController::class, 'create'])
+        Route::post('/create/{usuarioId}', [RutinaController::class, 'create'])
             ->name('rutina.create');
         Route::put('update/{usuarioId}', [RutinaController::class, 'update'])
             ->name('rutina.update');
