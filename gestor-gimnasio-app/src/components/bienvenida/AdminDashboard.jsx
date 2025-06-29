@@ -121,7 +121,7 @@ const AdminDashboard = () => {
         <Grid item xs={12} md={6} lg={3}>
           <Card>
             <CardContent sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
-              <Typography variant="h6">👥 Alumnos activos</Typography>
+              <Typography variant="h6">👥 Cantidad de Alumnos</Typography>
               <Typography variant="h4">{cargandoAlumnos ? 'Cargando...' : alumnosActivos}</Typography>
             </CardContent>
           </Card>
