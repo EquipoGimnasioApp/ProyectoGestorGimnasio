@@ -7,10 +7,18 @@ import dayjs from 'dayjs';
 const AdminDashboard = () => {
   const usuario = JSON.parse(localStorage.getItem('usuario'))
   const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
+  // Clases
   const [clasesHoy, setClasesHoy] = useState(0)
-
+  const [cargaClases, setCargando] = useState(true);
+  // Alumnos activos
+  const [alumnosActivos, setAlumnosActivos] = useState(0);
+  const [cargandoAlumnos, setCargandoAlumnos] = useState(true);
+  // Profesores
+  const [profesoresActivos, setProfesoresActivos] = useState(0);
+  const [cargandoProfesores, setCargandoProfesores] = useState(true);
 
   useEffect(() => {
+    // obtener las clases de hoy
     const fetchClasesHoy = async () => {
       try {
         const response = await fetch(`${environment.apiUrl}/turnos-clase`, {
@@ -22,17 +30,72 @@ const AdminDashboard = () => {
         });
         if (response.ok) {
           const data = await response.json()
+          console.log(data);
           const clasesDeHoy = data.filter(clase => dayjs(clase.fecha).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD'));
           setClasesHoy(clasesDeHoy.length)
-          console.log(data)
+          setCargando(false)
         } else {
           setClasesHoy(0)
+          setCargando(false)
         }
       } catch {
         setClasesHoy(0)
       }
-    }
-    fetchClasesHoy()
+    };
+
+    //Obtener alumnos activos
+    const fetchAlumnosActivos = async () => {
+      try {
+        const response = await fetch(`${environment.apiUrl}/usuarios/alumnos`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          setAlumnosActivos(data.length);
+          setCargandoAlumnos(false);
+        } else {
+          setAlumnosActivos(0);
+          setCargandoAlumnos(false);
+        }
+      } catch {
+        setAlumnosActivos(0);
+        setCargandoAlumnos(false);
+      }
+    };
+
+    //Obtener profesores activos
+    const fetchProfesoresActivos = async () => {
+      try {
+        const response = await fetch(`${environment.apiUrl}/usuarios/profesores`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          setProfesoresActivos(data.length);
+          setCargandoProfesores(false);
+        } else {
+          setProfesoresActivos(0);
+          setCargandoProfesores(false);
+        }
+      } catch {
+        setProfesoresActivos(0);
+        setCargandoProfesores(false);
+      }
+    };
+
+    fetchClasesHoy();
+    fetchAlumnosActivos();
+    fetchProfesoresActivos();
   }, [])
 
 
@@ -51,8 +114,8 @@ const AdminDashboard = () => {
         <Grid item xs={12} md={6} lg={3}>
           <Card>
             <CardContent sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
-              <Typography variant="h6">📍 Clases hoy</Typography>
-              <Typography variant='h4'>{clasesHoy}</Typography>
+              <Typography variant="h6">📍 Clases del día</Typography>
+              <Typography variant='h4'>{cargaClases ? 'Cargando...' : clasesHoy}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -61,7 +124,7 @@ const AdminDashboard = () => {
           <Card>
             <CardContent sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
               <Typography variant="h6">👥 Alumnos activos</Typography>
-              <Typography variant="h4">120</Typography>
+              <Typography variant="h4">{cargandoAlumnos ? 'Cargando...' : alumnosActivos}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -70,7 +133,7 @@ const AdminDashboard = () => {
           <Card>
             <CardContent sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
               <Typography variant="h6">👨‍🏫 Profesores</Typography>
-              <Typography variant="h4">7</Typography>
+              <Typography variant="h4">{cargandoProfesores ? 'Cargando...' : profesoresActivos}</Typography>
             </CardContent>
           </Card>
         </Grid>
