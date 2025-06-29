@@ -189,7 +189,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           Mi Rutina
         </Button>
       )}
-      {/* {puedeVerAsignarRutina && (
+      {puedeVerAsignarRutina && (
         <Button
           color="inherit"
           startIcon={<SportsGymnasticsIcon />}
@@ -198,7 +198,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
         >
           Asignar Rutina
         </Button>
-      )} */}
+      )}
     </Box>
   )
 }

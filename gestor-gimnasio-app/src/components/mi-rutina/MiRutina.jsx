@@ -10,7 +10,7 @@ import { Box } from '@mui/system';
 const MiRutina = () => {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
-  const [rutinas, setRutinas] = useState(0);
+  const [rutinas, setRutinas] = useState("");
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
@@ -25,10 +25,12 @@ const MiRutina = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
-          setRutinas(data.descripcion);
+          if (!data || !data.descripcion || data.descripcion === '') {
+            setRutinas('No tienes una rutina asignada');
+          } else {
+            setRutinas(data.descripcion);
+          }
           setCargando(false);
-
         } else {
           setRutinas("No tienes una rutina asignada");
           setCargando(false);
