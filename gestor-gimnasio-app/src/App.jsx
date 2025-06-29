@@ -21,6 +21,9 @@ import HistorialPagos from "./components/historial-pagos/HistorialPagos"
 import AdminDashboard from "./components/bienvenida/AdminDashboard"
 import AlumnoDashboard from "./components/bienvenida/AlumnoDashboard"
 import ProfesorDashboard from "./components/bienvenida/ProfesorDashboard"
+import MiRutina from './components/mi-rutina/MiRutina';
+import AsignarRutina from "./components/asignar-rutina/AsignarRutina";
+
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -59,6 +62,8 @@ function App() {
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
             <Route path="/dashboard/alumno" element={<AlumnoDashboard />} />
             <Route path="/dashboard/profesor" element={<ProfesorDashboard />} />
+            <Route path='/dashboard/mi-rutina' element={<MiRutina />} />
+            <Route path='/dashboard/asignar-rutina' element={<AsignarRutina />} />
           </Route>
         </Route>
         <Route path="*" element={usuarioEstaLogueado ?

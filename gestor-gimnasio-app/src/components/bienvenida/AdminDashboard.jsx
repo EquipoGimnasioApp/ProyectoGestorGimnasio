@@ -30,7 +30,6 @@ const AdminDashboard = () => {
         });
         if (response.ok) {
           const data = await response.json()
-          console.log(data);
           const clasesDeHoy = data.filter(clase => dayjs(clase.fecha).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD'));
           setClasesHoy(clasesDeHoy.length)
           setCargando(false)
@@ -55,7 +54,6 @@ const AdminDashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setAlumnosActivos(data.length);
           setCargandoAlumnos(false);
         } else {
