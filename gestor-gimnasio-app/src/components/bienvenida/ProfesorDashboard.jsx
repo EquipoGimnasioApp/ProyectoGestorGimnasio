@@ -54,17 +54,7 @@ const ProfesorDashboard = ({ profesorName = usuario.nombres }) => {
         </Card>
       </Grid>
 
-      <Grid item xs={12} marginBottom={4}>
-        <Card>
-          <CardContent sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)' }}>
-            <Typography variant="h6">📌 Tareas pendientes</Typography>
-            <ul className="list-disc pl-5">
-              <li>📝 Tomar lista en clase HIIT</li>
-              <li>📬 Responder 1 mensaje nuevo</li>
-            </ul>
-          </CardContent>
-        </Card>
-      </Grid>
+     
 
       <Grid item xs={12}>
         <Typography variant="body2" color="text.secondary" align="center">

@@ -46,6 +46,8 @@ Route::post('/contactoslanding', [ContactoLandingController::class, 'enviar']);
 
 Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('usuarios')->group(function () {
+        Route::post(ID_ROUTE_PARAMETER . '/modificar-tipo', [UsuarioController::class, 'modificarTipo']);
+
         Route::get('/check-email/{email}', [UsuarioController::class, 'checkEmailExists'])
             ->middleware('throttle:5,1')
             ->name('usuarios.checkEmail');
