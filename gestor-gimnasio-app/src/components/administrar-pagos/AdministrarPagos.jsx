@@ -187,7 +187,7 @@ export function AdministrarPagos() {
             alignItems: 'center'
           }}
         >
-          <h2 className='titulo-clases'>Administrar Pagos</h2>
+          <h2 className='titulo-clases'>Registrar Pago</h2>
 
           {(cargandoAlumnos || cargandoFormasPago) ? (
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mt: 4, mb: 4 }}>
