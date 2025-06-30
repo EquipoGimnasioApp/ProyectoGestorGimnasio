@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+
 class InscripcionController extends Controller
 {
     public function __construct(
@@ -62,7 +63,7 @@ class InscripcionController extends Controller
     {
         try {
             $inscripciones = $this->inscripcionService->getInscripcionesPorUsuario($id_usuario);
-            return response()->json($inscripciones, Response::HTTP_OK);
+            return response()->json(json_decode(json_encode($inscripciones, JSON_INVALID_UTF8_SUBSTITUTE), true), 200, [], JSON_UNESCAPED_UNICODE);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
         }

@@ -15,6 +15,7 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TipoDocumentoController;
+use App\Http\Controllers\RutinaController;
 
 if (!defined('AUTH_SANCTION')) {
     define('AUTH_SANCTION', 'auth:sanctum');
@@ -45,6 +46,8 @@ Route::post('/contactoslanding', [ContactoLandingController::class, 'enviar']);
 
 Route::middleware(AUTH_SANCTION)->group(function () {
     Route::prefix('usuarios')->group(function () {
+        Route::post(ID_ROUTE_PARAMETER . '/modificar-tipo', [UsuarioController::class, 'modificarTipo']);
+
         Route::get('/check-email/{email}', [UsuarioController::class, 'checkEmailExists'])
             ->middleware('throttle:5,1')
             ->name('usuarios.checkEmail');
@@ -150,6 +153,17 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::get('/mensajes/enviados/{usuarioId}', [MensajeController::class, 'enviados']);
     Route::patch('/mensajes/{id}/leido', [MensajeController::class, 'marcarLeido']);
     Route::delete('/mensajes/{id}', [MensajeController::class, 'eliminar'])->name('mensajes.destroy');
+
+    Route::prefix('rutina')->group(function () {
+        Route::get('/{usuarioId}', [RutinaController::class, 'getByUsuario'])
+            ->name('rutina.getByUsuario');
+        Route::post('/create/{usuarioId}', [RutinaController::class, 'create'])
+            ->name('rutina.create');
+        Route::put('update/{usuarioId}', [RutinaController::class, 'update'])
+            ->name('rutina.update');
+        Route::delete('/delete', [RutinaController::class, 'destroy'])
+            ->name('rutina.destroy');
+    });
 
     Route::prefix('formas-pago')->group(function () {
         Route::get('/', [FormaPagoController::class, 'index'])

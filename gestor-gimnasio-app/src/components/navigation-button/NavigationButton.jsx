@@ -7,6 +7,8 @@ import EventNoteIcon from "@mui/icons-material/EventNote"
 import MailOutlineIcon from "@mui/icons-material/MailOutline"
 import BuildIcon from "@mui/icons-material/Build"
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
+import SportsGymnasticsIcon from '@mui/icons-material/SportsGymnastics'
 import PlaylistAddCheck from "@mui/icons-material/PlaylistAddCheck"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
 import PropTypes from "prop-types"
@@ -40,6 +42,12 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
 
   const puedeVerHistorialPagos =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO;
+
+  const puedeVerMiRutina =
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
+
+  const puedeVerAsignarRutina =
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR;
 
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -170,10 +178,31 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
       {puedeVerHistorialPagos && (
         <Button
           color="inherit"
+          startIcon={<ReceiptLongIcon />}
           sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
           onClick={() => navigate('/dashboard/historial-pagos')}
         >
           Historial de Pagos
+        </Button>
+      )}
+      {puedeVerMiRutina && (
+        <Button
+          color="inherit"
+          startIcon={<SportsGymnasticsIcon />}
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
+          onClick={() => navigate('/dashboard/mi-rutina')}
+        >
+          Mi Rutina
+        </Button>
+      )}
+      {puedeVerAsignarRutina && (
+        <Button
+          color="inherit"
+          startIcon={<SportsGymnasticsIcon />}
+          sx={{ textTransform: 'none', mx: 1, color: colorButtons, fontSize: '1em' }}
+          onClick={() => navigate('/dashboard/asignar-rutina')}
+        >
+          Asignar Rutina
         </Button>
       )}
     </Box>

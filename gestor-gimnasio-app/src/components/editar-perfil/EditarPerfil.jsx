@@ -283,13 +283,13 @@ export default function EditarPerfil() {
                     <Carga />
                 ) : (
                     <>
-                        <Typography
+                        {/* <Typography
                             variant='subtitle1'
                             align='center'
                             sx={{ mb: 4, color: 'text.secondary', fontWeight: 'bold' }}
                         >
                             Estado de membresía: {form.estado_membresia || 'No disponible'}
-                        </Typography>
+                        </Typography> */}
                         <form onSubmit={handleSubmit}>
                             <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
                                 <DatePicker

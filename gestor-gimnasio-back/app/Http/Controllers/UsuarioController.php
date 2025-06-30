@@ -68,4 +68,17 @@ class UsuarioController extends Controller
         $usuario->delete();
         return response()->json(['message' => 'Usuario eliminado correctamente']);
     }
+
+    public function modificarTipo(Request $request, $id)
+    {
+        $request->validate([
+            'id_tipo_usuario' => 'required|integer|exists:tipo_usuario,id'
+        ]);
+
+        $usuario = Usuario::findOrFail($id);
+        $usuario->id_tipo_usuario = $request->id_tipo_usuario;
+        $usuario->save();
+
+        return response()->json(['message' => 'Tipo de usuario actualizado correctamente']);
+    }
 }

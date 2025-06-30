@@ -5,26 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoActividad extends Model
+class Rutina extends Model
 {
     use HasFactory;
 
-    protected $table = 'tipo_actividad';
+    protected $table = 'rutina';
 
     protected $primaryKey = 'id';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'tipo',
+        'descripcion',
+        'id_usuario',
     ];
 
-    protected $casts = [
-        'tipo' => 'string',
-    ];
-
-    public function turnosClase()
+    public function usuario()
     {
-        return $this->hasMany(TurnoClase::class, 'id_actividad', 'id');
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'id');
     }
 }
