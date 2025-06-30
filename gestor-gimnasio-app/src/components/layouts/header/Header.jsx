@@ -161,6 +161,11 @@ function Header() {
                   }}
                   open={Boolean(anchorMenuUsu)}
                   onClose={handleClose}
+                  PaperProps={{
+                    sx: {
+                      minWidth: 300
+                    }
+                  }}
                 >
                   <MenuItem disabled>
                     <Typography variant="subtitle1">{`Nombre: ${capitalizarNombreCompleto(usuario.nombres, usuario.apellidos)}`}</Typography>

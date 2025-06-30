@@ -79,6 +79,10 @@
 }
 
 body {
+  min-height: 100vh;
+}
+
+.background-app {
   background-image: url('/background/background.png');
   background-size: cover;
   background-repeat: no-repeat;
