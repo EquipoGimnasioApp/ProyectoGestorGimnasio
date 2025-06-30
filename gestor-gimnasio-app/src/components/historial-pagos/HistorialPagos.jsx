@@ -18,7 +18,9 @@ const HistorialPagos = () => {
 
   const getPagos = () => {
     setCargando(true)
-    fetch(`${environment.apiUrl}/pagos`, {
+    const usuario = JSON.parse(localStorage.getItem('usuario'))
+    const idUsuario = usuario?.id
+    fetch(`${environment.apiUrl}/pagos/${idUsuario}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
