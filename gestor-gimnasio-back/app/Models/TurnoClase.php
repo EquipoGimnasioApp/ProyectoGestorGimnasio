@@ -55,4 +55,8 @@ class TurnoClase extends Model
         return $this->sala ? $this->sala->descripcion : '';
     }
 
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class, 'id_turno_clase', 'id');
+    }
 }

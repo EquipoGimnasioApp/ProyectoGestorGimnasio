@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, Typography, Grid, Paper } from '@mui/material'
 import { getClasesProfesor } from '../../services/clasesProfesorService'
 import CargaTabla from '../clases-carga/CargaTabla'
+import PropTypes from 'prop-types'
 
 const usuario = JSON.parse(localStorage.getItem('usuario'))
 
@@ -82,7 +83,7 @@ const ProfesorDashboard = ({ profesorName = usuario.nombres }) => {
                     <ul className='list-disc pl-5'>
                       {clases.map(clase => (
                         <li key={clase.id} style={{ marginBottom: '1.2rem' }}>
-                          {clase.tipoActividad || clase.id_actividad} – {clase.fecha} – {clase.horario_desde || clase.horarioDesde}hs a {clase.horario_hasta || clase.horarioHasta}hs – Sala: {clase.descripcionSala || clase.sala || '-'} – {clase.totalInscriptos ?? '-'} alumnos inscriptos
+                          {clase.tipoActividad} - {clase.fecha} - {clase.horarioDesde}hs a {clase.horarioHasta}hs - Sala: {clase.descripcionSala ?? '-'} - {clase.totalInscriptos ?? '-'} alumnos inscriptos
                         </li>
                       ))}
                     </ul>
@@ -103,6 +104,10 @@ const ProfesorDashboard = ({ profesorName = usuario.nombres }) => {
       </Paper>
     </div>
   )
+}
+
+ProfesorDashboard.propTypes = {
+  profesorName: PropTypes.string.isRequired,
 }
 
 export default ProfesorDashboard

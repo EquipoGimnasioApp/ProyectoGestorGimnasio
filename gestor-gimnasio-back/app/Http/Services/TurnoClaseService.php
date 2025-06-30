@@ -86,7 +86,7 @@ class TurnoClaseService implements TurnoClaseServiceInterface
     {
         $clases = $this->turnoClaseRepository->getClasesPorProfesor($idProfesor);
         return $clases->map(function ($turno) {
-            return \App\Models\DTOs\TurnoClaseDto::fromTurnoClase($turno);
+            return TurnoClaseDto::fromTurnoClase($turno);
         });
     }
 }

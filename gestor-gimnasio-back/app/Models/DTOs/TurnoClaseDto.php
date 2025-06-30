@@ -15,7 +15,8 @@ class TurnoClaseDto
         public string $fecha,
         public string $horarioDesde,
         public string $horarioHasta,
-        public int $cupoMaximo
+        public int $cupoMaximo,
+        public int $totalInscriptos = 0,
     ) {}
 
     public static function fromTurnoClase($turnoClase)
@@ -32,6 +33,7 @@ class TurnoClaseDto
             $turnoClase->horario_desde->format('H:i'),
             $turnoClase->horario_hasta->format('H:i'),
             $turnoClase->cupo_maximo,
+            $turnoClase->inscripciones_count ?? 0,
         );
     }
 }
