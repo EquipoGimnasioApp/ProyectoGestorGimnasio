@@ -227,13 +227,13 @@ function Login() {
                 >
                   Registrarse
                 </Button>
-                <Link
+                {/* <Link
                   variant="body2"
                   className="forgot-password-link-white"
                   onClick={() => navigate('/forgot-password')}
                 >
                   ¿Olvidaste tu contraseña?
-                </Link>
+                </Link> */}
               </Box>
             </Box>
           </Grid>
