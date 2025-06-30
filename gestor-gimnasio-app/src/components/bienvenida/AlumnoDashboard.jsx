@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
-import { EventNote } from '@mui/icons-material';
-import environment from '../../environments/environment';
-import dayjs from 'dayjs';
+import React, { useEffect, useMemo, useState } from 'react'
+import { Card, CardContent, Typography, Grid } from '@mui/material'
+import { EventNote } from '@mui/icons-material'
+import environment from '../../environments/environment'
+import dayjs from 'dayjs'
 
 
 const AlumnoDashboard = () => {
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const usuario = JSON.parse(localStorage.getItem('usuario'))
   const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
-  const [proximasClases, setProximasClases] = useState([]);
-  const [cargandoClases, setCargandoClases] = useState(true);
+  const [proximasClases, setProximasClases] = useState([])
+  const [cargandoClases, setCargandoClases] = useState(true)
 
   useEffect(() => {
     const fetchProximasClases = async () => {
@@ -20,27 +20,34 @@ const AlumnoDashboard = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        });
+        })
         if (response.ok) {
-          const data = await response.json();
-          setProximasClases(data);
-          setCargandoClases(false);
+          const data = await response.json()
+          setProximasClases(data)
+          setCargandoClases(false)
         } else {
-          setProximasClases([]);
-          setCargandoClases(false);
+          setProximasClases([])
+          setCargandoClases(false)
         }
       } catch {
-        setProximasClases([]);
-        setCargandoClases(false);
+        setProximasClases([])
+        setCargandoClases(false)
       }
-    };
-    fetchProximasClases();
-  }, []);
+    }
+    fetchProximasClases()
+  }, [])
+
+  function capitalizarNombre(nombre) {
+    return (nombre)
+      .split(' ')
+      .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
+      .join(' ')
+  }
 
   return (
     <div className="p-6 space-y-6">
       <Typography variant="h4" gutterBottom>
-        👋 Bienvenido/a, {usuario.nombres}
+        👋 ¡Hola, {capitalizarNombre(usuario.nombres)}
       </Typography>
       <Typography variant="body1" marginBottom={2}>
         ¡Nos alegra verte de nuevo! Desde aquí podés reservar clases, ver tu agenda y mantenerte en contacto con tus profesores.
@@ -59,15 +66,15 @@ const AlumnoDashboard = () => {
                   <li>No tenés clases próximas.</li>
                 ) : (
                   proximasClases
-                  .filter(clase => clase.turno_clase)
-                  .map((clase) => (
-                    <li key={clase.id}>
-                      {dayjs(clase.turno_clase.fecha).format('DD/MM/YYYY')} -
-                      {clase.turno_clase.tipo_actividad?.tipo} {clase.turno_clase.horario_desde}hs -
-                      Profesor/a: {clase.turno_clase.profesor?.nombres} {clase.turno_clase.profesor?.apellidos} -
-                      Sala: {clase.turno_clase.sala?.descripcion}
-                    </li>
-                  ))
+                    .filter(clase => clase.turno_clase)
+                    .map((clase) => (
+                      <li key={clase.id}>
+                        {dayjs(clase.turno_clase.fecha).format('DD/MM/YYYY')} -
+                        {clase.turno_clase.tipo_actividad?.tipo} {clase.turno_clase.horario_desde}hs -
+                        Profesor/a: {clase.turno_clase.profesor?.nombres} {clase.turno_clase.profesor?.apellidos} -
+                        Sala: {clase.turno_clase.sala?.descripcion}
+                      </li>
+                    ))
                 )
               )}
             </ul>
@@ -82,7 +89,7 @@ const AlumnoDashboard = () => {
         </Typography>
       </Grid>
     </div>
-  );
-};
+  )
+}
 
-export default AlumnoDashboard;
+export default AlumnoDashboard

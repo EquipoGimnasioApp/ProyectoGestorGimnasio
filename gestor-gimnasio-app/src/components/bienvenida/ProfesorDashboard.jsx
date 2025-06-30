@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Typography, Grid } from '@mui/material';
-import { getClasesProfesor } from '../../services/clasesProfesorService';
+import React, { useEffect, useState } from 'react'
+import { Card, CardContent, Typography, Grid } from '@mui/material'
+import { getClasesProfesor } from '../../services/clasesProfesorService'
 
-const usuario = JSON.parse(localStorage.getItem('usuario'));
+const usuario = JSON.parse(localStorage.getItem('usuario'))
 
 const ProfesorDashboard = ({ profesorName = usuario.nombres }) => {
-  const [clases, setClases] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const token = localStorage.getItem('usuarioAccesToken');
+  const [clases, setClases] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const token = localStorage.getItem('usuarioAccesToken')
 
   useEffect(() => {
     const fetchClases = async () => {
-      setCargando(true);
+      setCargando(true)
       try {
-        const data = await getClasesProfesor(usuario.id, token);
-        setClases(data);
-      } catch (e) {
-        setClases([]);
+        const data = await getClasesProfesor(usuario.id, token)
+        setClases(data)
+      } catch {
+        setClases([])
       } finally {
-        setCargando(false);
+        setCargando(false)
       }
-    };
-    fetchClases();
-  }, []);
+    }
+    fetchClases()
+  }, [])
+
+  function capitalizarNombre(nombre) {
+    return (nombre)
+      .split(' ')
+      .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
+      .join(' ')
+  }
 
   return (
     <div className="p-6 space-y-6">
       <Typography variant="h4" gutterBottom>
-        👋 Hola, profe {profesorName}
+        👋 ¡Hola, profe {capitalizarNombre(profesorName)}
       </Typography>
       <Typography variant="body1" marginBottom={2}>
         ¡Gracias por tu compromiso con nuestros alumnos! Desde acá podés gestionar tus clases, tomar asistencia y responder mensajes.
@@ -54,7 +61,7 @@ const ProfesorDashboard = ({ profesorName = usuario.nombres }) => {
         </Card>
       </Grid>
 
-     
+
 
       <Grid item xs={12}>
         <Typography variant="body2" color="text.secondary" align="center">
@@ -62,7 +69,7 @@ const ProfesorDashboard = ({ profesorName = usuario.nombres }) => {
         </Typography>
       </Grid>
     </div>
-  );
-};
+  )
+}
 
-export default ProfesorDashboard;
+export default ProfesorDashboard

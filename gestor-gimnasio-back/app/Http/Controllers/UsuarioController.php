@@ -38,6 +38,12 @@ class UsuarioController extends Controller
         return response()->json($profesores, Response::HTTP_OK);
     }
 
+    public function getAlumnos()
+    {
+        $alumnos = $this->usuarioSrv->getAlumnos();
+        return response()->json($alumnos, Response::HTTP_OK);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

@@ -24,6 +24,7 @@ import SnackbarMensaje from "../utils/SnackbarMensaje"
 import CargaTabla from "../clases-carga/CargaTabla"
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum"
 
+
 function Clases() {
   const [clasesParaTabla, setClasesParaTabla] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -182,128 +183,141 @@ function Clases() {
   useEffect(() => {
     getClasesInscripcionUsuario(usuario, token)
   }, [getClasesInscripcionUsuario, usuario, token])
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <h2 className="titulo-clases">Próximas clases</h2>
-
-      <Box
-        sx={{
-          maxWidth: 900,
-          width: '100%',
-          mb: 2,
-          display: 'flex',
-          gap: 2,
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
-        <TextField
-          label="Buscar Actividad"
-          variant="outlined"
-          size="small"
-          value={busquedaActividad}
-          onChange={(e) => setBusquedaActividad(e.target.value)}
-          disabled={isLoading}
-          placeholder="Ej: Yoga, Pilates, Zumba..."
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper
+          elevation={6}
           sx={{
-            width: '100%',
-            maxWidth: 280,
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#ffffff',
-            },
+            width: '95vw',
+            maxWidth: 1600,
+            margin: '0 auto',
+            padding: { xs: 2, sm: 6, md: 8 },
+            border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+            backgroundColor: 'rgba(248, 250, 252, 1)',
+            borderRadius: 2,
+            boxShadow: '0 8px 32px rgba(60,60,60,0.18)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
           }}
-        />
+        >
+          <h2 className='titulo-clases'>Próximas clases</h2>
 
-        <TextField
-          label="Buscar Profesor"
-          variant="outlined"
-          size="small"
-          value={busquedaProfesor}
-          onChange={(e) => setBusquedaProfesor(e.target.value)}
-          disabled={isLoading}
-          placeholder="Ej: Juan, Maria, Pedro..."
-          sx={{
-            width: '100%',
-            maxWidth: 280,
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#ffffff',
-            },
-          }}
-        />
-
-        <DatePicker
-          label="Buscar Fecha"
-          value={busquedaFecha}
-          onChange={(nuevaFecha) => setBusquedaFecha(nuevaFecha)}
-          format="DD/MM/YYYY"
-          disabled={isLoading}
-          slotProps={{
-            textField: {
-              size: 'small',
-              sx: {
+          <Box
+            sx={{
+              maxWidth: 900,
+              width: '100%',
+              mb: 2,
+              mt: 2,
+              display: 'flex',
+              gap: 2,
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
+            <TextField
+              label="Buscar Actividad"
+              variant="outlined"
+              size="small"
+              value={busquedaActividad}
+              onChange={(e) => setBusquedaActividad(e.target.value)}
+              disabled={isLoading}
+              placeholder="Ej: Yoga, Pilates, Zumba..."
+              sx={{
                 width: '100%',
                 maxWidth: 280,
                 '& .MuiOutlinedInput-root': {
                   backgroundColor: '#ffffff',
                 },
-              },
-            },
-          }}
-        />
+              }}
+            />
 
-        <Box sx={{
-          maxWidth: 1200,
-          minWidth: 900,
-          width: '90vw',
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'center',
-          mt: 2,
-        }}>
-          <Button
-            variant="outlined"
-            className="boton-principal"
-            onClick={resetBuscadores}
-            disabled={isLoading}
-          >
-            Limpiar Filtros
-          </Button>
-        </Box>
-      </Box>
+            <TextField
+              label="Buscar Profesor"
+              variant="outlined"
+              size="small"
+              value={busquedaProfesor}
+              onChange={(e) => setBusquedaProfesor(e.target.value)}
+              disabled={isLoading}
+              placeholder="Ej: Juan, Maria, Pedro..."
+              sx={{
+                width: '100%',
+                maxWidth: 280,
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: '#ffffff',
+                },
+              }}
+            />
 
-      <TableContainer component={Paper} className="equipamiento-table" sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.22)' }}>
-        {isLoading ? (
-          <CargaTabla texto="Cargando clases..." />
-        ) : (
-          <ClasesTabla
-            tipoUsuario={parseInt(usuario.idTipoUsuario, 10)}
-            clases={clasesFiltradas}
-            onInscribirClick={handleInscribirClick}
-            onCancelarInscripcionClick={handleCancelarInscripcionClick}
-            accionEnProgreso={accionEnProgreso}
-            accionId={accionId}
-          />
-        )}
-      </TableContainer>
+            <DatePicker
+              label="Buscar Fecha"
+              value={busquedaFecha}
+              onChange={(nuevaFecha) => setBusquedaFecha(nuevaFecha)}
+              format="DD/MM/YYYY"
+              disabled={isLoading}
+              slotProps={{
+                textField: {
+                  size: 'small',
+                  sx: {
+                    width: '100%',
+                    maxWidth: 280,
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#ffffff',
+                    },
+                  },
+                },
+              }}
+            />
 
-      <Box sx={{
-        maxWidth: 1200,
-        minWidth: 900,
-        width: '90vw',
-        margin: '0 auto',
-        display: 'flex',
-        justifyContent: 'flex-end',
-      }}>
-        <Button
-          variant="outlined"
-          className="boton-principal"
-          onClick={() => getClasesInscripcionUsuario(usuario, token)}
-          disabled={isLoading}
-        >
-          Actualizar
-        </Button>
-      </Box>
+            <Box sx={{
+              maxWidth: 1200,
+              minWidth: 900,
+              width: '90vw',
+              margin: '0 auto',
+              display: 'flex',
+              justifyContent: 'center',
+              mt: 2,
+            }}>
+              <Button
+                variant="outlined"
+                className="boton-principal"
+                onClick={resetBuscadores}
+                disabled={isLoading}
+              >
+                Limpiar Filtros
+              </Button>
+            </Box>
+          </Box>
 
+          <TableContainer component={Paper} className="equipamiento-table" sx={{ border: 'rgba(60, 60, 60, 0.22) 0.5px solid', boxShadow: '0 4px 28px rgba(78, 78, 78, 0.22)' }}>
+            {isLoading ? (
+              <CargaTabla texto="Cargando clases..." />
+            ) : (
+              <ClasesTabla
+                tipoUsuario={parseInt(usuario.idTipoUsuario, 10)}
+                clases={clasesFiltradas}
+                onInscribirClick={handleInscribirClick}
+                onCancelarInscripcionClick={handleCancelarInscripcionClick}
+                accionEnProgreso={accionEnProgreso}
+                accionId={accionId}
+              />
+            )}
+          </TableContainer>
+
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button
+              variant="outlined"
+              className="boton-principal"
+              onClick={() => getClasesInscripcionUsuario(usuario, token)}
+              disabled={isLoading}
+            >
+              Actualizar
+            </Button>
+          </Box>
+        </Paper>
+      </div>
       <SnackbarMensaje
         abrirSnackbar={abrirSnackbar}
         duracionSnackbar={5000}
@@ -394,13 +408,13 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
   }
 
   function capitalizarFrase(nombreCompleto) {
-  return nombreCompleto
-    .split(' ')
-    .map(palabra =>
-      palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
-    )
-    .join(' ');
-}
+    return nombreCompleto
+      .split(' ')
+      .map(palabra =>
+        palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
+      )
+      .join(' ')
+  }
 
   return (
     <Table sx={{ minWidth: 900 }} aria-label='tabla de clases'>
@@ -409,7 +423,7 @@ function ClasesTabla({ tipoUsuario, clases, onInscribirClick, onCancelarInscripc
         {clases.map((clase) => {
           const soloFechas = clase.fecha.split(' ')[0].split('-')
           const fechaFormateada = `${soloFechas[2]}/${soloFechas[1]}/${soloFechas[0]}`
-          const nombreProfe = capitalizarFrase(`${clase.nombresProfesor} ${clase.apellidosProfesor}`);
+          const nombreProfe = capitalizarFrase(`${clase.nombresProfesor} ${clase.apellidosProfesor}`)
           const isCurrentActionTarget = accionEnProgreso && accionId === clase.idTurnoClase
           const disponibilidad = clase.cupoMaximo - clase.totalInscriptos
 

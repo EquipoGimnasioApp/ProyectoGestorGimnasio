@@ -341,121 +341,141 @@ export default function AbmTurnoClase() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <h2 className="titulo">Administrar Clases</h2>
-
-      <Box
-        sx={{
-          maxWidth: 900,
-          width: "100%",
-          mb: 2,
-          display: "flex",
-          gap: 2,
-          justifyContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
-        <TextField
-          label="Buscar Actividad"
-          variant="outlined"
-          size="small"
-          value={busquedaActividad}
-          onChange={(e) => setBusquedaActividad(e.target.value)}
-          disabled={cargando}
-          placeholder="Ej: Yoga, Pilates, Zumba..."
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper
+          elevation={6}
           sx={{
-            width: "100%",
-            maxWidth: 280,
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: "#ffffff",
-            },
+            width: '95vw',
+            maxWidth: 1700,
+            margin: '0 auto',
+            padding: { xs: 2, sm: 6, md: 8 },
+            border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+            backgroundColor: 'rgba(248, 250, 252, 1)',
+            borderRadius: 2,
+            boxShadow: '0 8px 32px rgba(60,60,60,0.18)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
           }}
-        />
+        >
+          <h2 className="titulo-clases">Administrar Clases</h2>
 
-        <TextField
-          label="Buscar Profesor"
-          variant="outlined"
-          size="small"
-          value={busquedaProfesor}
-          onChange={(e) => setBusquedaProfesor(e.target.value)}
-          disabled={cargando}
-          placeholder="Ej: Juan, Maria, Pedro..."
-          sx={{
-            width: "100%",
-            maxWidth: 280,
-            "& .MuiOutlinedInput-root": {
-              backgroundColor: "#ffffff",
-            },
-          }}
-        />
-
-        <DatePicker
-          label="Buscar Fecha"
-          value={busquedaFecha}
-          onChange={(nuevaFecha) => setBusquedaFecha(nuevaFecha)}
-          format="DD/MM/YYYY"
-          disabled={cargando}
-          slotProps={{
-            textField: {
-              size: "small",
-              sx: {
+          <Box
+            sx={{
+              maxWidth: 900,
+              width: "100%",
+              mb: 2,
+              mt: 2,
+              display: "flex",
+              gap: 2,
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <TextField
+              label="Buscar Actividad"
+              variant="outlined"
+              size="small"
+              value={busquedaActividad}
+              onChange={(e) => setBusquedaActividad(e.target.value)}
+              disabled={cargando}
+              placeholder="Ej: Yoga, Pilates, Zumba..."
+              sx={{
                 width: "100%",
                 maxWidth: 280,
                 "& .MuiOutlinedInput-root": {
                   backgroundColor: "#ffffff",
                 },
-              },
-            },
-          }}
-        />
-      </Box>
+              }}
+            />
 
-      <TableContainer component={Paper} className="equipamiento-table" sx={{
-        border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
-        boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
-      }}>
-        {cargando ? (
-          <CargaTabla texto="Cargando clases..." />
-        ) : (
-          <TurnoClasesTabla
-            clases={turnoClasesFiltradas}
-            onEditar={handleOpenModalEditar}
+            <TextField
+              label="Buscar Profesor"
+              variant="outlined"
+              size="small"
+              value={busquedaProfesor}
+              onChange={(e) => setBusquedaProfesor(e.target.value)}
+              disabled={cargando}
+              placeholder="Ej: Juan, Maria, Pedro..."
+              sx={{
+                width: "100%",
+                maxWidth: 280,
+                "& .MuiOutlinedInput-root": {
+                  backgroundColor: "#ffffff",
+                },
+              }}
+            />
+
+            <DatePicker
+              label="Buscar Fecha"
+              value={busquedaFecha}
+              onChange={(nuevaFecha) => setBusquedaFecha(nuevaFecha)}
+              format="DD/MM/YYYY"
+              disabled={cargando}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  sx: {
+                    width: "100%",
+                    maxWidth: 280,
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "#ffffff",
+                    },
+                  },
+                },
+              }}
+            />
+          </Box>
+
+          <TableContainer component={Paper} className="equipamiento-table" sx={{
+            border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+            boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+          }}>
+            {cargando ? (
+              <CargaTabla texto="Cargando clases..." />
+            ) : (
+              <TurnoClasesTabla
+                clases={turnoClasesFiltradas}
+                onEditar={handleOpenModalEditar}
+                salas={salas}
+                onEliminar={(turnoClase) => deleteTurnoClase(turnoClase, userToken)}
+              />
+            )}
+          </TableContainer>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button
+              variant="outlined"
+              className="boton-principal"
+              disabled={cargandoActividades && cargandoProfesores && cargandoSalas}
+              onClick={handleOpenModalCrear}
+            >
+              Nueva Clase
+            </Button>
+            <Button variant="outlined" className="boton-principal" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
+              Actualizar
+            </Button>
+          </Box>
+          <TurnoClaseModal
+            abrirModal={modalConfig.abrir}
+            handleCerrar={handleCloseModal}
+            handleConfirmar={handleConfirmarModal}
+            actividades={actividades}
+            profesores={profesores}
+            turnoExistente={modalConfig.turno}
+            esEdicion={modalConfig.esEdicion}
+            tituloModal={modalConfig.titulo}
             salas={salas}
-            onEliminar={(turnoClase) => deleteTurnoClase(turnoClase, userToken)}
+            cargandoSalas={cargandoSalas}
           />
-        )}
-      </TableContainer>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button
-          variant="outlined"
-          className="boton-principal"
-          disabled={cargandoActividades && cargandoProfesores && cargandoSalas}
-          onClick={handleOpenModalCrear}
-        >
-          Nueva Clase
-        </Button>
-        <Button variant="outlined" className="boton-principal" sx={{ ml: 2 }} onClick={() => getTurnoClases(userToken)}>
-          Actualizar
-        </Button>
-      </Box>
-      <TurnoClaseModal
-        abrirModal={modalConfig.abrir}
-        handleCerrar={handleCloseModal}
-        handleConfirmar={handleConfirmarModal}
-        actividades={actividades}
-        profesores={profesores}
-        turnoExistente={modalConfig.turno}
-        esEdicion={modalConfig.esEdicion}
-        tituloModal={modalConfig.titulo}
-        salas={salas}
-        cargandoSalas={cargandoSalas}
-      />
-      <SnackbarMensaje
-        abrirSnackbar={abrirSnackbar}
-        duracionSnackbar={5000}
-        handleCloseSnackbar={handleCloseSnackbar}
-        mensajeSnackbar={mensajeSnackbar}
-        snackbarSeverity={snackbarSeverity}
-      />
+          <SnackbarMensaje
+            abrirSnackbar={abrirSnackbar}
+            duracionSnackbar={5000}
+            handleCloseSnackbar={handleCloseSnackbar}
+            mensajeSnackbar={mensajeSnackbar}
+            snackbarSeverity={snackbarSeverity}
+          />
+        </Paper>
+      </div>
     </LocalizationProvider>
   )
 }
