@@ -21,6 +21,7 @@ import HistorialPagos from "./components/historial-pagos/HistorialPagos"
 import AdminDashboard from "./components/bienvenida/AdminDashboard"
 import AlumnoDashboard from "./components/bienvenida/AlumnoDashboard"
 import ProfesorDashboard from "./components/bienvenida/ProfesorDashboard"
+import AdministrarPagos from "./components/administrar-pagos/AdministrarPagos"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -59,6 +60,7 @@ function App() {
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
             <Route path="/dashboard/alumno" element={<AlumnoDashboard />} />
             <Route path="/dashboard/profesor" element={<ProfesorDashboard />} />
+            <Route path="/dashboard/abm/pagos" element={<AdministrarPagos />} />
           </Route>
         </Route>
         <Route path="*" element={usuarioEstaLogueado ?
