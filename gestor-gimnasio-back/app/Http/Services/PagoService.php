@@ -20,4 +20,9 @@ class PagoService implements PagoServiceInterface
     {
         return $this->pagoRepository->getAll();
     }
+    public function cargarPago(array $data)
+    {
+        $data['fecha'] = now();
+        return $this->pagoRepository->save($data);
+    }
 }

@@ -24,7 +24,7 @@ import ProfesorDashboard from "./components/bienvenida/ProfesorDashboard"
 import MiRutina from './components/mi-rutina/MiRutina'
 import AsignarRutina from "./components/asignar-rutina/AsignarRutina"
 import Pagos from "./components/pagos/Pagos"
-
+import AdministrarPagos from "./components/administrar-pagos/AdministrarPagos"
 
 import dayjs from "dayjs"
 import "dayjs/locale/es"
@@ -66,6 +66,7 @@ function App() {
             <Route path='/dashboard/mi-rutina' element={<MiRutina />} />
             <Route path='/dashboard/asignar-rutina' element={<AsignarRutina />} />
             <Route path='/dashboard/pagos' element={<Pagos />} />
+            <Route path="/dashboard/abm/pagos" element={<AdministrarPagos />} />
           </Route>
         </Route>
         <Route path="*" element={usuarioEstaLogueado ?

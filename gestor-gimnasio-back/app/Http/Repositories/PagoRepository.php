@@ -20,4 +20,9 @@ class PagoRepository implements PagoRepositoryInterface
     {
         return Pago::with(['usuario', 'formaPago'])->orderBy('id')->get();
     }
+
+    public function save(array $data)
+    {
+        return Pago::create($data);
+    }
 }
