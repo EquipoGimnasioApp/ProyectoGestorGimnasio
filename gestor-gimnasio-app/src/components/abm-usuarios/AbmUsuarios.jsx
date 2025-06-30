@@ -232,7 +232,7 @@ function UsuariosTabla({ usuarios, onEliminar }) {
                     <TableCell>USUARIO</TableCell>
                     <TableCell>EMAIL</TableCell>
                     <TableCell>ROL</TableCell>
-                    <TableCell>MODIFICAR</TableCell>
+                    <TableCell>MODIFICAR ROL</TableCell>
                     <TableCell>ELIMINAR</TableCell>
                 </TableRow>
             </TableHead>
@@ -341,10 +341,10 @@ function UsuariosTabla({ usuarios, onEliminar }) {
                     }}
                 >
                     <Typography variant="h6" sx={{ mb: 2 }}>
-                        Modificar tipo de usuario
+                        Modificar rol
                     </Typography>
                     <Typography sx={{ mb: 2 }}>
-                        Selecciona el nuevo tipo de usuario:
+                        Seleccione el nuevo rol para el usuario:
                     </Typography>
                     <TextField
                         select
