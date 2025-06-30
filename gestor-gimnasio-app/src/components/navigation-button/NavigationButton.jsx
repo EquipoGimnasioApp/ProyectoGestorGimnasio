@@ -11,6 +11,7 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import SportsGymnasticsIcon from '@mui/icons-material/SportsGymnastics'
 import PlaylistAddCheck from "@mui/icons-material/PlaylistAddCheck"
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale'
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
@@ -83,11 +84,6 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
     handleAbmClose()
   }
 
-  const handleAbmPagosClick = () => {
-    navigate("/dashboard/abm/pagos")
-    handleAbmClose()
-  }
-
   return (
     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center", fontSize: "1.15rem", paddingLeft: "5rem" }}>
       {puedeVerAgendarClases && (
@@ -142,6 +138,17 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
       {puedeVerAbm && (
         <Button
           color="inherit"
+          startIcon={<PointOfSaleIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/registrar-pago")}
+        >
+          Registrar Pago
+        </Button>
+      )}
+
+      {puedeVerAbm && (
+        <Button
+          color="inherit"
           startIcon={<AttachMoneyIcon />}
           sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
           onClick={() => navigate("/dashboard/pagos")}
@@ -149,6 +156,8 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           Pagos
         </Button>
       )}
+
+
       {puedeVerAbm && (
         <>
           <Button
@@ -182,7 +191,6 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
             <MenuItem onClick={handleAbmSalasClick}>Salas</MenuItem>
             <MenuItem onClick={handleAbmEquipamientoClick}>Equipamiento</MenuItem>
             <MenuItem onClick={handleAbmUsuariosClick}>Usuarios</MenuItem>
-            <MenuItem onClick={handleAbmPagosClick}>Pagos</MenuItem>
           </Menu>
         </>
       )}

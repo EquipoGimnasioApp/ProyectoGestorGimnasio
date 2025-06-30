@@ -22,6 +22,7 @@ function Dashboard() {
 
   return (
     <Box
+      className='background-app'
       sx={{
         display: "flex",
         flexDirection: "column",

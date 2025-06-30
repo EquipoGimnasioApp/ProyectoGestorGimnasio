@@ -29,7 +29,7 @@ function Landing() {
     {
       image: "/hombre_celular.jpg",
       title: "Facilidad de uso",
-      text: "Desde una plataforma web, en cualquier lugar con tu compu, celu o tablet administrá de manera sencilla la gestión de turnos, pagos, fichas, mails, equipamiento, etc.",
+      text: "En cualquier lugar, desde tu compu, celu o tablet administrá de manera sencilla la gestión de clases, pagos, fichas, mails, equipamiento, etc.",
     },
   ]
 
@@ -389,7 +389,7 @@ function Landing() {
               WebApp para los clientes
             </Box>
             <Button
-             href="#contactoLanding"
+              href="#contactoLanding"
               variant="contained"
               sx={{
                 backgroundColor: "#111",
@@ -426,7 +426,6 @@ function Landing() {
           id="faq"
           sx={{
             width: "100%",
-            background: "#fafafa",
             display: "flex",
             justifyContent: "center",
             alignItems: "flex-start",
