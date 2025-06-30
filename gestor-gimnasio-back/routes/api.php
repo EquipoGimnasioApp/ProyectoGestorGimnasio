@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\ContactoLandingController;
+use App\Http\Controllers\FormaPagoController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
@@ -149,4 +150,14 @@ Route::middleware(AUTH_SANCTION)->group(function () {
     Route::get('/mensajes/enviados/{usuarioId}', [MensajeController::class, 'enviados']);
     Route::patch('/mensajes/{id}/leido', [MensajeController::class, 'marcarLeido']);
     Route::delete('/mensajes/{id}', [MensajeController::class, 'eliminar'])->name('mensajes.destroy');
+
+    Route::prefix('formas-pago')->group(function () {
+        Route::get('/', [FormaPagoController::class, 'index'])
+            ->name('formas-pago.index');
+    });
+
+    Route::prefix('pagos')->group(function () {
+        Route::post('/', [PagoController::class, 'cargarPago'])
+            ->name('pagos.cargar');
+    });
 });

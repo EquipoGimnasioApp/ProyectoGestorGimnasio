@@ -9,10 +9,16 @@ class PagoService implements PagoServiceInterface
 {
     public function __construct(
         protected PagoRepositoryInterface $pagoRepository
-    ) { }
+    ) {}
 
     public function getHistorialByUsuarioId($usuarioId)
     {
         return $this->pagoRepository->getHistorialByUsuarioId($usuarioId);
+    }
+
+    public function cargarPago(array $data)
+    {
+        $data['fecha'] = now();
+        return $this->pagoRepository->save($data);
     }
 }
