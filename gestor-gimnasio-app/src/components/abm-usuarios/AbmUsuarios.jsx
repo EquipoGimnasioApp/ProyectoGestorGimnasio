@@ -103,35 +103,54 @@ export default function AbmUsuarios() {
 
     return (
         <>
-            <h2 className="titulo-clases">Administrar Usuarios</h2>
-            <TableContainer component={Paper} className="equipamiento-table">
-                {cargando ? (
-                    <Carga />
-                ) : (
-                    <UsuariosTabla
-                        usuarios={usuarios}
-                        onEliminar={(usuario) => deleteUsuario(usuario, userToken)}
-                    />
-                )}
-            </TableContainer>
-            <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                <Button
-                    variant="outlined"
-                    disabled={cargando}
-                    className="boton-principal"
-                    sx={{ ml: 2 }}
-                    onClick={() => getUsuarios(userToken)}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Paper
+                    elevation={6}
+                    sx={{
+                        width: '95vw',
+                        maxWidth: 1700,
+                        margin: '0 auto',
+                        padding: { xs: 2, sm: 6, md: 8 },
+                        border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+                        backgroundColor: 'rgba(248, 250, 252, 1)',
+                        borderRadius: 2,
+                        boxShadow: '0 8px 32px rgba(60,60,60,0.18)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}
                 >
-                    Actualizar
-                </Button>
-            </Box>
-            <SnackbarMensaje
-                abrirSnackbar={abrirSnackbar}
-                duracionSnackbar={5000}
-                handleCloseSnackbar={handleCloseSnackbar}
-                mensajeSnackbar={mensajeSnackbar}
-                snackbarSeverity={snackbarSeverity}
-            />
+                    <h2 className="titulo-clases">Administrar Usuarios</h2>
+                    <TableContainer component={Paper} className="equipamiento-table">
+                        {cargando ? (
+                            <Carga />
+                        ) : (
+                            <UsuariosTabla
+                                usuarios={usuarios}
+                                onEliminar={(usuario) => deleteUsuario(usuario, userToken)}
+                            />
+                        )}
+                    </TableContainer>
+                    <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
+                        <Button
+                            variant="outlined"
+                            disabled={cargando}
+                            className="boton-principal"
+                            sx={{ ml: 2 }}
+                            onClick={() => getUsuarios(userToken)}
+                        >
+                            Actualizar
+                        </Button>
+                    </Box>
+                    <SnackbarMensaje
+                        abrirSnackbar={abrirSnackbar}
+                        duracionSnackbar={5000}
+                        handleCloseSnackbar={handleCloseSnackbar}
+                        mensajeSnackbar={mensajeSnackbar}
+                        snackbarSeverity={snackbarSeverity}
+                    />
+                </Paper>
+            </div>
         </>
     )
 }

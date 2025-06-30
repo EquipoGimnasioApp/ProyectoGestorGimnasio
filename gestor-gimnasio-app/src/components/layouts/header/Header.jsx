@@ -20,10 +20,18 @@ function Header() {
   const [anchorMenuUsu, setAnchorMenuUsu] = useState(null)
   const [usuario, setUsuario] = useState(null)
   const navigate = useNavigate()
+
+  function capitalizarNombre(nombre) {
+    return (nombre)
+      .split(' ')
+      .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
+      .join(' ')
+  }
+
   const mensajeDeBienvenida = useMemo(() => {
     return usuario?.nombres
-      ? `¡Bienvenido, ${usuario.nombres}!`
-      : '¡Bienvenido!'
+      ? `¡Bienvenido/a, ${capitalizarNombre(usuario.nombres)}!`
+      : '¡Bienvenido/a!'
   }, [usuario?.nombres])
 
   useEffect(() => {
@@ -83,6 +91,13 @@ function Header() {
     setUsuario(null)
     handleClose()
     navigate('/login')
+  }
+
+  function capitalizarNombreCompleto(nombre, apellido) {
+    return (nombre + ' ' + apellido)
+      .split(' ')
+      .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
+      .join(' ')
   }
 
   return (
@@ -148,13 +163,13 @@ function Header() {
                   onClose={handleClose}
                 >
                   <MenuItem disabled>
-                    <Typography variant="subtitle1">{`Nombre: ${usuario.nombres} ${usuario.apellidos}`}</Typography>
+                    <Typography variant="subtitle1">{`Nombre: ${capitalizarNombreCompleto(usuario.nombres, usuario.apellidos)}`}</Typography>
                   </MenuItem>
                   <MenuItem disabled>
-                    <Typography variant="subtitle1">{`Email: ${usuario.email}`}</Typography>
+                    <Typography variant="subtitle1">{`Email: ${usuario.email.toLowerCase()}`}</Typography>
                   </MenuItem>
                   <MenuItem disabled>
-                    <Typography variant="subtitle1">{`Rol: ${usuario.descTipoUsuario}`}</Typography>
+                    <Typography variant="subtitle1">{`Rol: ${usuario.descTipoUsuario.charAt(0).toUpperCase() + usuario.descTipoUsuario.slice(1).toLowerCase()}`}</Typography>
                   </MenuItem>
                   <MenuItem
                     sx={{

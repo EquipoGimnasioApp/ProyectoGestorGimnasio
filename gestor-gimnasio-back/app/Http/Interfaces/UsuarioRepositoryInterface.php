@@ -37,6 +37,8 @@ interface UsuarioRepositoryInterface
      */
     public function getProfesores();
 
+    public function getAlumnos();
+
     /**
      * Verifica si un correo electrónico ya existe en la base de datos.
      *

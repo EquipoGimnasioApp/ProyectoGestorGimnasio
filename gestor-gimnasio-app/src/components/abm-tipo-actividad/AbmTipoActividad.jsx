@@ -203,49 +203,68 @@ export default function AbmTipoActividad() {
 
   return (
     <>
-      <h2 className="titulo-clases">Administrar Actividades</h2>
-      <TableContainer component={Paper} className="equipamiento-table" sx={{
-        border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
-        boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
-      }}>
-        {cargando ? (
-          <CargaTabla texto="Cargando actividades..." />
-        ) : (
-          <TiposActividadTabla
-            actividades={tiposActividad}
-            onEditar={handleOpenModalEditar}
-            onEliminar={(actividad) => deleteActividad(actividad, userToken)}
-          />
-        )}
-      </TableContainer>
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
-          Nueva Actividad
-        </Button>
-        <Button
-          variant="outlined"
-          className="boton-principal"
-          sx={{ ml: 2 }}
-          onClick={() => getTiposActividad(userToken)}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper
+          elevation={6}
+          sx={{
+            width: '95vw',
+            maxWidth: 1700,
+            margin: '0 auto',
+            padding: { xs: 2, sm: 6, md: 8 },
+            border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+            backgroundColor: 'rgba(248, 250, 252, 1)',
+            borderRadius: 2,
+            boxShadow: '0 8px 32px rgba(60,60,60,0.18)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
         >
-          Actualizar
-        </Button>
-      </Box>
-      <TipoActividadModal
-        abrirModal={modalConfig.abrir}
-        handleCerrar={handleCloseModal}
-        handleConfirmar={handleConfirmarModal}
-        actividadExistente={modalConfig.actividad}
-        esEdicion={modalConfig.esEdicion}
-        tituloModal={modalConfig.titulo}
-      />
-      <SnackbarMensaje
-        abrirSnackbar={abrirSnackbar}
-        duracionSnackbar={5000}
-        handleCloseSnackbar={handleCloseSnackbar}
-        mensajeSnackbar={mensajeSnackbar}
-        snackbarSeverity={snackbarSeverity}
-      />
+          <h2 className="titulo-clases">Administrar Actividades</h2>
+          <TableContainer component={Paper} className="equipamiento-table" sx={{
+            border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+            boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+          }}>
+            {cargando ? (
+              <CargaTabla texto="Cargando actividades..." />
+            ) : (
+              <TiposActividadTabla
+                actividades={tiposActividad}
+                onEditar={handleOpenModalEditar}
+                onEliminar={(actividad) => deleteActividad(actividad, userToken)}
+              />
+            )}
+          </TableContainer>
+          <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
+            <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
+              Nueva Actividad
+            </Button>
+            <Button
+              variant="outlined"
+              className="boton-principal"
+              sx={{ ml: 2 }}
+              onClick={() => getTiposActividad(userToken)}
+            >
+              Actualizar
+            </Button>
+          </Box>
+          <TipoActividadModal
+            abrirModal={modalConfig.abrir}
+            handleCerrar={handleCloseModal}
+            handleConfirmar={handleConfirmarModal}
+            actividadExistente={modalConfig.actividad}
+            esEdicion={modalConfig.esEdicion}
+            tituloModal={modalConfig.titulo}
+          />
+          <SnackbarMensaje
+            abrirSnackbar={abrirSnackbar}
+            duracionSnackbar={5000}
+            handleCloseSnackbar={handleCloseSnackbar}
+            mensajeSnackbar={mensajeSnackbar}
+            snackbarSeverity={snackbarSeverity}
+          />
+        </Paper>
+      </div>
     </>
   )
 }
