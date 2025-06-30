@@ -85,25 +85,27 @@ const AlumnoDashboard = () => {
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h6">📅 Tus próximas clases</Typography>
-              <ul className="list-disc pl-5">
+              <ul className='list-disc pl-5'>
                 {cargandoClases ? (
-                  <CargaTabla texto='Cargando próximas clases...' />
+                  <CargaTabla texto='Cargando tus próximas clases...' />
                 ) : (
-                  proximasClases.length === 0 ? (
-                    <li>No tenés clases agendadas.</li>
-                  ) : (
-                    proximasClases
-                      .filter(clase => clase.turno_clase)
-                      .map((clase) => (
-                        <li key={clase.id}>
-                          {dayjs(clase.turno_clase.fecha).format('DD/MM/YYYY')} -
-                          {clase.turno_clase.tipo_actividad?.tipo} {clase.turno_clase.horario_desde}hs -
-                          Profesor/a: {clase.turno_clase.profesor?.nombres} {clase.turno_clase.profesor?.apellidos} -
-                          Sala: {clase.turno_clase.sala?.descripcion}
-                        </li>
-                      ))
-                  )
+                  <>
+                    <Typography variant='h6'>📅 Tus próximas clases</Typography>
+                    {proximasClases.length === 0 ? (
+                      <li>No tenés clases agendadas.</li>
+                    ) : (
+                      proximasClases
+                        .filter(clase => clase.turno_clase)
+                        .map(clase => (
+                          <li key={clase.id}>
+                            {dayjs(clase.turno_clase.fecha).format('DD/MM/YYYY')} -
+                            {clase.turno_clase.tipo_actividad?.tipo} {clase.turno_clase.horario_desde}hs -
+                            Profesor/a: {clase.turno_clase.profesor?.nombres} {clase.turno_clase.profesor?.apellidos} -
+                            Sala: {clase.turno_clase.sala?.descripcion}
+                          </li>
+                        ))
+                    )}
+                  </>
                 )}
               </ul>
             </CardContent>
