@@ -9,7 +9,7 @@ class FormaPagoController extends Controller
 {
     protected $formaPagoSrv;
 
-    public function __construct(FormaPagoController $formaPagoSrv)
+    public function __construct(FormaPagoService $formaPagoSrv)
     {
         $this->formaPagoSrv = $formaPagoSrv;
     }

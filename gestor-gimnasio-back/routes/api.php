@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\ContactoLandingController;
+use App\Http\Controllers\FormaPagoController;
 use App\Http\Controllers\InscripcionController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\TipoActividadController;
@@ -14,7 +15,6 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TipoDocumentoController;
-use App\Http\Controllers\FormaPagoController;
 use App\Http\Controllers\RutinaController;
 
 if (!defined('AUTH_SANCTION')) {
@@ -163,5 +163,15 @@ Route::middleware(AUTH_SANCTION)->group(function () {
             ->name('rutina.update');
         Route::delete('/delete', [RutinaController::class, 'destroy'])
             ->name('rutina.destroy');
+    });
+
+    Route::prefix('formas-pago')->group(function () {
+        Route::get('/', [FormaPagoController::class, 'index'])
+            ->name('formas-pago.index');
+    });
+
+    Route::prefix('pagos')->group(function () {
+        Route::post('/', [PagoController::class, 'cargarPago'])
+            ->name('pagos.cargar');
     });
 });

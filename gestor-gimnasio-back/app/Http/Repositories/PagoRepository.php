@@ -15,4 +15,9 @@ class PagoRepository implements PagoRepositoryInterface
             ->orderBy('fecha', 'desc')
             ->get();
     }
+
+    public function save(array $data)
+    {
+        return Pago::create($data);
+    }
 }

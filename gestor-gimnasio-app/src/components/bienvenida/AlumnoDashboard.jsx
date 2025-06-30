@@ -62,9 +62,9 @@ const AlumnoDashboard = () => {
                   .filter(clase => clase.turno_clase)
                   .map((clase) => (
                     <li key={clase.id}>
-                      {dayjs(clase.turno_clase.fecha).format('DD/MM/YYYY')} - 
-                      {clase.turno_clase.tipo_actividad?.tipo} {clase.turno_clase.horario_desde}hs - 
-                      Profesor/a: {clase.turno_clase.profesor?.nombres} {clase.turno_clase.profesor?.apellidos} - 
+                      {dayjs(clase.turno_clase.fecha).format('DD/MM/YYYY')} -
+                      {clase.turno_clase.tipo_actividad?.tipo} {clase.turno_clase.horario_desde}hs -
+                      Profesor/a: {clase.turno_clase.profesor?.nombres} {clase.turno_clase.profesor?.apellidos} -
                       Sala: {clase.turno_clase.sala?.descripcion}
                     </li>
                   ))
