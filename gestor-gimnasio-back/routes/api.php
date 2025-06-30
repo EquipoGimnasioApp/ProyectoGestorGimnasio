@@ -14,7 +14,6 @@ use App\Http\Controllers\PagoController;
 use App\Http\Controllers\MensajeController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\TipoDocumentoController;
-use App\Http\Controllers\FormaPagoController;
 use App\Http\Controllers\RutinaController;
 
 if (!defined('AUTH_SANCTION')) {
@@ -25,7 +24,11 @@ if (!defined('ID_ROUTE_PARAMETER')) {
     define('ID_ROUTE_PARAMETER', '/{id}');
 }
 
-Route::get('/pagos/{id}', [PagoController::class, 'historial']);
+Route::prefix('pagos')->group(function () {
+    Route::get('/', [PagoController::class, 'index'])
+        ->name('pagos.index');
+    Route::get('/{id}', [PagoController::class, 'historial']);
+});
 
 Route::post('auth/login', [AuthController::class, 'login'])
     ->name('login');

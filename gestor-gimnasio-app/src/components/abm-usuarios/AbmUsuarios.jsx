@@ -103,7 +103,7 @@ export default function AbmUsuarios() {
 
     return (
         <>
-            <h2 className="titulo-clases">Administrar usuarios</h2>
+            <h2 className="titulo-clases">Administrar Usuarios</h2>
             <TableContainer component={Paper} className="equipamiento-table">
                 {cargando ? (
                     <Carga />

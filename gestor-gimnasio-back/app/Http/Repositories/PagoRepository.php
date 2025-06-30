@@ -15,4 +15,9 @@ class PagoRepository implements PagoRepositoryInterface
             ->orderBy('fecha', 'desc')
             ->get();
     }
+
+    public function getAll()
+    {
+        return Pago::with(['usuario', 'formaPago'])->orderBy('id')->get();
+    }
 }
