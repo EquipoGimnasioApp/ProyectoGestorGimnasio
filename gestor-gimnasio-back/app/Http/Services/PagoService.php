@@ -16,6 +16,10 @@ class PagoService implements PagoServiceInterface
         return $this->pagoRepository->getHistorialByUsuarioId($usuarioId);
     }
 
+    public function getAll()
+    {
+        return $this->pagoRepository->getAll();
+    }
     public function cargarPago(array $data)
     {
         $data['fecha'] = now();

@@ -25,7 +25,11 @@ if (!defined('ID_ROUTE_PARAMETER')) {
     define('ID_ROUTE_PARAMETER', '/{id}');
 }
 
-Route::get('/pagos/{id}', [PagoController::class, 'historial']);
+Route::prefix('pagos')->group(function () {
+    Route::get('/', [PagoController::class, 'index'])
+        ->name('pagos.index');
+    Route::get('/{id}', [PagoController::class, 'historial']);
+});
 
 Route::post('auth/login', [AuthController::class, 'login'])
     ->name('login');

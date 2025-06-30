@@ -10,10 +10,10 @@ class PagoDto
     public function __construct(
         public int $id,
         public Carbon $fecha,
-        public decimal $monto,
+        public float $monto,
         public int $id_forma_pago,
         public int $id_usuario,
-        public string $descripcionFormaPago,
+        public string $descripcionFormaPago
     ) {}
 
     public static function fromUser(Pago $pago)
@@ -22,10 +22,9 @@ class PagoDto
             $pago->id,
             $pago->fecha,
             $pago->monto,
-            $pago->usuario_id,
-            $pago->formaPago->id,
             $pago->id_forma_pago,
-            $pago->formaPago->descripcion ?? '',
+            $pago->usuario_id,
+            $pago->formaPago->descripcion ?? ''
         );
     }
 }

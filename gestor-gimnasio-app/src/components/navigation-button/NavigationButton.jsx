@@ -10,6 +10,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import SportsGymnasticsIcon from '@mui/icons-material/SportsGymnastics'
 import PlaylistAddCheck from "@mui/icons-material/PlaylistAddCheck"
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import TiposUsuarioEnum from "../../models/enums/TiposUsuarioEnum.models.enum.js"
 import PropTypes from "prop-types"
 import { useNavigate } from "react-router-dom"
@@ -41,13 +42,13 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
     idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const puedeVerHistorialPagos =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO
 
   const puedeVerMiRutina =
-    idTipoUsuario === TiposUsuarioEnum.ALUMNO;
+    idTipoUsuario === TiposUsuarioEnum.ALUMNO
 
   const puedeVerAsignarRutina =
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR;
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR
 
   const handleAbmClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -136,6 +137,16 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           onClick={() => navigate("/dashboard/admin-mensajes")}
         >
           Mensajes
+        </Button>
+      )}
+      {puedeVerAbm && (
+        <Button
+          color="inherit"
+          startIcon={<AttachMoneyIcon />}
+          sx={{ textTransform: "none", mx: 1, color: colorButtons, fontSize: "1em" }}
+          onClick={() => navigate("/dashboard/pagos")}
+        >
+          Pagos
         </Button>
       )}
       {puedeVerAbm && (

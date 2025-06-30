@@ -203,11 +203,11 @@ export default function AbmTipoActividad() {
 
   return (
     <>
-      <h2 className="titulo-clases">Administrar actividades</h2>
-      <TableContainer component={Paper} className="equipamiento-table"  sx={{
-    border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
-    boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
-  }}>
+      <h2 className="titulo-clases">Administrar Actividades</h2>
+      <TableContainer component={Paper} className="equipamiento-table" sx={{
+        border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+        boxShadow: '0 4px 28px rgba(78, 78, 78, 0.12)'
+      }}>
         {cargando ? (
           <CargaTabla texto="Cargando actividades..." />
         ) : (
@@ -219,7 +219,7 @@ export default function AbmTipoActividad() {
         )}
       </TableContainer>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button variant="outlined" className="boton-principal"  disabled={cargando}  onClick={handleOpenModalCrear}>
+        <Button variant="outlined" className="boton-principal" disabled={cargando} onClick={handleOpenModalCrear}>
           Nueva Actividad
         </Button>
         <Button
@@ -399,7 +399,7 @@ function TipoActividadModal({
   const [tipo, setTipo] = useState("")
   const [idActividad, setIdActividad] = useState(null)
 
-  const disabledConfirmButton = !tipo.trim() 
+  const disabledConfirmButton = !tipo.trim()
   const resetFormValues = () => {
     setTipo("")
     setIdActividad(null)

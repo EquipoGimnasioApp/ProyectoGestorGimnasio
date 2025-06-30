@@ -9,18 +9,20 @@ use App\Models\FormaPago;
 class Pago extends Model
 {
     protected $table = 'pago';
+
     protected $primaryKey = 'id';
     public $timestamps = false;
-    public $fillable = [
-        'usuario_id',
-        'id_forma_pago',
-        'monto',
+
+    protected $fillable = [
         'fecha',
+        'monto',
+        'id_forma_pago',
+        'usuario_id'
     ];
 
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'id_usuario', 'id');
+        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 
     public function formaPago()

@@ -21,6 +21,13 @@ class PagoController extends Controller
         return response()->json($pagos);
     }
 
+    public function index()
+    {
+        $pagos = $this->pagoService->getAll();
+
+        return response()->json($pagos);
+    }
+
     public function cargarPago(Request $request)
     {
         $data = $request->validate(

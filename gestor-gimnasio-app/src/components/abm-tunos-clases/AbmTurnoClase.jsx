@@ -341,7 +341,7 @@ export default function AbmTurnoClase() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <h2 className="titulo">Administrar clases</h2>
+      <h2 className="titulo">Administrar Clases</h2>
 
       <Box
         sx={{
@@ -549,7 +549,7 @@ function TurnoClasesTabla({ clases, onEditar, onEliminar }) {
       .map(palabra =>
         palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase()
       )
-      .join(' ');
+      .join(' ')
   }
 
   return (
