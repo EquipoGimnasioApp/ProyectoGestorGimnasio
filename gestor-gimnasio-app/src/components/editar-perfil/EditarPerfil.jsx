@@ -9,6 +9,7 @@ import {
     Select,
     InputLabel,
     FormControl,
+    Paper
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -233,185 +234,204 @@ export default function EditarPerfil() {
 
     return (
         <>
-            <h2 className='titulo-clases'>Editar mi Perfil</h2>
-            <Box sx={{ maxWidth: 800, mx: 'auto', mt: 6 }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 3 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'center' }}>
-                        <Avatar
-                            src={
-                                fotoPerfil
-                                    ? fotoPerfil instanceof File
-                                        ? URL.createObjectURL(fotoPerfil)
-                                        : fotoPerfil
-                                    : undefined
-                            }
-                            sx={{ width: 150, height: 150, mr: 3 }}
-                        />
-
-                        <Box sx={{ display: 'flex', flexDirection: 'column', width: '180px' }}>
-                            <Button
-                                variant='outlined'
-                                color='black'
-                                fullWidth
-                                component='label'
-                                sx={{ mb: 1 }}
-                            >
-                                Seleccionar foto
-                                <input
-                                    type='file'
-                                    accept='image/*'
-                                    hidden
-                                    onChange={handleFotoChange}
+            <div className='p-6 space-y-6' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Paper
+                    elevation={6}
+                    sx={{
+                        width: '95vw',
+                        maxWidth: 1600,
+                        margin: '0 auto',
+                        padding: { xs: 2, sm: 6, md: 8 },
+                        border: 'rgba(60, 60, 60, 0.22) 0.5px solid',
+                        backgroundColor: 'rgba(248, 250, 252, 1)',
+                        borderRadius: 2,
+                        boxShadow: '0 8px 32px rgba(60,60,60,0.18)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}
+                >
+                    <h2 className='titulo-clases'>Editar mi Perfil</h2>
+                    <Box sx={{ maxWidth: 800, mx: 'auto', mt: 6 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', mb: 3 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'center' }}>
+                                <Avatar
+                                    src={
+                                        fotoPerfil
+                                            ? fotoPerfil instanceof File
+                                                ? URL.createObjectURL(fotoPerfil)
+                                                : fotoPerfil
+                                            : undefined
+                                    }
+                                    sx={{ width: 150, height: 150, mr: 3 }}
                                 />
-                            </Button>
-                            <Button
-                                variant='contained'
-                                color='primary'
-                                fullWidth
-                                sx={{ mb: 1 }}
-                                onClick={handleFotoUpload}
-                            >
-                                Subir foto
-                            </Button>
+
+                                <Box sx={{ display: 'flex', flexDirection: 'column', width: '180px' }}>
+                                    <Button
+                                        variant='outlined'
+                                        color='black'
+                                        fullWidth
+                                        component='label'
+                                        sx={{ mb: 1, width: 200 }}
+                                    >
+                                        Seleccionar foto
+                                        <input
+                                            type='file'
+                                            accept='image/*'
+                                            hidden
+                                            onChange={handleFotoChange}
+                                        />
+                                    </Button>
+                                    <Button
+                                        variant='contained'
+                                        className="boton-principal"
+                                        fullWidth
+                                        sx={{ mb: 1, width: 200 }}
+                                        onClick={handleFotoUpload}
+                                    >
+                                        Subir foto
+                                    </Button>
+                                </Box>
+                            </Box>
                         </Box>
-                    </Box>
-                </Box>
-                <Typography variant='h4' align='center' mb={2} sx={{ marginBottom: 2, marginTop: 9 }}>
-                    {`${capitalizar(usuario.nombres)} ${capitalizar(usuario.apellidos)}`}
-                </Typography>
-                {cargando || !form.estado_membresia || !form.pais ? (
-                    <Carga />
-                ) : (
-                    <>
-                        {/* <Typography
+                        <Typography variant='h4' align='center' mb={2} sx={{ marginBottom: 2, marginTop: 9 }}>
+                            {`${capitalizar(usuario.nombres)} ${capitalizar(usuario.apellidos)}`}
+                        </Typography>
+                        {cargando || !form.estado_membresia || !form.pais ? (
+                            <Carga />
+                        ) : (
+                            <>
+                                {/* <Typography
                             variant='subtitle1'
                             align='center'
                             sx={{ mb: 4, color: 'text.secondary', fontWeight: 'bold' }}
                         >
                             Estado de membresía: {form.estado_membresia || 'No disponible'}
                         </Typography> */}
-                        <form onSubmit={handleSubmit}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-                                <DatePicker
-                                    label='Fecha de nacimiento'
-                                    value={form.fecha_nacimiento ?? null}
-                                    onChange={newValue => setForm({ ...form, fecha_nacimiento: newValue })}
-                                    format='yyyy-MM-dd'
-                                    slotProps={{
-                                        textField: { fullWidth: true, size: 'medium' },
-                                    }}
-                                />
-                            </LocalizationProvider>
-                            <TextField
-                                label='Teléfono'
-                                name='telefono'
-                                value={form.telefono}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <TextField
-                                label='Teléfono de Emergencia'
-                                name='telefono_emergencia'
-                                value={form.telefono_emergencia}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <FormControl fullWidth margin='normal'>
-                                <InputLabel>Tipo de Documento</InputLabel>
-                                <Select
-                                    name='id_tipo_documento'
-                                    value={form.id_tipo_documento}
-                                    label='Tipo de Documento'
-                                    onChange={handleChange}
-                                >
-                                    {tiposDocumento.map((tipo) => (
-                                        <MenuItem key={tipo.id} value={tipo.id}>
-                                            {tipo.descripcion}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <TextField
-                                label='Documento de Identidad'
-                                name='documento_identidad'
-                                value={form.documento_identidad}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <TextField
-                                label='Obra Social / Seguro Médico'
-                                name='cobertura_medica'
-                                value={form.cobertura_medica}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <TextField
-                                label='Observaciones sobre Salud'
-                                name='observaciones_salud'
-                                value={form.observaciones_salud}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                                multiline
-                                rows={2}
-                            />
-                            <TextField
-                                label='País/región'
-                                name='pais'
-                                value={form.pais}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                                disabled
-                            />
-                            <TextField
-                                label='Ciudad'
-                                name='ciudad'
-                                value={form.ciudad}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <TextField
-                                label='Dirección'
-                                name='direccion'
-                                value={form.direccion}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <TextField
-                                label='Código postal'
-                                name='codigo_postal'
-                                value={form.codigo_postal}
-                                onChange={handleChange}
-                                fullWidth
-                                margin='normal'
-                            />
-                            <Button
-                                type='submit'
-                                variant='contained'
-                                className='boton-principal'
-                                sx={{ mt: 3, mb: 2 }}
-                                fullWidth
-                            >
-                                Guardar
-                            </Button>
-                        </form>
-                    </>
-                )}
-            </Box>
-            <SnackbarMensaje
-                abrirSnackbar={abrirSnackbar}
-                duracionSnackbar={5000}
-                handleCloseSnackbar={handleCloseSnackbar}
-                mensajeSnackbar={mensajeSnackbar}
-                snackbarSeverity={snackbarSeverity}
-            />
+                                <form onSubmit={handleSubmit}>
+                                    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+                                        <DatePicker
+                                            label='Fecha de nacimiento'
+                                            value={form.fecha_nacimiento ?? null}
+                                            onChange={newValue => setForm({ ...form, fecha_nacimiento: newValue })}
+                                            format='yyyy-MM-dd'
+                                            slotProps={{
+                                                textField: { fullWidth: true, size: 'medium' },
+                                            }}
+                                        />
+                                    </LocalizationProvider>
+                                    <TextField
+                                        label='Teléfono'
+                                        name='telefono'
+                                        value={form.telefono}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <TextField
+                                        label='Teléfono de Emergencia'
+                                        name='telefono_emergencia'
+                                        value={form.telefono_emergencia}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <FormControl fullWidth margin='normal'>
+                                        <InputLabel>Tipo de Documento</InputLabel>
+                                        <Select
+                                            name='id_tipo_documento'
+                                            value={form.id_tipo_documento}
+                                            label='Tipo de Documento'
+                                            onChange={handleChange}
+                                        >
+                                            {tiposDocumento.map((tipo) => (
+                                                <MenuItem key={tipo.id} value={tipo.id}>
+                                                    {tipo.descripcion}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <TextField
+                                        label='Documento de Identidad'
+                                        name='documento_identidad'
+                                        value={form.documento_identidad}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <TextField
+                                        label='Obra Social / Seguro Médico'
+                                        name='cobertura_medica'
+                                        value={form.cobertura_medica}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <TextField
+                                        label='Observaciones sobre Salud'
+                                        name='observaciones_salud'
+                                        value={form.observaciones_salud}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                        multiline
+                                        rows={2}
+                                    />
+                                    <TextField
+                                        label='País/región'
+                                        name='pais'
+                                        value={form.pais}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                        disabled
+                                    />
+                                    <TextField
+                                        label='Ciudad'
+                                        name='ciudad'
+                                        value={form.ciudad}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <TextField
+                                        label='Dirección'
+                                        name='direccion'
+                                        value={form.direccion}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <TextField
+                                        label='Código postal'
+                                        name='codigo_postal'
+                                        value={form.codigo_postal}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin='normal'
+                                    />
+                                    <Button
+                                        type='submit'
+                                        variant='contained'
+                                        className='boton-principal'
+                                        sx={{ mt: 3, mb: 2 }}
+                                        fullWidth
+                                    >
+                                        Guardar
+                                    </Button>
+                                </form>
+                            </>
+                        )}
+                    </Box>
+                    <SnackbarMensaje
+                        abrirSnackbar={abrirSnackbar}
+                        duracionSnackbar={5000}
+                        handleCloseSnackbar={handleCloseSnackbar}
+                        mensajeSnackbar={mensajeSnackbar}
+                        snackbarSeverity={snackbarSeverity}
+                    />
+                </Paper>
+            </div>
         </>
     )
 }
