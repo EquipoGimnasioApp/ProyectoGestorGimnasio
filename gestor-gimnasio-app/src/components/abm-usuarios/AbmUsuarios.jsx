@@ -139,10 +139,21 @@ export default function AbmUsuarios() {
 function UsuariosTabla({ usuarios, onEliminar }) {
     const [openEliminar, setOpenEliminar] = useState(false)
     const [usuarioAEliminar, setUsuarioAEliminar] = useState(null)
+    const [openModificar, setOpenModificar] = useState(false)
+    const [usuarioAModificar, setUsuarioAModificar] = useState(null)
+    const [nuevoTipoUsuario, setNuevoTipoUsuario] = useState('')
+    const [cargandoModificar, setCargandoModificar] = useState(false)
+    const [snackbar, setSnackbar] = useState({ open: false, mensaje: '', severidad: 'info' })
 
     const handleClickEliminar = (usuario) => {
         setUsuarioAEliminar(usuario)
         setOpenEliminar(true)
+    }
+
+    const handleClickModificar = (usuario) => {
+        setUsuarioAModificar(usuario)
+        setNuevoTipoUsuario(usuario.id_tipo_usuario)
+        setOpenModificar(true)
     }
 
     const handleConfirmarEliminar = () => {
@@ -158,6 +169,43 @@ function UsuariosTabla({ usuarios, onEliminar }) {
         setUsuarioAEliminar(null)
     }
 
+    const handleCancelarModificar = () => {
+        setOpenModificar(false)
+        setUsuarioAModificar(null)
+    }
+
+    const handleGuardarModificar = async () => {
+        if (usuarioAModificar && nuevoTipoUsuario !== usuarioAModificar.id_tipo_usuario) {
+            setCargandoModificar(true)
+            try {
+                const userToken = localStorage.getItem('usuarioAccesToken')
+                const response = await fetch(`${environment.apiUrl}/usuarios/${usuarioAModificar.id}/modificar-tipo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                    body: JSON.stringify({ id_tipo_usuario: nuevoTipoUsuario }),
+                })
+                if (!response.ok) {
+                    const errorData = await response.json()
+                    throw new Error(errorData.message ?? 'Error al modificar el usuario')
+                }
+                setOpenModificar(false)
+                setUsuarioAModificar(null)
+                setSnackbar({ open: true, mensaje: 'Tipo de usuario modificado exitosamente', severidad: 'success' })
+            } catch (error) {
+                setSnackbar({ open: true, mensaje: error.message ?? 'Error al modificar el usuario', severidad: 'error' })
+            } finally {
+                setCargandoModificar(false)
+            }
+        } else {
+            setOpenModificar(false)
+            setUsuarioAModificar(null)
+        }
+    }
+
     const encabezadosTabla = () => {
         return (
             <TableHead className="cabecera-tabla-abm">
@@ -165,18 +213,17 @@ function UsuariosTabla({ usuarios, onEliminar }) {
                     <TableCell>USUARIO</TableCell>
                     <TableCell>EMAIL</TableCell>
                     <TableCell>ROL</TableCell>
-                    <TableCell>DETALLES</TableCell>
+                    <TableCell>MODIFICAR</TableCell>
                     <TableCell>ELIMINAR</TableCell>
                 </TableRow>
             </TableHead>
         )
     }
 
-    // Ordenar usuarios: 1-ADMINISTRADOR, 3-PROFESOR, 2-ALUMNO
-    const ordenRol = { 1: 0, 3: 1, 2: 2 };
+    const ordenRol = { 1: 0, 3: 1, 2: 2 }
     const usuariosOrdenados = [...usuarios].sort(
         (a, b) => (ordenRol[a.id_tipo_usuario] ?? 99) - (ordenRol[b.id_tipo_usuario] ?? 99)
-    );
+    )
 
     if (!usuarios || usuarios.length === 0) {
         return (
@@ -194,12 +241,11 @@ function UsuariosTabla({ usuarios, onEliminar }) {
     }
 
     function capitalizarNombreCompleto(nombre, apellido) {
-  // Une nombre y apellido, separa por espacios, capitaliza cada palabra y vuelve a unir
-  return (nombre + " " + apellido)
-    .split(" ")
-    .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
-    .join(" ");
-}
+        return (nombre + ' ' + apellido)
+            .split(' ')
+            .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
+            .join(' ')
+    }
 
     return (
         <>
@@ -214,8 +260,8 @@ function UsuariosTabla({ usuarios, onEliminar }) {
                             <TableCell>{usuario.email.toLowerCase()}</TableCell>
                             <TableCell>{usuario.tipo_usuario?.tipo.charAt(0).toUpperCase() + usuario.tipo_usuario?.tipo.slice(1).toLowerCase()}</TableCell>
                             <TableCell>
-                                <Button variant="outlined" className="boton-principal" /* onClick={() => handleClickEliminar(usuario)} */>
-                                    Detalles
+                                <Button variant="outlined" className="boton-principal" onClick={() => handleClickModificar(usuario)}>
+                                    Modificar
                                 </Button>
                             </TableCell>
                             <TableCell>
@@ -230,17 +276,17 @@ function UsuariosTabla({ usuarios, onEliminar }) {
             <Modal open={openEliminar} onClose={handleCancelarEliminar}>
                 <Box
                     sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
                         width: 400,
-                        bgcolor: "background.paper",
-                        border: "2px solid #000",
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
                         boxShadow: 24,
                         p: 4,
-                        display: "flex",
-                        flexDirection: "column",
+                        display: 'flex',
+                        flexDirection: 'column',
                         gap: 2,
                     }}
                 >
@@ -248,7 +294,7 @@ function UsuariosTabla({ usuarios, onEliminar }) {
                         Confirmar eliminación
                     </Typography>
                     <Typography sx={{ mb: 3 }}>¿Está seguro de que desea eliminar el usuario?</Typography>
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                         <Button variant="outlined" className="boton-secundario" onClick={handleCancelarEliminar}>
                             Cancelar
                         </Button>
@@ -258,6 +304,59 @@ function UsuariosTabla({ usuarios, onEliminar }) {
                     </Box>
                 </Box>
             </Modal>
+            <Modal open={openModificar} onClose={handleCancelarModificar}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        border: '2px solid #000',
+                        boxShadow: 24,
+                        p: 4,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    }}
+                >
+                    <Typography variant="h6" sx={{ mb: 2 }}>
+                        Modificar tipo de usuario
+                    </Typography>
+                    <Typography sx={{ mb: 2 }}>
+                        Selecciona el nuevo tipo de usuario:
+                    </Typography>
+                    <TextField
+                        select
+                        label="Tipo de usuario"
+                        value={nuevoTipoUsuario}
+                        onChange={(e) => setNuevoTipoUsuario(Number(e.target.value))}
+                        SelectProps={{ native: true }}
+                        fullWidth
+                        disabled={cargandoModificar}
+                    >
+                        <option value={1}>Administrador</option>
+                        <option value={3}>Profesor</option>
+                        <option value={2}>Alumno</option>
+                    </TextField>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
+                        <Button variant="outlined" className="boton-secundario" onClick={handleCancelarModificar} disabled={cargandoModificar}>
+                            Cancelar
+                        </Button>
+                        <Button variant="contained" className="boton-principal" onClick={handleGuardarModificar} color="primary" disabled={cargandoModificar}>
+                            Guardar
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
+            <SnackbarMensaje
+                abrirSnackbar={snackbar.open}
+                duracionSnackbar={4000}
+                handleCloseSnackbar={() => setSnackbar({ ...snackbar, open: false })}
+                mensajeSnackbar={snackbar.mensaje}
+                snackbarSeverity={snackbar.severidad}
+            />
         </>
     )
 }
