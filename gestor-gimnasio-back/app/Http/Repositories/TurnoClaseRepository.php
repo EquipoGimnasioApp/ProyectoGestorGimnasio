@@ -11,7 +11,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
 {
     public function getAll(): Collection
     {
-        return TurnoClase::with(['tipoActividad', 'profesor','sala'])
+        return TurnoClase::with(['tipoActividad', 'profesor', 'sala'])
             ->orderBy('id', 'DESC')
             ->get();
     }
@@ -43,7 +43,7 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
                 DB::raw('CASE WHEN inscripcion.id IS NOT NULL THEN TRUE ELSE FALSE END AS inscripto')
             ])
             ->leftJoin('tipo_actividad', 'turno_clase.id_actividad', '=', 'tipo_actividad.id')
-             ->leftJoin('sala', 'turno_clase.id_sala', '=', 'sala.id')
+            ->leftJoin('sala', 'turno_clase.id_sala', '=', 'sala.id')
             ->leftJoin('inscripcion', function ($join) use ($userId) {
                 $join->on('turno_clase.id', '=', 'inscripcion.id_turno_clase')
                     ->where('inscripcion.id_usuario', '=', $userId);
@@ -116,10 +116,11 @@ class TurnoClaseRepository implements TurnoClaseRepositoryInterface
     {
         return TurnoClase::findOrFail($idTurnoClase);
     }
-    
+
     public function getClasesPorProfesor($idProfesor)
     {
         return TurnoClase::with(['tipoActividad', 'profesor', 'sala'])
+            ->withCount('inscripciones')
             ->where('id_profesor', $idProfesor)
             ->orderBy('fecha', 'DESC')
             ->get();

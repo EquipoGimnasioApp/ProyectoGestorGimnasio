@@ -8,7 +8,7 @@ const AdminDashboard = () => {
   const usuario = JSON.parse(localStorage.getItem('usuario'))
   const token = useMemo(() => localStorage.getItem('usuarioAccesToken'), [])
   const [clasesHoy, setClasesHoy] = useState(0)
-  const [cargaClases, setCargando] = useState(true)
+  const [cargaClases, setCargaClases] = useState(true)
   const [alumnosActivos, setAlumnosActivos] = useState(0)
   const [cargandoAlumnos, setCargandoAlumnos] = useState(true)
   const [profesoresActivos, setProfesoresActivos] = useState(0)
@@ -29,10 +29,10 @@ const AdminDashboard = () => {
           const data = await response.json()
           const clasesDeHoy = data.filter(clase => dayjs(clase.fecha).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD'))
           setClasesHoy(clasesDeHoy.length)
-          setCargando(false)
+          setCargaClases(false)
         } else {
           setClasesHoy(0)
-          setCargando(false)
+          setCargaClases(false)
         }
       } catch {
         setClasesHoy(0)
@@ -74,7 +74,6 @@ const AdminDashboard = () => {
         })
         if (response.ok) {
           const data = await response.json()
-          console.log(data)
           setProfesoresActivos(data.length)
           setCargandoProfesores(false)
         } else {
