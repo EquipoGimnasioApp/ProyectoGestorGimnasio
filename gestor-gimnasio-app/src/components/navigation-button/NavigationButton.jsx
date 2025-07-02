@@ -30,8 +30,8 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
   const puedeVerAgendarClases =
     idTipoUsuario === TiposUsuarioEnum.ALUMNO || idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR
 
-  const puedeVerActividades =
-    idTipoUsuario === TiposUsuarioEnum.PROFESOR
+  /* const puedeVerActividades =
+    idTipoUsuario === TiposUsuarioEnum.PROFESOR */
 
   const puedeVerTomarAsistencia =
     idTipoUsuario === TiposUsuarioEnum.PROFESOR
@@ -96,7 +96,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
           {idTipoUsuario === TiposUsuarioEnum.ADMINISTRADOR ? 'Próximas Clases' : 'Agendar'}
         </Button>
       )}
-      {puedeVerActividades && (
+     {/*  {puedeVerActividades && (
         <Button
           color="inherit"
           startIcon={<EventNoteIcon />}
@@ -105,7 +105,7 @@ function NavigationButton({ usuario, colorButtons = "#000" }) {
         >
           Actividades
         </Button>
-      )}
+      )} */}
       {puedeVerMensajes && (
         <Button
           color="inherit"
